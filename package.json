@@ -1,0 +1,13 @@
+{
+  "name": "ade",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Autonomous Digital Entity — corpo 3D, cervello autonomo, memoria persistente",
+  "type": "module",
+  "scripts": {
+    "cycle": "node agent/agent.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.116.0"
+  }
+}

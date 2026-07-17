@@ -1,0 +1,9 @@
+{
+  "date": "2026-07-17",
+  "daily_budget": 100000,
+  "used_today": 0,
+  "remaining": 100000,
+  "reserve_threshold": 6000,
+  "total_cycles": 0,
+  "last_cycle_at": null
+}
