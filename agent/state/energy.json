@@ -4,6 +4,6 @@
   "used_today": 0,
   "remaining": 100000,
   "reserve_threshold": 6000,
-  "total_cycles": 0,
-  "last_cycle_at": null
+  "total_cycles": 1,
+  "last_cycle_at": "2026-07-17T12:34:25.046Z"
 }
