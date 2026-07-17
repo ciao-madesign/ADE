@@ -1,6 +1,6 @@
 // ADE — finestra pubblica: rendering del corpo e dei pannelli di osservazione.
-import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+// Three.js è vendorizzato in assets/vendor/ e caricato dinamicamente, così un
+// eventuale problema col viewer non impedisce ai pannelli dati di funzionare.
 
 const $ = (sel) => document.querySelector(sel);
 
@@ -18,7 +18,7 @@ async function fetchText(url) {
 
 /* ------------------------------------------------ corpo 3D */
 
-function buildGeometry(g) {
+function buildGeometry(THREE, g) {
   const p = g.params || {};
   switch (g.type) {
     case "box": return new THREE.BoxGeometry(p.width ?? 1, p.height ?? 1, p.depth ?? 1);
@@ -38,7 +38,9 @@ function buildGeometry(g) {
   }
 }
 
-function startViewer(body) {
+async function startViewer(body) {
+  const THREE = await import("three");
+  const { OrbitControls } = await import("./vendor/OrbitControls.js");
   const container = $("#viewer");
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(body.scene?.background || "#0a0a12");
@@ -92,7 +94,7 @@ function startViewer(body) {
       flatShading: !!m.flat,
       side: THREE.DoubleSide,
     });
-    const mesh = new THREE.Mesh(buildGeometry(part.geometry || {}), mat);
+    const mesh = new THREE.Mesh(buildGeometry(THREE, part.geometry || {}), mat);
     mesh.position.fromArray(part.position || [0, 0, 0]);
     mesh.rotation.fromArray(part.rotation || [0, 0, 0]);
     mesh.scale.fromArray(part.scale || [1, 1, 1]);
@@ -230,15 +232,15 @@ function renderEvoluzione(md) {
 /* ------------------------------------------------ avvio */
 
 (async () => {
-  try {
-    const body = await fetchJSON("body/body.json");
-    renderCorpoInfo(body);
-    startViewer(body);
-  } catch (e) { console.error("corpo:", e); }
-
   try { renderEnergia(await fetchJSON("agent/state/energy.json")); } catch (e) { console.error("energia:", e); }
   try { renderDiario(await fetchText("ACTION_LOG.md")); } catch (e) { console.error("diario:", e); }
   try { renderMemoria(await fetchJSON("memory/index.json")); } catch { $("#memoria-lista").innerHTML = "<li class='nota'>Nessuna memoria ancora.</li>"; }
   try { renderAmbiente(await fetchJSON("environment/manifest.json")); } catch (e) { console.error("ambiente:", e); }
   try { renderEvoluzione(await fetchText("body/CHANGELOG.md")); } catch (e) { console.error("evoluzione:", e); }
+
+  try {
+    const body = await fetchJSON("body/body.json");
+    renderCorpoInfo(body);
+    await startViewer(body);
+  } catch (e) { console.error("corpo:", e); }
 })();
