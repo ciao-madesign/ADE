@@ -1,0 +1,217 @@
+# Guida al Go-Live di ADE
+
+Percorso passo-passo dalla situazione attuale al sito pubblico funzionante.
+Questo file è il **tracciatore ufficiale**: ad ogni step completato viene aggiornato
+con data, esito e decisioni prese. Gli stati possibili sono:
+
+- ⬜ da fare · 🔄 in corso · ✅ completato · ⏭️ saltato (con motivo)
+
+**Come lavoreremo**: uno step alla volta. Per ogni step la guida dice cosa serve,
+chi fa cosa (tu dal browser, io sul codice), come verifichiamo che sia riuscito,
+e quali decisioni ti verranno chieste **prima** di agire.
+
+---
+
+## Quadro d'insieme
+
+```
+Step 1  Branch di produzione            (decisione + git)
+Step 2  Provider AI + chiave            (browser: Groq/altro)
+Step 3  Configurazione ciclo su GitHub  (browser: variables + secrets)
+Step 4  Primo ciclo "pensato"           (test: ADE pensa davvero)
+Step 5  Progetto su Vercel              (browser: import repo)
+Step 6  Quarantena (Vercel Blob)        (browser: storage)
+Step 7  Chiavi del ponte Vercel↔GitHub  (browser: PAT + variabili)
+Step 8  Collaudo del flusso stimoli     (test end-to-end insieme)
+Step 9  Dominio (opzionale)             (decisione + browser)
+Step 10 Checklist finale e go-live      (verifica tutto + annuncio)
+```
+
+Al termine: sito live su Vercel, cervello su GitHub Actions, modello sul provider
+scelto. Nessun componente sulla tua macchina.
+
+---
+
+## Step 1 — Branch di produzione ⬜
+
+**Obiettivo**: decidere su quale branch vive ADE e allinearlo. Oggi tutto è su
+`claude/autonomous-digital-entity-d82nr6`; Vercel e il ciclo devono puntare allo
+stesso branch, per sempre (la storia git è la biografia dell'entità).
+
+**Decisione che ti chiederò**: portare tutto su `main` (consigliato: più pulito,
+è lo standard che Vercel propone) oppure restare sul branch attuale.
+
+**Chi fa cosa**: decidi tu; il merge/allineamento lo faccio io.
+
+**Verifica**: il branch scelto contiene l'ultimo commit e il ciclo 1 dell'entità.
+
+---
+
+## Step 2 — Provider AI e chiave ⬜
+
+**Obiettivo**: dare ad ADE un cervello in cloud, gratis, senza installare nulla.
+
+**Decisione che ti chiederò**: quale provider. Il consigliato è **Groq**
+(free tier generoso, Llama 3.3 70B, veloce); alternative: OpenRouter, Google AI
+Studio, Cerebras. Differenze pratiche: limiti giornalieri e qualità del modello.
+
+**Chi fa cosa (tu, ~5 minuti dal browser)**:
+1. Registrati sul sito del provider scelto (es. console.groq.com).
+2. Crea una API key e **copiala subito** (spesso si vede una volta sola).
+3. Tienila da parte per lo Step 3. Non incollarla mai in chat o nel repo.
+
+**Verifica**: hai una chiave (per Groq inizia con `gsk_`).
+
+---
+
+## Step 3 — Configurazione del ciclo su GitHub ⬜
+
+**Obiettivo**: dire al workflow `cycle.yml` quale cervello usare.
+
+**Chi fa cosa (tu, dal browser)** — nel repo GitHub:
+*Settings → Secrets and variables → Actions*
+
+Tab **Variables** (3 voci):
+| Nome | Valore (esempio per Groq) |
+|---|---|
+| `AI_PROVIDER` | `openai` |
+| `OPENAI_BASE_URL` | `https://api.groq.com/openai/v1` |
+| `AI_MODEL` | `llama-3.3-70b-versatile` |
+
+Tab **Secrets** (1 voce):
+| Nome | Valore |
+|---|---|
+| `OPENAI_API_KEY` | la chiave dello Step 2 |
+
+**Verifica**: le 3 variables e il secret compaiono negli elenchi.
+
+---
+
+## Step 4 — Primo ciclo "pensato" ⬜
+
+**Obiettivo**: la prova generale del cervello. Finora ADE ha vissuto solo il
+ciclo 1 (riflesso, senza AI); ora deve pensare davvero per la prima volta.
+
+**Chi fa cosa (tu, dal browser)**: nel repo → tab *Actions* → workflow
+"Ciclo autonomo" → *Run workflow* sul branch scelto allo Step 1.
+
+**Verifica (insieme)**: dopo 1-2 minuti il workflow è verde e nel repo compaiono
+un nuovo commit "Ciclo 2", `memory/002_*.md`, una voce nel diario ed eventuali
+azioni. Io controllerò la qualità dell'output e, se il modello scelto produce
+risposte malformate, ti proporrò un modello alternativo **prima** di cambiare.
+
+**Possibili intoppi** (li gestiamo insieme): chiave errata (errore 401), modello
+inesistente (404), risposta non-JSON (ciclo annullato senza danni — è il
+comportamento previsto).
+
+---
+
+## Step 5 — Progetto su Vercel ⬜
+
+**Obiettivo**: il sito pubblico online.
+
+**Chi fa cosa (tu, dal browser)**:
+1. vercel.com → login con GitHub → *Add New → Project*.
+2. Importa il repo ADE. Se chiede i permessi, autorizza almeno questo repo.
+3. **Production Branch**: quello dello Step 1. Nessuna build da configurare
+   (rileva `vercel.json` da solo). *Deploy*.
+
+**Verifica**: l'URL `*.vercel.app` mostra il sito con il corpo 3D e il diario.
+A questo punto upload e admin **non funzionano ancora** (mancano Step 6-7): è normale.
+
+---
+
+## Step 6 — Quarantena su Vercel Blob ⬜
+
+**Obiettivo**: lo spazio dove i file caricati aspettano il tuo verdetto,
+fuori dal mondo di ADE.
+
+**Chi fa cosa (tu, dal browser)**: nel progetto Vercel → tab *Storage* →
+*Create Database* → **Blob** → nome a piacere (es. `ade-quarantena`) → collega
+al progetto. La variabile `BLOB_READ_WRITE_TOKEN` si imposta da sola.
+
+**Verifica**: in *Settings → Environment Variables* esiste `BLOB_READ_WRITE_TOKEN`.
+
+---
+
+## Step 7 — Chiavi del ponte Vercel ↔ GitHub ⬜
+
+**Obiettivo**: permettere al pannello admin di (a) committare gli stimoli
+approvati nel repo e (b) avviare cicli a comando. E proteggere l'admin con un token.
+
+**Chi fa cosa (tu, dal browser)**:
+
+1. **Token GitHub**: github.com → *Settings* (del tuo account) → *Developer
+   settings* → *Fine-grained tokens* → *Generate new token*:
+   - Repository access: **solo il repo ADE**
+   - Permissions → Repository permissions: **Contents: Read and write** e
+     **Actions: Read and write**; tutto il resto: nessuno
+   - Scadenza: scegli tu (ti avviserà quando rinnovarlo). Copia il token (`github_pat_…`).
+2. **Variabili su Vercel** (*Settings → Environment Variables*, ambiente Production):
+   | Nome | Valore |
+   |---|---|
+   | `ADMIN_TOKEN` | una password lunga inventata da te (30+ caratteri; un password manager aiuta) |
+   | `GITHUB_TOKEN` | il token del punto 1 |
+   | `GITHUB_REPO` | `ciao-madesign/ADE` |
+   | `GITHUB_BRANCH` | il branch dello Step 1 |
+3. **Redeploy**: tab *Deployments* → ⋯ sull'ultimo → *Redeploy* (le variabili
+   valgono solo per i deploy successivi).
+
+**Verifica**: `tuo-sito.vercel.app/admin` → inserisci `ADMIN_TOKEN` → "Entra"
+senza errori (lista vuota: giusto, non c'è ancora nulla in quarantena).
+
+---
+
+## Step 8 — Collaudo del flusso stimoli ⬜
+
+**Obiettivo**: provare l'intero giro prima di aprirlo al pubblico.
+
+**Faremo insieme, in ordine**:
+1. Dal sito: carica un'immagine o un piccolo testo con "Lascia uno stimolo".
+2. Su `/admin`: vedi il file in quarantena col rapporto di scansione → *Approva*.
+3. Su GitHub: verifica il commit "Stimolo approvato" in `environment/inbox/`.
+4. Da `/admin`: *Avvia un ciclo ora* → il workflow parte su GitHub.
+5. A ciclo finito: il sito si ri-deploya e mostra come ADE ha reagito (o ignorato!)
+   il tuo stimolo. Entrambe le reazioni sono un successo: è autonoma.
+6. Prova anche il percorso negativo: carica un file bloccato (es. rinomina un
+   file in `.exe`) e verifica il rifiuto automatico.
+
+**Verifica**: tutti i 6 punti passano.
+
+---
+
+## Step 9 — Dominio personalizzato (opzionale) ⏭️/⬜
+
+**Decisione che ti chiederò**: tenere `*.vercel.app` (gratis, subito) o
+comprare un dominio (es. `ade.qualcosa.it`, ~10-15€/anno).
+
+**Se sì (tu, dal browser)**: Vercel → *Settings → Domains* → aggiungi il dominio
+e segui le istruzioni DNS del tuo registrar.
+
+---
+
+## Step 10 — Checklist finale e go-live ⬜
+
+Prima di condividere il link, verifichiamo insieme:
+
+- [ ] Il ciclo schedulato gira da solo (attendere un giro delle 0/6/12/18 UTC)
+- [ ] Energia visibile e coerente sul sito (i token scendono a ogni ciclo)
+- [ ] Upload → quarantena → approvazione → reazione: testato allo Step 8
+- [ ] `/admin` inaccessibile senza token (prova in incognito)
+- [ ] Un ciclo con stimolo ignorato non rompe nulla
+- [ ] `ADMIN_TOKEN`, `GITHUB_TOKEN`, `OPENAI_API_KEY` mai comparsi nel repo
+- [ ] README aggiornato con l'URL pubblico
+
+Poi: si condivide il link. Il Truman Show comincia.
+
+---
+
+## Registro delle decisioni
+
+| Data | Step | Decisione | Motivo |
+|---|---|---|---|
+| — | — | — | — |
+
+## Diario di avanzamento
+
+*(aggiornato ad ogni step completato)*
