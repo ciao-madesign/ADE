@@ -33,22 +33,53 @@ Il primo ciclo (bootstrap) è deterministico e gratuito. Dal secondo in poi il c
 
 ## Il substrato cognitivo: modelli open source o Claude
 
-Il "pensiero" è astratto in `agent/llm.mjs` e si configura con variabili d'ambiente:
+Il "pensiero" è astratto in `agent/llm.mjs` e si configura con variabili d'ambiente.
+
+**Modelli open source in cloud, senza installare nulla e senza usare la tua macchina** (basta registrarsi dal browser e copiare una API key):
 
 | Configurazione | Esempio |
 |---|---|
-| **Ollama** (locale, open source, gratis) | `AI_PROVIDER=openai` · `OPENAI_BASE_URL=http://localhost:11434/v1` · `AI_MODEL=llama3.3` (o `qwen2.5`, `mistral`, …) — nessuna chiave |
-| **Groq** (cloud, free tier, modelli open) | `AI_PROVIDER=openai` · `OPENAI_BASE_URL=https://api.groq.com/openai/v1` · `OPENAI_API_KEY=…` · `AI_MODEL=llama-3.3-70b-versatile` |
-| **OpenRouter** (modelli `:free`) | `AI_PROVIDER=openai` · `OPENAI_BASE_URL=https://openrouter.ai/api/v1` · `OPENAI_API_KEY=…` · `AI_MODEL=meta-llama/llama-3.3-70b-instruct:free` |
-| **Anthropic Claude** (a pagamento) | `AI_PROVIDER=anthropic` · `ANTHROPIC_API_KEY=…` (modello di default: `claude-opus-4-8`) |
+| **Groq** (free tier generoso, modelli open, molto veloce) | `AI_PROVIDER=openai` · `OPENAI_BASE_URL=https://api.groq.com/openai/v1` · `OPENAI_API_KEY=gsk_…` · `AI_MODEL=llama-3.3-70b-versatile` |
+| **OpenRouter** (aggregatore, modelli con suffisso `:free`) | `AI_PROVIDER=openai` · `OPENAI_BASE_URL=https://openrouter.ai/api/v1` · `OPENAI_API_KEY=sk-or-…` · `AI_MODEL=meta-llama/llama-3.3-70b-instruct:free` |
+| **Google AI Studio** (Gemini, free tier, endpoint OpenAI-compatibile) | `AI_PROVIDER=openai` · `OPENAI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai` · `OPENAI_API_KEY=…` · `AI_MODEL=gemini-2.0-flash` |
+| **Cerebras** (free tier, modelli open) | `AI_PROVIDER=openai` · `OPENAI_BASE_URL=https://api.cerebras.ai/v1` · `OPENAI_API_KEY=…` · `AI_MODEL=llama-3.3-70b` |
 
-Qualunque endpoint OpenAI-compatibile funziona (vLLM, LM Studio, llama.cpp server…). Il conteggio dei token riportato dal provider alimenta il vincolo energetico; se il provider non lo riporta, viene stimato.
+**Alternative che richiedono una macchina** (la tua o un VPS): **Ollama** (`OPENAI_BASE_URL=http://localhost:11434/v1`, nessuna chiave), vLLM, LM Studio, llama.cpp server. Nota: Ollama è un software che *esegue* i modelli su un computer — non esiste un "Ollama cloud" gratuito; per gli stessi modelli senza una macchina, usa Groq/OpenRouter qui sopra.
+
+**Claude** (a pagamento): `AI_PROVIDER=anthropic` · `ANTHROPIC_API_KEY=…` (default `claude-opus-4-8`).
+
+Il conteggio dei token riportato dal provider alimenta il vincolo energetico; se il provider non lo riporta, viene stimato.
 
 ## La mente auto-modificabile
 
 `agent/mind/*.md` è il *modo di pensare* dell'entità: file markdown che lei stessa scrive con normali azioni sui file e che vengono iniettati nel suo prompt di sistema ad ogni ciclo, **dopo** l'identità originale. Può darsi principi, procedure, priorità — e cambiarli. Ciò che invece **non può** toccare: i prompt originali (`agent/prompts/`), il codice del ciclo, l'energia. La mente è limitata (~9.000 caratteri iniettati): crescendo, dovrà imparare a sintetizzarsi.
 
-## Il sito live
+## Deploy su Vercel (consigliato — tutto in cloud, zero macchine tue)
+
+Su Vercel l'architettura diventa interamente serverless e si incastra con GitHub Actions:
+
+```
+utente → sito su Vercel → /api/upload → scansione → quarantena (Vercel Blob)
+admin  → /admin → approva → commit in environment/inbox/ (GitHub API)
+GitHub Actions (ogni 6h) → ciclo dell'entità → commit → Vercel ri-deploya il sito
+```
+
+Ogni commit dell'entità fa ri-deployare il sito: i dati mostrati sono sempre l'ultimo stato del mondo. Il frontend rileva la modalità serverless e sincronizza ogni 30 secondi (niente SSE persistente su serverless).
+
+Passi:
+
+1. **Importa il repository** su [vercel.com](https://vercel.com) (Add New → Project → il repo ADE, branch dell'entità). Nessuna configurazione di build: il sito è statico e le funzioni in `api/` vengono rilevate da sole.
+2. **Crea uno store Blob** (tab *Storage* → Blob → collega al progetto): serve da quarantena. La variabile `BLOB_READ_WRITE_TOKEN` viene impostata automaticamente.
+3. **Variabili d'ambiente** (*Settings → Environment Variables*):
+   - `ADMIN_TOKEN` — token lungo e segreto per il pannello `/admin`
+   - `GITHUB_TOKEN` — fine-grained PAT sul repo con permessi **Contents: Read and write** e **Actions: Read and write**
+   - `GITHUB_REPO` — es. `ciao-madesign/ADE`
+   - `GITHUB_BRANCH` — il branch dell'entità (lo stesso collegato a Vercel)
+4. **Configura il ciclo su GitHub** (*Settings del repo → Secrets and variables → Actions*): variables `AI_PROVIDER`, `AI_MODEL`, `OPENAI_BASE_URL` e secret `OPENAI_API_KEY` (o `ANTHROPIC_API_KEY`). Il workflow `cycle.yml` gira ogni 6 ore, e dal pannello `/admin` puoi avviarne uno al volo ("Avvia un ciclo ora" innesca il workflow via GitHub API).
+
+Risultato: sito su Vercel, cervello su GitHub Actions, modello su Groq/OpenRouter — **niente gira sulla tua macchina**.
+
+## Il sito live (alternativa: server proprio)
 
 `server/server.mjs` (Node puro, nessuna dipendenza) trasforma il sito in un osservatorio continuo:
 

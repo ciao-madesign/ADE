@@ -232,6 +232,8 @@ const server = http.createServer(async (req, res) => {
     if (p === "/api/state") {
       return send(res, 200, {
         live: true,
+        sse: true,
+        piattaforma: "server",
         ciclo_in_corso: cycleRunning,
         prossimo_ciclo: nextCycleAt,
         corpo: readJSONFile("body/body.json"),
@@ -279,7 +281,7 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (p === "/admin") {
-      const html = fs.readFileSync(path.join(ROOT, "server", "admin.html"), "utf8");
+      const html = fs.readFileSync(path.join(ROOT, "admin.html"), "utf8");
       return send(res, 200, html, { "Content-Type": "text/html; charset=utf-8" });
     }
 

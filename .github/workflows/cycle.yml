@@ -45,5 +45,7 @@ jobs:
           else
             CICLO=$(node -e "try{const i=require('./memory/index.json');console.log(i.files.at(-1).ciclo)}catch{console.log('?')}")
             git commit -m "Ciclo ${CICLO}: $(date -u +%Y-%m-%dT%H:%MZ)"
+            # nel frattempo potrebbero essere entrati stimoli approvati da Vercel
+            git pull --rebase origin "${GITHUB_REF_NAME}" || true
             git push
           fi

@@ -334,7 +334,16 @@ function setupUpload() {
     if (state.live) {
       setupUpload();
       setCountdown(state.prossimo_ciclo);
-      connectLive();
+      if (state.sse === false) {
+        // Serverless (Vercel): niente SSE, sincronizzazione periodica leggera.
+        setBadge("online", "live · sync 30s");
+        setInterval(async () => {
+          try { setCountdown((await fetchJSON("/api/state")).prossimo_ciclo); } catch {}
+          await refreshAll();
+        }, 30000);
+      } else {
+        connectLive();
+      }
       return;
     }
   } catch { /* hosting statico: nessun server live */ }
