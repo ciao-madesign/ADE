@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ADE — Amministrazione</title>
+  <style>
+    body { background:#0a0a12; color:#d6dae6; font-family: Georgia, serif; max-width: 900px; margin: 0 auto; padding: 2rem; line-height: 1.5; }
+    h1 { letter-spacing: .2em; font-weight: 400; }
+    .card { background:#12141d; border:1px solid #232838; border-radius:10px; padding:1rem 1.2rem; margin:1rem 0; }
+    input, textarea, button { background:#171a26; color:#d6dae6; border:1px solid #232838; border-radius:6px; padding:.5rem .7rem; font-family:inherit; font-size:.95rem; }
+    button { cursor:pointer; }
+    button.ok { border-color:#2e6b45; color:#7fdc9a; }
+    button.no { border-color:#6b2e2e; color:#dc7f7f; }
+    .esito-pulito { color:#7fdc9a; } .esito-sospetto { color:#e0b45c; }
+    ul { padding-left: 1.1rem; } .muted { color:#8790a5; font-size:.85rem; }
+    code { background:#171a26; padding:.1em .35em; border-radius:4px; font-size:.85em; }
+    #msg { min-height:1.4em; color:#e0b45c; }
+  </style>
+</head>
+<body>
+  <h1>ADE · ADMIN</h1>
+  <div class="card">
+    <label>Token admin <input id="token" type="password" size="34" /></label>
+    <button id="salva">Entra</button>
+    <button id="ciclo" title="Avvia subito un ciclo dell'entità">Avvia un ciclo ora</button>
+    <p id="msg"></p>
+  </div>
+  <h2 style="font-size:1rem;letter-spacing:.1em;text-transform:uppercase;color:#8b93a7">Quarantena</h2>
+  <div id="lista"></div>
+
+  <script>
+    const $ = (s) => document.querySelector(s);
+    const tokenInput = $("#token");
+    tokenInput.value = localStorage.getItem("ade_admin_token") || "";
+
+    const auth = () => ({ "Authorization": "Bearer " + tokenInput.value, "Content-Type": "application/json" });
+
+    async function carica() {
+      $("#msg").textContent = "";
+      const r = await fetch("/api/admin/pending", { headers: auth() });
+      if (!r.ok) { $("#msg").textContent = (await r.json()).errore || "errore"; return; }
+      localStorage.setItem("ade_admin_token", tokenInput.value);
+      const { uploads } = await r.json();
+      const cont = $("#lista");
+      cont.innerHTML = uploads.length ? "" : "<p class='muted'>Nessun upload in attesa o deciso.</p>";
+      for (const u of uploads) {
+        const div = document.createElement("div");
+        div.className = "card";
+        const motivi = (u.rapporto.motivi || []).map((m) => `<li>${esc(m)}</li>`).join("") || "<li>nessuna anomalia</li>";
+        const pending = u.stato === "in_quarantena";
+        div.innerHTML = `
+          <b>${esc(u.nome_sicuro)}</b> <span class="muted">(${u.rapporto.dimensione} byte · ${esc(u.autore)} · ${u.caricato_il.slice(0,16).replace("T"," ")})</span><br>
+          Stato: <b>${esc(u.stato)}</b> · Scansione: <b class="esito-${esc(u.rapporto.esito)}">${esc(u.rapporto.esito)}</b>
+          <ul class="muted">${motivi}</ul>
+          ${u.nota ? `<p class="muted">Nota del mittente: ${esc(u.nota)}</p>` : ""}
+          <p class="muted">sha256: <code>${esc(u.rapporto.sha256 || "")}</code></p>
+          ${pending ? `<button class="ok" data-id="${u.id}" data-a="approva">Approva → environment/inbox/</button>
+          <button class="no" data-id="${u.id}" data-a="rifiuta">Rifiuta</button>` : ""}`;
+        cont.appendChild(div);
+      }
+      cont.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => decidi(b.dataset.id, b.dataset.a)));
+    }
+
+    async function decidi(id, azione) {
+      const motivo = azione === "rifiuta" ? (prompt("Motivo del rifiuto (facoltativo):") || "") : "";
+      const r = await fetch("/api/admin/decide", { method: "POST", headers: auth(), body: JSON.stringify({ id, azione, motivo }) });
+      $("#msg").textContent = r.ok ? `Fatto: ${azione}` : (await r.json()).errore;
+      carica();
+    }
+
+    function esc(s) { return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
+
+    $("#salva").addEventListener("click", carica);
+    $("#ciclo").addEventListener("click", async () => {
+      const r = await fetch("/api/admin/cycle", { method: "POST", headers: auth() });
+      $("#msg").textContent = r.ok ? "Ciclo avviato." : (await r.json()).errore;
+    });
+    if (tokenInput.value) carica();
+  </script>
+</body>
+</html>

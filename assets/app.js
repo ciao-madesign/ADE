@@ -42,6 +42,8 @@ async function startViewer(body) {
   const THREE = await import("three");
   const { OrbitControls } = await import("./vendor/OrbitControls.js");
   const container = $("#viewer");
+  container.innerHTML = "";
+  let disposed = false;
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(body.scene?.background || "#0a0a12");
   if (body.scene?.fog) scene.fog = new THREE.Fog(new THREE.Color(body.scene.fog), 8, 22);
@@ -105,6 +107,7 @@ async function startViewer(body) {
 
   const clock = new THREE.Clock();
   function animate() {
+    if (disposed) return;
     requestAnimationFrame(animate);
     const t = clock.getElapsedTime();
     const dt = clock.getDelta();
@@ -143,6 +146,8 @@ async function startViewer(body) {
     camera.updateProjectionMatrix();
     renderer.setSize(container.clientWidth, container.clientHeight);
   });
+
+  return { dispose() { disposed = true; renderer.dispose(); container.innerHTML = ""; } };
 }
 
 /* ------------------------------------------------ pannelli */
@@ -229,9 +234,12 @@ function renderEvoluzione(md) {
   $("#evoluzione").textContent = entries.map((e) => "◇ " + e.trim()).join("\n\n") || "—";
 }
 
-/* ------------------------------------------------ avvio */
+/* ------------------------------------------------ avvio + modalità live */
 
-(async () => {
+let viewer = null;
+let bodyVersion = null;
+
+async function refreshAll() {
   try { renderEnergia(await fetchJSON("agent/state/energy.json")); } catch (e) { console.error("energia:", e); }
   try { renderDiario(await fetchText("ACTION_LOG.md")); } catch (e) { console.error("diario:", e); }
   try { renderMemoria(await fetchJSON("memory/index.json")); } catch { $("#memoria-lista").innerHTML = "<li class='nota'>Nessuna memoria ancora.</li>"; }
@@ -241,6 +249,95 @@ function renderEvoluzione(md) {
   try {
     const body = await fetchJSON("body/body.json");
     renderCorpoInfo(body);
-    await startViewer(body);
+    if (body.version !== bodyVersion) {
+      bodyVersion = body.version;
+      if (viewer) viewer.dispose();
+      viewer = await startViewer(body);
+    }
   } catch (e) { console.error("corpo:", e); }
+}
+
+function setBadge(stato, testo) {
+  const b = $("#live-badge");
+  b.className = stato;
+  b.textContent = "● " + testo;
+}
+
+function setCountdown(iso) {
+  const el = $("#prossimo-ciclo");
+  if (!iso) { el.textContent = ""; return; }
+  const diff = new Date(iso) - Date.now();
+  if (diff <= 0) { el.textContent = "ciclo imminente"; return; }
+  const h = Math.floor(diff / 3600000), m = Math.floor((diff % 3600000) / 60000);
+  el.textContent = `prossimo ciclo tra ${h}h ${String(m).padStart(2, "0")}m`;
+}
+
+function connectLive() {
+  const es = new EventSource("/api/events");
+  es.addEventListener("benvenuto", (e) => {
+    setBadge("online", "live");
+    setCountdown(JSON.parse(e.data).prossimo_ciclo);
+  });
+  es.addEventListener("battito", (e) => {
+    const d = JSON.parse(e.data);
+    setBadge(d.ciclo_in_corso ? "pensando" : "online", d.ciclo_in_corso ? "l'entità sta pensando…" : "live");
+    setCountdown(d.prossimo_ciclo);
+  });
+  es.addEventListener("ciclo_inizio", () => setBadge("pensando", "l'entità sta pensando…"));
+  for (const ev of ["stato", "ciclo_fine", "stimolo_approvato"]) {
+    es.addEventListener(ev, () => { setBadge("online", "live"); refreshAll(); });
+  }
+  es.onerror = () => {
+    setBadge("offline", "connessione persa, ritento…");
+    es.close();
+    setTimeout(connectLive, 5000);
+  };
+}
+
+function setupUpload() {
+  $("#upload-sezione").hidden = false;
+  $("#upload-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const file = $("#upload-file").files[0];
+    const esito = $("#upload-esito");
+    if (!file) return;
+    if (file.size > 8 * 1024 * 1024) { esito.textContent = "File oltre gli 8 MB."; return; }
+    esito.textContent = "Scansione in corso…";
+    const buf = new Uint8Array(await file.arrayBuffer());
+    let bin = "";
+    for (let i = 0; i < buf.length; i += 0x8000) bin += String.fromCharCode(...buf.subarray(i, i + 0x8000));
+    const r = await fetch("/api/upload", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nome: file.name,
+        dati_base64: btoa(bin),
+        nota: $("#upload-nota").value,
+        autore: $("#upload-autore").value,
+      }),
+    });
+    const out = await r.json();
+    if (!r.ok) { esito.textContent = "Errore: " + (out.errore || r.status); return; }
+    if (out.stato === "rifiutato_automaticamente") {
+      esito.textContent = "Rifiutato dallo scanner: " + out.rapporto.motivi.join("; ");
+    } else {
+      esito.textContent = `In quarantena (scansione: ${out.rapporto.esito}). Un amministratore deciderà se farlo entrare nel mondo di ADE.`;
+      $("#upload-form").reset();
+    }
+  });
+}
+
+(async () => {
+  await refreshAll();
+  try {
+    const state = await fetchJSON("/api/state");
+    if (state.live) {
+      setupUpload();
+      setCountdown(state.prossimo_ciclo);
+      connectLive();
+      return;
+    }
+  } catch { /* hosting statico: nessun server live */ }
+  setBadge("offline", "osservazione differita (aggiornamento ogni 60s)");
+  setInterval(refreshAll, 60000);
 })();

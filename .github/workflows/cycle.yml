@@ -27,6 +27,11 @@ jobs:
 
       - name: Esegui un ciclo dell'entità
         env:
+          # Provider AI: vedi agent/llm.mjs. Configura l'uno O l'altro.
+          AI_PROVIDER: ${{ vars.AI_PROVIDER }}
+          AI_MODEL: ${{ vars.AI_MODEL }}
+          OPENAI_BASE_URL: ${{ vars.OPENAI_BASE_URL }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: node agent/agent.mjs
 

@@ -5,7 +5,8 @@
   "description": "Autonomous Digital Entity — corpo 3D, cervello autonomo, memoria persistente",
   "type": "module",
   "scripts": {
-    "cycle": "node agent/agent.mjs"
+    "cycle": "node agent/agent.mjs",
+    "start": "node server/server.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.116.0"

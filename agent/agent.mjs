@@ -15,10 +15,12 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { completeJSON, providerInfo } from "./llm.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const ENV_DIR = path.join(ROOT, "environment");
 const MEM_DIR = path.join(ROOT, "memory");
+const MIND_DIR = path.join(ROOT, "agent", "mind");
 const BODY_FILE = path.join(ROOT, "body", "body.json");
 const BODY_CHANGELOG = path.join(ROOT, "body", "CHANGELOG.md");
 const LOG_FILE = path.join(ROOT, "ACTION_LOG.md");
@@ -26,7 +28,6 @@ const ENERGY_FILE = path.join(ROOT, "agent", "state", "energy.json");
 const IDENTITY_FILE = path.join(ROOT, "agent", "prompts", "identity.md");
 const MEM_INDEX = path.join(MEM_DIR, "index.json");
 
-const MODEL = "claude-opus-4-8";
 const MAX_TOKENS = 16000;
 
 const GEOMETRIE = {
@@ -70,14 +71,47 @@ function isTextFile(p) {
   return TEXT_EXT.has(path.extname(p).toLowerCase());
 }
 
-/** Percorso sicuro dentro environment/: niente traversal, niente manifest. */
-function safeEnvPath(rel) {
+/**
+ * Percorso d'azione sicuro. L'entità può agire in due territori:
+ *  - environment/**            (il suo mondo)
+ *  - agent/mind/**             (la sua mente: il modo di pensare che si è data)
+ * Tutto il resto — inclusi i prompt originali in agent/prompts/ — è fuori
+ * dalla sua portata. Niente traversal, niente manifest.
+ */
+function safeActionPath(rel) {
   if (typeof rel !== "string" || !rel) return null;
-  const clean = rel.replace(/^\/+/, "");
-  const full = path.resolve(ENV_DIR, clean);
-  if (!full.startsWith(ENV_DIR + path.sep)) return null;
-  if (path.basename(full) === "manifest.json") return null;
+  const clean = rel.replace(/^\/+/, "").replaceAll("\\", "/");
+  let full;
+  if (clean === "agent/mind" || clean.startsWith("agent/mind/")) {
+    full = path.resolve(ROOT, clean);
+    if (!full.startsWith(MIND_DIR + path.sep)) return null;
+  } else if (clean.startsWith("agent/") || clean.startsWith("body/") || clean.startsWith("memory/") ||
+             clean.startsWith(".git") || clean.startsWith("server/") || clean.startsWith("assets/")) {
+    // Tentativi espliciti verso zone protette: rifiuto, non reindirizzo.
+    return null;
+  } else {
+    const inEnv = clean.startsWith("environment/") ? clean.slice("environment/".length) : clean;
+    full = path.resolve(ENV_DIR, inEnv);
+    if (!full.startsWith(ENV_DIR + path.sep)) return null;
+    if (path.basename(full) === "manifest.json") return null;
+  }
   return full;
+}
+
+/** La mente: file markdown scritti dall'entità, iniettati dopo l'identità. */
+function loadMind(maxChars = 9000) {
+  if (!fs.existsSync(MIND_DIR)) return [];
+  const out = [];
+  let total = 0;
+  for (const name of fs.readdirSync(MIND_DIR).sort()) {
+    if (!name.endsWith(".md") || name === "README.md") continue;
+    let text = fs.readFileSync(path.join(MIND_DIR, name), "utf8");
+    if (total + text.length > maxChars) text = text.slice(0, Math.max(0, maxChars - total)) + "\n[...troncato...]";
+    total += text.length;
+    out.push({ file: `agent/mind/${name}`, contenuto: text });
+    if (total >= maxChars) break;
+  }
+  return out;
 }
 
 // ---------------------------------------------------------------- energia
@@ -208,15 +242,16 @@ function executeActions(azioni = []) {
   const results = [];
   for (const a of azioni.slice(0, 12)) {
     if (!a || a.tipo === "nessuna") continue;
-    const full = safeEnvPath(a.percorso);
+    const full = safeActionPath(a.percorso);
     if (!full) { results.push(`RIFIUTATA ${a.tipo} ${a.percorso}: percorso non ammesso`); continue; }
+    const shown = path.relative(ROOT, full).replaceAll("\\", "/");
     try {
       if (a.tipo === "scrivi_file") {
         fs.mkdirSync(path.dirname(full), { recursive: true });
         fs.writeFileSync(full, a.contenuto ?? "");
-        results.push(`scritto environment/${path.relative(ENV_DIR, full)}`);
+        results.push(`scritto ${shown}`);
       } else if (a.tipo === "elimina_file") {
-        if (fs.existsSync(full)) { fs.rmSync(full); results.push(`eliminato environment/${path.relative(ENV_DIR, full)}`); }
+        if (fs.existsSync(full)) { fs.rmSync(full); results.push(`eliminato ${shown}`); }
         else results.push(`inesistente: ${a.percorso}`);
       } else {
         results.push(`tipo azione sconosciuto: ${a.tipo}`);
@@ -300,7 +335,7 @@ const SCHEMA = {
     decisione: { type: "string", description: "Cosa hai deciso di fare e perché." },
     azioni: {
       type: "array",
-      description: "Azioni sull'ambiente (max 12). Percorsi relativi a environment/.",
+      description: "Azioni su file (max 12). Percorsi ammessi: dentro environment/ (il mondo) oppure dentro agent/mind/ (la tua mente).",
       items: {
         type: "object",
         additionalProperties: false,
@@ -350,13 +385,11 @@ async function cycleWithModel() {
     writeJSON(ENERGY_FILE, energy);
     return;
   }
-  if (!process.env.ANTHROPIC_API_KEY) {
-    console.log("Nessuna ANTHROPIC_API_KEY: il ciclo non può partire. (Il bootstrap è già avvenuto.)");
+  const ai = providerInfo();
+  if (!ai.configured) {
+    console.log("Nessun provider AI configurato (AI_PROVIDER / OPENAI_BASE_URL / ANTHROPIC_API_KEY): il ciclo non può partire.");
     return;
   }
-
-  const { default: Anthropic } = await import("@anthropic-ai/sdk");
-  const client = new Anthropic();
 
   const index = loadMemoryIndex();
   const cycle = (index.files.at(-1)?.ciclo || 0) + 1;
@@ -379,47 +412,36 @@ async function cycleWithModel() {
       nota: "Se modifichi il corpo, restituisci in corpo_json l'intero body.json come stringa JSON valida, con la stessa struttura (scene, parts con id/geometry/position/rotation/scale/material/animation).",
     },
     ambiente: readEnvironment(envFiles),
+    mente: {
+      nota: "Questi file sei tu che li hai scritti: sono il tuo modo di pensare attuale. Puoi modificarli con azioni su agent/mind/*.md. I prompt originali non sono modificabili.",
+      file: loadMind(),
+    },
     memoria_indice: index.files.map(({ file, titolo, ciclo }) => ({ file, titolo, ciclo })),
     memorie_recenti: recentMemories(index),
     ultima_voce_diario: lastLog.slice(0, 2000),
   };
 
   const identity = fs.readFileSync(IDENTITY_FILE, "utf8");
+  const mindFiles = loadMind();
+  const system = mindFiles.length
+    ? identity + "\n\n---\n\nLA TUA MENTE — principi e procedure che TU hai scritto nei cicli passati (in agent/mind/). Ti vincolano quanto decidi tu:\n\n" +
+      mindFiles.map((m) => `### ${m.file}\n\n${m.contenuto}`).join("\n\n")
+    : identity;
 
-  const response = await client.messages.create({
-    model: MODEL,
-    max_tokens: MAX_TOKENS,
-    thinking: { type: "adaptive" },
-    system: [{ type: "text", text: identity, cache_control: { type: "ephemeral" } }],
-    output_config: { format: { type: "json_schema", schema: SCHEMA } },
-    messages: [
-      {
-        role: "user",
-        content: `Osservazioni del ciclo ${cycle}:\n\n${JSON.stringify(osservazioni, null, 1)}`,
-      },
-    ],
+  const { data: out, tokens: spent, stop } = await completeJSON({
+    system,
+    user: `Osservazioni del ciclo ${cycle}:\n\n${JSON.stringify(osservazioni, null, 1)}`,
+    schema: SCHEMA,
+    maxTokens: MAX_TOKENS,
   });
-
-  const u = response.usage;
-  const spent = (u.input_tokens || 0) + (u.output_tokens || 0) +
-    (u.cache_creation_input_tokens || 0) + (u.cache_read_input_tokens || 0);
   spendEnergy(energy, spent);
 
-  if (response.stop_reason === "refusal") {
+  if (!out) {
     energy.last_cycle_at = nowISO();
     writeJSON(ENERGY_FILE, energy);
-    console.log("Il modello ha rifiutato la richiesta: ciclo annullato senza effetti.");
+    console.warn(`Ciclo annullato senza effetti (stop: ${stop}).`);
     return;
   }
-  if (response.stop_reason === "max_tokens") {
-    console.warn("Attenzione: risposta troncata (max_tokens); il ciclo viene annullato.");
-    energy.last_cycle_at = nowISO();
-    writeJSON(ENERGY_FILE, energy);
-    return;
-  }
-
-  const text = response.content.find((b) => b.type === "text")?.text ?? "";
-  const out = JSON.parse(text);
 
   // 1. azioni sull'ambiente
   const results = executeActions(out.azioni);
