@@ -32,18 +32,21 @@ scelto. Nessun componente sulla tua macchina.
 
 ---
 
-## Step 1 — Branch di produzione ⬜
+## Step 1 — Branch di produzione ✅ (2026-07-18)
 
-**Obiettivo**: decidere su quale branch vive ADE e allinearlo. Oggi tutto è su
-`claude/autonomous-digital-entity-d82nr6`; Vercel e il ciclo devono puntare allo
-stesso branch, per sempre (la storia git è la biografia dell'entità).
+**Deciso**: ADE vive su **`main`**. Branch creato con l'intera storia (genesi +
+ciclo 1); il branch tecnico `claude/autonomous-digital-entity-d82nr6` resta come
+archivio della costruzione. D'ora in poi, ovunque nella guida si parli di
+"branch dell'entità", si intende `main` (in particolare: `GITHUB_BRANCH=main`
+allo Step 7 e Production Branch = `main` allo Step 5).
 
-**Decisione che ti chiederò**: portare tutto su `main` (consigliato: più pulito,
-è lo standard che Vercel propone) oppure restare sul branch attuale.
+**Azione residua per te (1 minuto, browser)**: rendi `main` il branch
+predefinito del repo → github.com/ciao-madesign/ADE → *Settings* → sezione
+*General* → riquadro *Default branch* → icona ⇄ → scegli `main` → *Update*.
+Serve perché GitHub mostri `main` a chi visita il repo e lo proponga di default
+a Vercel.
 
-**Chi fa cosa**: decidi tu; il merge/allineamento lo faccio io.
-
-**Verifica**: il branch scelto contiene l'ultimo commit e il ciclo 1 dell'entità.
+**Verifica**: entrambi i branch esistono sul remoto e puntano allo stesso commit.
 
 ---
 
@@ -210,8 +213,10 @@ Poi: si condivide il link. Il Truman Show comincia.
 
 | Data | Step | Decisione | Motivo |
 |---|---|---|---|
-| — | — | — | — |
+| 2026-07-18 | 1 | ADE vive su `main` | Standard di GitHub/Vercel, nome pulito; il branch tecnico resta come archivio |
 
 ## Diario di avanzamento
 
-*(aggiornato ad ogni step completato)*
+- **2026-07-18 — Step 1 completato.** Creato `main` dall'intera storia esistente
+  (stesso commit del branch tecnico). Resta un click all'utente: impostare
+  `main` come default branch nelle impostazioni GitHub.
