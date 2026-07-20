@@ -30,12 +30,23 @@ const MEM_INDEX = path.join(MEM_DIR, "index.json");
 const INBOX_DIR = path.join(ENV_DIR, "inbox");
 const EXPIRY_FILE = path.join(INBOX_DIR, ".expiry.json");
 
-// I provider free-tier OpenAI-compatibili (Groq &co.) hanno un budget di
-// token al minuto molto più stretto di Claude — nel caso di Qwen 3.6 27B su
-// Groq, appena 8000 token totali (prompt + risposta + immagini) al minuto.
-// Con Anthropic il margine è ampio; con un provider di quel tipo teniamo
-// tutto — risposta, contesto testuale, immagini — su budget molto ridotti.
-const TIGHT_BUDGET = providerInfo().provider !== "anthropic";
+// I provider free-tier OpenAI-compatibili non sono tutti uguali: Groq ha un
+// budget di token al minuto molto stretto (Qwen 3.6 27B: appena 8000 token
+// totali — prompt + risposta + immagini — al minuto), mentre altri, come
+// Google AI Studio (Gemini), ne concedono ordini di grandezza in più
+// (~1.000.000 TPM). Solo con i provider "stretti" limitiamo davvero tutto;
+// con Anthropic e con gli host free-tier noti per essere generosi teniamo
+// il contesto pieno.
+function isGenerousProvider(info) {
+  if (info.provider === "anthropic") return true;
+  try {
+    const host = new URL(info.baseUrl).hostname;
+    return host === "generativelanguage.googleapis.com";
+  } catch {
+    return false;
+  }
+}
+const TIGHT_BUDGET = !isGenerousProvider(providerInfo());
 
 // Spazio riservato alla risposta del modello. Sovrascrivibile con AI_MAX_TOKENS.
 const MAX_TOKENS = Number(process.env.AI_MAX_TOKENS) || (TIGHT_BUDGET ? 1500 : 16000);

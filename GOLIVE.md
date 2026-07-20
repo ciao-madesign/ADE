@@ -408,6 +408,51 @@ anche fuori dai test, la soluzione sarebbe distanziare i cicli
 programmati (oggi ogni 6 ore, ampiamente sufficiente) o valutare un
 piano a pagamento — decisione che ti chiederò se e quando servisse.
 
+### Incidente 2026-07-20 (parte 9) — cambio provider: da Groq a Google AI Studio
+
+Il 429 si è ripresentato anche dopo l'attesa e i ritentativi automatici.
+Controllati i log reali dei cicli falliti su GitHub Actions: anche
+un tentativo "pulito" (senza immagine, risposta ridotta) chiedeva già
+5.000-6.000 token, a fronte di un tetto di 8.000 token/minuto **totali**
+— margine troppo stretto per essere affidabile, specialmente perché ogni
+ciclo automatico e ogni ritentativo consumano la stessa finestra.
+Confermato anche che la variabile `AI_MAX_TOKENS=4000`, impostata su
+richiesta mia in una fase precedente, **non stava causando il problema**:
+`.github/workflows/cycle.yml` non la passa al programma (mancava nel
+blocco `env:`), quindi restava inutilizzata — errore mio nell'avere
+lasciato quel collegamento incompleto. Può essere rimossa dalle
+Variables di GitHub, non serve più: il codice si autoregola da solo.
+
+**Decisione presa dall'admin** (tre opzioni presentate: tornare a Llama
+3.3 come soluzione-tampone, restare su Qwen disattivando la visione,
+o cambiare fornitore): **cambiare fornitore, passare a Google AI
+Studio (Gemini)**. Il suo tier gratuito concede circa 1.000.000 di
+token al minuto (più di 100 volte quello di Groq) ed è nativamente
+multimodale — nessun compromesso su affidabilità o visione.
+
+**Azione richiesta all'admin** (dal sito, 5 minuti):
+1. Vai su [aistudio.google.com](https://aistudio.google.com) → *Get API
+   key* → crea una chiave gratuita (basta un account Google).
+2. Su GitHub → *Settings* → *Secrets and variables* → *Actions*:
+   - scheda **Secrets**: aggiorna `OPENAI_API_KEY` con la nuova chiave
+     Google (sovrascrive quella di Groq).
+   - scheda **Variables**: `OPENAI_BASE_URL` →
+     `https://generativelanguage.googleapis.com/v1beta/openai`,
+     `AI_MODEL` → `gemini-2.5-flash`. `AI_PROVIDER` resta `openai`
+     (invariato).
+   - (facoltativo) rimuovi `AI_MAX_TOKENS`, non serve più.
+3. Rilancia il ciclo.
+
+**Corretto nel codice**: prima di questa modifica, ogni provider
+OpenAI-compatibile diverso da Claude veniva trattato con lo stesso
+budget "stretto" pensato per Groq — corretto per Groq, inutilmente
+penalizzante per un provider con un margine enorme come Gemini.
+`agent.mjs` ora riconosce l'host `generativelanguage.googleapis.com`
+e in quel caso usa il contesto pieno (stesso trattamento riservato a
+Claude): niente più limiti artificiali su ambiente, memoria, mente o
+numero/peso delle immagini. Con qualunque altro endpoint sconosciuto,
+per prudenza, resta il profilo ridotto.
+
 ---
 
 ## Step 9 — Dominio personalizzato (opzionale) ⏭️/⬜

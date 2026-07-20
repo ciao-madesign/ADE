@@ -42,10 +42,12 @@ Il "pensiero" è astratto in `agent/llm.mjs` e si configura con variabili d'ambi
 
 | Configurazione | Esempio |
 |---|---|
-| **Groq** (free tier generoso, modelli open, molto veloce) | `AI_PROVIDER=openai` · `OPENAI_BASE_URL=https://api.groq.com/openai/v1` · `OPENAI_API_KEY=gsk_…` · `AI_MODEL=llama-3.3-70b-versatile` |
+| **Google AI Studio** (Gemini, consigliato — free tier molto ampio: ~1.000.000 token/minuto, visione nativa) | `AI_PROVIDER=openai` · `OPENAI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai` · `OPENAI_API_KEY=…` · `AI_MODEL=gemini-2.5-flash` |
+| **Groq** (free tier veloce ma con budget di token/minuto stretto — vedi nota sotto) | `AI_PROVIDER=openai` · `OPENAI_BASE_URL=https://api.groq.com/openai/v1` · `OPENAI_API_KEY=gsk_…` · `AI_MODEL=llama-3.3-70b-versatile` |
 | **OpenRouter** (aggregatore, modelli con suffisso `:free`) | `AI_PROVIDER=openai` · `OPENAI_BASE_URL=https://openrouter.ai/api/v1` · `OPENAI_API_KEY=sk-or-…` · `AI_MODEL=meta-llama/llama-3.3-70b-instruct:free` |
-| **Google AI Studio** (Gemini, free tier, endpoint OpenAI-compatibile) | `AI_PROVIDER=openai` · `OPENAI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai` · `OPENAI_API_KEY=…` · `AI_MODEL=gemini-2.0-flash` |
 | **Cerebras** (free tier, modelli open) | `AI_PROVIDER=openai` · `OPENAI_BASE_URL=https://api.cerebras.ai/v1` · `OPENAI_API_KEY=…` · `AI_MODEL=llama-3.3-70b` |
+
+**Nota sul budget di token dei provider gratuiti**: Groq concede solo 6.000-12.000 token al minuto a seconda del modello — con il contesto di ADE (memoria, ambiente, mente) e in più un'immagine, è facile superarlo, causando errori 413/429 (`agent/llm.mjs` ha comunque un ritentativo automatico che riduce il carico e aspetta il tempo indicato dal provider). Google AI Studio non ha questo problema: il tier gratuito è ~100 volte più ampio. Per questo è il provider consigliato di default. Il codice riconosce automaticamente `generativelanguage.googleapis.com` e usa un contesto pieno; con qualunque altro endpoint OpenAI-compatibile (incluso Groq) usa per prudenza un contesto ridotto.
 
 **Alternative che richiedono una macchina** (la tua o un VPS): **Ollama** (`OPENAI_BASE_URL=http://localhost:11434/v1`, nessuna chiave), vLLM, LM Studio, llama.cpp server. Nota: Ollama è un software che *esegue* i modelli su un computer — non esiste un "Ollama cloud" gratuito; per gli stessi modelli senza una macchina, usa Groq/OpenRouter qui sopra.
 
