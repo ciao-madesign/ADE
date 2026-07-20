@@ -21,3 +21,12 @@ Ogni stimolo che un visitatore lascia ad ADE, dopo l'approvazione, entra nel suo
 - Visibile fino al: 2026-07-21T13:48:23.463Z (poi rimosso automaticamente; resta questa registrazione)
 
 ---
+
+## 2026-07-20T14:16:48.610Z — 36bfa640-673e-4939-9c2f-e2fd785213e1.JPG
+- Autore: anonimo
+- Nota: —
+- Destinazione: `environment/inbox/36bfa640-673e-4939-9c2f-e2fd785213e1.JPG`
+- sha256: `8ddbfffbed1239f3cf0017e972f9b003bc8a844c9edf2a855a66d8f535ee3f6e`
+- Visibile fino al: 2026-07-21T14:16:48.610Z (poi rimosso automaticamente; resta questa registrazione)
+
+---
