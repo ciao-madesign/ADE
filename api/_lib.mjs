@@ -157,14 +157,23 @@ export async function blobModule() {
   return import("@vercel/blob");
 }
 
+/** Legge per intero uno stream WHATWG (l'SDK Blob restituisce ReadableStream, non un buffer). */
+async function streamToBuffer(stream) {
+  const chunks = [];
+  for await (const chunk of stream) chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+  return Buffer.concat(chunks);
+}
+
 export async function listQuarantine() {
-  const { list } = await blobModule();
+  const { list, get } = await blobModule();
   const { blobs } = await list({ prefix: "quarantine/" });
   const metas = [];
   for (const b of blobs.filter((x) => x.pathname.endsWith(".meta.json"))) {
     try {
-      const r = await fetch(b.url, { cache: "no-store" });
-      metas.push({ ...(await r.json()), _meta_url: b.url });
+      const res = await get(b.pathname, { access: "private" });
+      if (!res?.stream) continue;
+      const testo = (await streamToBuffer(res.stream)).toString("utf8");
+      metas.push({ ...JSON.parse(testo), _meta_pathname: b.pathname });
     } catch { /* meta illeggibile: ignora */ }
   }
   return metas.sort((a, b) => (a.caricato_il < b.caricato_il ? 1 : -1));
@@ -172,30 +181,30 @@ export async function listQuarantine() {
 
 export async function saveQuarantine(id, buffer, meta) {
   const { put } = await blobModule();
-  await put(`quarantine/${id}.bin`, buffer, { access: "public", addRandomSuffix: false });
+  await put(`quarantine/${id}.bin`, buffer, { access: "private", addRandomSuffix: false });
   await put(`quarantine/${id}.meta.json`, JSON.stringify(meta, null, 2), {
-    access: "public", addRandomSuffix: false, allowOverwrite: true, contentType: "application/json",
+    access: "private", addRandomSuffix: false, allowOverwrite: true, contentType: "application/json",
   });
 }
 
 export async function readQuarantineBin(id) {
-  const { list } = await blobModule();
-  const { blobs } = await list({ prefix: `quarantine/${id}.bin` });
-  if (!blobs.length) return null;
-  const r = await fetch(blobs[0].url, { cache: "no-store" });
-  return { buffer: Buffer.from(await r.arrayBuffer()), url: blobs[0].url };
+  const { get } = await blobModule();
+  const pathname = `quarantine/${id}.bin`;
+  const res = await get(pathname, { access: "private" });
+  if (!res?.stream) return null;
+  return { buffer: await streamToBuffer(res.stream), pathname };
 }
 
 export async function updateQuarantineMeta(meta) {
   const { put } = await blobModule();
   await put(`quarantine/${meta.id}.meta.json`, JSON.stringify(meta, null, 2), {
-    access: "public", addRandomSuffix: false, allowOverwrite: true, contentType: "application/json",
+    access: "private", addRandomSuffix: false, allowOverwrite: true, contentType: "application/json",
   });
 }
 
-export async function deleteBlobUrl(url) {
+export async function deleteBlobPath(pathname) {
   const { del } = await blobModule();
-  try { await del(url); } catch { /* già assente */ }
+  try { await del(pathname); } catch { /* già assente */ }
 }
 
 /* ------------------------------------------------ pianificazione */

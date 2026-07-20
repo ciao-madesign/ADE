@@ -5,7 +5,7 @@
  */
 import { sanitizeName } from "../../server/scan.mjs";
 import {
-  deleteBlobUrl, ghConfigured, ghCreateFile, ghMissingVars, listQuarantine,
+  deleteBlobPath, ghConfigured, ghCreateFile, ghMissingVars, listQuarantine,
   readQuarantineBin, recordArrival, requireAdmin, updateQuarantineMeta,
 } from "../_lib.mjs";
 
@@ -52,9 +52,9 @@ export default async function handler(req, res) {
     meta.deciso_il = new Date().toISOString();
     meta.motivo_decisione = String(motivo || "").slice(0, 300);
     await updateQuarantineMeta(meta);
-    if (bin) await deleteBlobUrl(bin.url); // i byte non restano in giro dopo il verdetto
+    if (bin) await deleteBlobPath(bin.pathname); // i byte non restano in giro dopo il verdetto
 
-    const { _meta_url, ...clean } = meta;
+    const { _meta_pathname, ...clean } = meta;
     res.status(200).json(clean);
   } catch (e) {
     console.error(e);

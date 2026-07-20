@@ -218,6 +218,24 @@ una configurazione in realtà corretta — **non serviva nessuna azione
 sull'account Vercel**, era un bug del codice. Corretto: il controllo ora
 accetta `BLOB_READ_WRITE_TOKEN` **oppure** `BLOB_STORE_ID`.
 
+**Incidente 2026-07-20 (parte 3) — lo store è privato, il codice presupponeva pubblico.**
+Dopo la parte 2, nuovo errore al primo vero upload: *"Cannot use public access
+on a private store"*. Lo store dell'admin è configurato con accesso
+**privato** — scelta di sicurezza corretta (i file non ancora approvati non
+dovrebbero essere leggibili da un URL pubblico), ma il codice presumeva
+sempre `access: "public"` in scrittura e leggeva i contenuti con un semplice
+`fetch()` sull'URL, che sugli store privati non è autenticato e quindi fallisce.
+
+Verificato contro la documentazione ufficiale @vercel/blob (store privati:
+`put(..., { access: "private" })` in scrittura; lettura tramite `get(pathname,
+{ access: "private" })`, che restituisce uno stream da consumare, non un URL
+scaricabile con `fetch()` diretto). Corretto in `api/_lib.mjs`: tutte le
+operazioni di scrittura ora usano `access: "private"`, e la lettura passa da
+`get()` con conversione stream→buffer. **Non serviva nessuna azione
+sull'account Vercel** — era, di nuovo, un'assunzione sbagliata nel codice,
+non un problema di configurazione. Lo store privato resta la scelta giusta e
+non va cambiato.
+
 ---
 
 ## Step 9 — Dominio personalizzato (opzionale) ⏭️/⬜

@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     return res.status(500).json({ errore: "nessuna credenziale Blob trovata (né BLOB_READ_WRITE_TOKEN né BLOB_STORE_ID): collega lo store Blob al progetto (Storage → Connected Projects) e fai un Redeploy." });
   }
   try {
-    const uploads = (await listQuarantine()).map(({ _meta_url, ...u }) => u);
+    const uploads = (await listQuarantine()).map(({ _meta_pathname, ...u }) => u);
     res.status(200).json({ uploads });
   } catch (e) {
     console.error(e);

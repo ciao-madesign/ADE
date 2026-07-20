@@ -72,7 +72,7 @@ Ogni commit dell'entità fa ri-deployare il sito: i dati mostrati sono sempre l'
 Passi:
 
 1. **Importa il repository** su [vercel.com](https://vercel.com) (Add New → Project → il repo ADE, branch dell'entità). Nessuna configurazione di build: il sito è statico e le funzioni in `api/` vengono rilevate da sole.
-2. **Crea uno store Blob** (tab *Storage* del progetto → Blob → collega al progetto): serve da quarantena. Gli store recenti si autenticano via **OIDC**: Vercel imposta da solo `BLOB_STORE_ID` (visibile tra le Environment Variables) e inietta `VERCEL_OIDC_TOKEN` a runtime — non serve alcun token da copiare a mano. (Store più vecchi possono invece usare un `BLOB_READ_WRITE_TOKEN` statico: il codice accetta entrambi.)
+2. **Crea uno store Blob** (tab *Storage* del progetto → Blob → collega al progetto): serve da quarantena, e il codice presuppone uno store con accesso **privato** (i file non ancora approvati non devono essere leggibili da un URL pubblico indovinabile). Gli store recenti si autenticano via **OIDC**: Vercel imposta da solo `BLOB_STORE_ID` (visibile tra le Environment Variables) e inietta `VERCEL_OIDC_TOKEN` a runtime — non serve alcun token da copiare a mano. (Store più vecchi possono invece usare un `BLOB_READ_WRITE_TOKEN` statico: il codice accetta entrambi come credenziale, ma l'accesso deve restare privato.)
 3. **Variabili d'ambiente** (*Settings → Environment Variables*):
    - `ADMIN_TOKEN` — token lungo e segreto per il pannello `/admin`
    - `GITHUB_TOKEN` — fine-grained PAT sul repo con permessi **Contents: Read and write** e **Actions: Read and write**
