@@ -146,9 +146,12 @@ fuori dal mondo di ADE.
 
 **Chi fa cosa (tu, dal browser)**: nel progetto Vercel → tab *Storage* →
 *Create Database* → **Blob** → nome a piacere (es. `ade-quarantena`) → collega
-al progetto. La variabile `BLOB_READ_WRITE_TOKEN` si imposta da sola.
+al progetto. Gli store recenti usano OIDC: Vercel imposta da solo
+`BLOB_STORE_ID` tra le variabili e inietta `VERCEL_OIDC_TOKEN` a runtime —
+non c'è nessun token da copiare a mano.
 
-**Verifica**: in *Settings → Environment Variables* esiste `BLOB_READ_WRITE_TOKEN`.
+**Verifica**: in *Settings → Environment Variables* esiste `BLOB_STORE_ID`
+(oppure, per store più vecchi, `BLOB_READ_WRITE_TOKEN`).
 
 ---
 
@@ -196,28 +199,24 @@ senza errori (lista vuota: giusto, non c'è ancora nulla in quarantena).
 
 **Verifica**: tutti i 6 punti passano.
 
-**Incidente 2026-07-20 — riscontrato durante il collaudo, risolto lato codice.**
-Alla Prova 1 (upload) e alla Prova "Avvia un ciclo ora": errori *"quarantena non
-disponibile (Vercel Blob non configurato?)"* e *"GITHUB_TOKEN/GITHUB_REPO non
-configurati"*, nonostante lo Step 6 e lo Step 7 risultassero completati.
+**Incidente 2026-07-20 (parte 1) — messaggi d'errore troppo generici, risolto.**
+Alla Prova 1 (upload) e alla Prova "Avvia un ciclo ora": errori generici
+*"non configurato"*, nonostante lo Step 6 e lo Step 7 risultassero completati.
+Corretto: i messaggi ora indicano **esattamente quale variabile manca**
+(es. "mancano su Vercel: GITHUB_TOKEN").
 
-Diagnosi: le variabili risultavano assenti nell'esecuzione live delle funzioni
-serverless — causa più probabile una delle tre: (a) variabili salvate ma non
-spuntate per l'ambiente *Production*, (b) store Blob creato ma non
-effettivamente "Connected" al progetto, (c) redeploy eseguito prima che il
-salvataggio delle variabili si completasse. Non era un problema del codice
-dello Step 6/7, ma tutti i messaggi d'errore erano troppo generici per
-individuare la causa esatta — corretto.
-
-Interventi applicati:
-- I messaggi d'errore ora indicano **esattamente quale variabile manca**
-  (es. "mancano su Vercel: GITHUB_TOKEN" invece del generico "non configurati").
-- **Azione richiesta all'admin**: su Vercel, *Settings → Environment Variables*,
-  verificare che ciascuna di `ADMIN_TOKEN`, `GITHUB_TOKEN`, `GITHUB_REPO`,
-  `GITHUB_BRANCH`, `BLOB_READ_WRITE_TOKEN` abbia la casella **Production**
-  spuntata; per il Blob, controllare in *Storage → ade-quarantena → Connected
-  Projects* che il progetto sia elencato. Poi *Deployments → ⋯ → Redeploy*
-  un'ultima volta e ripetere le Prove 1 e 4.
+**Incidente 2026-07-20 (parte 2) — Vercel Blob usa OIDC, non un token statico.**
+Con il messaggio più preciso è emerso: *"manca BLOB_READ_WRITE_TOKEN"*, ma lo
+store risultava correttamente collegato al progetto (verificato dall'admin
+nella pagina *Storage* del progetto: `BLOB_STORE_ID` e `BLOB_WEBHOOK_PUBLIC_KEY`
+presenti, ambienti Production+Preview). Causa reale: gli store Blob creati di
+recente non usano più un token statico `BLOB_READ_WRITE_TOKEN` — si autenticano
+via **OIDC**, con `BLOB_STORE_ID` (impostato da Vercel) e `VERCEL_OIDC_TOKEN`
+(iniettato automaticamente a runtime, non visibile/impostabile manualmente).
+Il controllo nel codice cercava solo la variabile vecchio-stile e bloccava
+una configurazione in realtà corretta — **non serviva nessuna azione
+sull'account Vercel**, era un bug del codice. Corretto: il controllo ora
+accetta `BLOB_READ_WRITE_TOKEN` **oppure** `BLOB_STORE_ID`.
 
 ---
 
@@ -277,7 +276,9 @@ Poi: si condivide il link. Il Truman Show comincia.
   Nota: il sito non è raggiungibile dagli IP datacenter dell'ambiente di
   sviluppo (403 del firewall Vercel) — irrilevante per i visitatori reali.
 - **2026-07-20 — Step 6 completato.** Store Vercel Blob `ade-quarantena` creato
-  e collegato al progetto; `BLOB_READ_WRITE_TOKEN` presente tra le variabili.
+  e collegato al progetto (confermato lo stesso giorno durante il collaudo:
+  `BLOB_STORE_ID` presente tra le variabili — lo store usa OIDC, non un
+  token statico; vedi l'incidente nello Step 8).
 - **2026-07-20 — Step 7 completato.** Fine-grained PAT `ade-vercel` creato
   (solo repo ADE, solo Contents+Actions R/W, scadenza 90gg — andrà rigenerato);
   variabili `ADMIN_TOKEN`, `GITHUB_TOKEN`, `GITHUB_REPO`, `GITHUB_BRANCH`

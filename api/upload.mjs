@@ -50,9 +50,13 @@ export default async function handler(req, res) {
     rapporto,
   };
 
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+  // Vercel Blob si autentica con un token statico (BLOB_READ_WRITE_TOKEN,
+  // store "vecchio stile") oppure via OIDC (BLOB_STORE_ID + VERCEL_OIDC_TOKEN,
+  // quest'ultimo iniettato automaticamente da Vercel a runtime per gli store
+  // collegati al progetto — è il caso normale per gli store creati di recente).
+  if (!process.env.BLOB_READ_WRITE_TOKEN && !process.env.BLOB_STORE_ID) {
     return res.status(500).json({
-      errore: "quarantena non disponibile: manca BLOB_READ_WRITE_TOKEN. Verifica che lo store Vercel Blob sia collegato al progetto (Storage → il tuo store → Connected Projects) e che sia stato fatto un Redeploy dopo il collegamento.",
+      errore: "quarantena non disponibile: nessuna credenziale Blob trovata (né BLOB_READ_WRITE_TOKEN né BLOB_STORE_ID). Verifica che lo store Vercel Blob sia collegato al progetto (Storage → il tuo store → Connected Projects) e che sia stato fatto un Redeploy dopo il collegamento.",
     });
   }
   try {
