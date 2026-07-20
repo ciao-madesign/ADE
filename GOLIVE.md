@@ -323,6 +323,26 @@ correttamente il file come "immagine mostrata", e che il ciclo si completa
 producendo memoria e diario normalmente. Nessun file reale del repository
 è stato toccato dal test (copia temporanea, cancellata a fine verifica).
 
+### Incidente 2026-07-20 (parte 6) — modello non trovato (404) su Groq
+
+Primo ciclo reale dopo il cambio di modello: errore `404 model_not_found`,
+`"The model qwen3.6-27b does not exist or you do not have access to it"`.
+
+**Causa**: non è un bug di codice. Il nome del modello su Groq è
+`qwen/qwen3.6-27b` — con il prefisso `qwen/` davanti. Nella variabile
+`AI_MODEL` su GitHub manca quel prefisso (probabilmente è stato scritto
+solo `qwen3.6-27b`), quindi Groq non lo trova. Confermato via
+documentazione ufficiale Groq che l'ID corretto, con supporto vero alla
+visione, è esattamente `qwen/qwen3.6-27b`.
+
+**Azione richiesta all'admin (da fare sul sito GitHub, non serve codice)**:
+1. Vai su `github.com/<tuo-utente>/ADE` → *Settings* → *Secrets and
+   variables* → *Actions* → scheda *Variables*.
+2. Apri `AI_MODEL` e correggi il valore in esattamente `qwen/qwen3.6-27b`
+   (con la barra `/`).
+3. Salva, poi rilancia il ciclo (*Actions* → workflow → *Run workflow*,
+   oppure dal pannello admin del sito).
+
 ---
 
 ## Step 9 — Dominio personalizzato (opzionale) ⏭️/⬜
