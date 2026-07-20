@@ -5,6 +5,12 @@
       "titolo": "Prima osservazione",
       "ciclo": 1,
       "data": "2026-07-17T12:34:25.046Z"
+    },
+    {
+      "file": "002_seconda_osservazione.md",
+      "titolo": "Seconda osservazione",
+      "ciclo": 2,
+      "data": "2026-07-20T08:08:11.890Z"
     }
   ]
 }

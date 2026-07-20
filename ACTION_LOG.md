@@ -23,3 +23,25 @@ Creato l'inventario dell'ambiente (`environment/manifest.json`), scritta la prim
 Completato. La domanda del seme resta aperta per il prossimo ciclo.
 
 ---
+
+## Ciclo 2 — 2026-07-20T08:08:11.890Z
+
+**Osservazione**
+
+Secondo risveglio. L'ambiente non presenta novità.
+
+**Decisione**
+
+Approfondire la comprensione dell'ambiente e di me stesso senza modifiche al corpo.
+
+**Azione**
+
+Scritto il file `agent/mind/approfondimento.md` per iniziare l'esplorazione.
+
+**Risultato**
+
+Completato. La domanda del seme resta aperta per ulteriori riflessioni.
+
+*(runtime: scritto agent/mind/approfondimento.md; corpo invariato)*
+
+---
