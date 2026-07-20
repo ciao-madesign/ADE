@@ -146,16 +146,33 @@ async function openaiJSON({ system, user, schema, maxTokens, images, info }) {
     return r;
   }
 
+  const isRateLimit = (r) => r.status === 413 || r.status === 429;
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  /** Estrae "riprova tra X secondi" dal corpo dell'errore Groq, se presente. */
+  async function waitSuggestedByProvider(r) {
+    const bodyText = await r.clone().text();
+    const m = bodyText.match(/try again in ([\d.]+)s/i);
+    const seconds = m ? Math.min(Number(m[1]) + 1, 60) : 5;
+    await sleep(seconds * 1000);
+  }
+
   let res = await attempt(images, maxTokens);
 
-  // 413/429 "tokens": la richiesta supera il budget al minuto del provider.
-  // Invece di annullare il ciclo, ridimensioniamo e riproviamo: prima si
-  // toglie il "peso" più grande (le immagini), poi si riduce lo spazio di
-  // risposta. Un ciclo senza vista o più conciso vale più di nessun ciclo.
-  if (res.status === 413 && images.length) {
+  // 413: la singola richiesta supera da sola il budget al minuto del
+  // provider. 429 "tokens": il budget del minuto è già in parte consumato
+  // da richieste precedenti, e questa lo farebbe sforare (il provider
+  // stesso indica dopo quanti secondi riprovare). In entrambi i casi non
+  // annulliamo il ciclo: aspettiamo se richiesto, poi ridimensioniamo,
+  // togliendo prima il "peso" più grande (le immagini), poi riducendo lo
+  // spazio di risposta. Un ciclo senza vista o più conciso vale più di
+  // nessun ciclo.
+  if (isRateLimit(res) && images.length) {
+    if (res.status === 429) await waitSuggestedByProvider(res);
     res = await attempt([], maxTokens);
   }
-  if (res.status === 413) {
+  if (isRateLimit(res)) {
+    if (res.status === 429) await waitSuggestedByProvider(res);
     res = await attempt([], Math.max(600, Math.floor(maxTokens / 2)));
   }
 

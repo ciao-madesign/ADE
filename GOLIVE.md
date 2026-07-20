@@ -380,6 +380,34 @@ dell'errore, ritenta automaticamente senza immagine e si completa
 normalmente (memoria e diario scritti). Nessun file reale del progetto è
 stato toccato dal test.
 
+### Incidente 2026-07-20 (parte 8) — 429, budget già in parte consumato
+
+Ciclo successivo: stesso tipo di limite (8000 token/minuto), ma stavolta
+come errore **429** invece di 413 — `"Limit 8000, Used 5918, Requested
+6389"`. Non è che quella singola richiesta fosse troppo grande (6389 <
+8000): è che il minuto in corso aveva già "consumato" 5918 token da un
+ciclo precedente eseguito poco prima. Groq stesso indicava quanto
+aspettare: *"Please try again in 32.3s"*.
+
+**Non serve nessuna azione dell'admin.** La rete di sicurezza in
+`llm.mjs` ora riconosce anche il 429 (non solo il 413): quando succede,
+aspetta il numero di secondi che Groq stesso indica nel messaggio di
+errore, poi ritenta — prima senza immagine, poi anche con una risposta
+più corta se necessario — invece di annullare il ciclo.
+
+Verificato forzando un 429 con lo stesso testo d'errore reale (compreso
+"try again in 2.5s"): confermato che il codice aspetta il tempo indicato
+e poi il ciclo si completa normalmente al secondo tentativo.
+
+**Nota per il futuro**: se i cicli vengono lanciati manualmente più volte
+di seguito a distanza ravvicinata (pochi secondi/minuti) durante i test,
+è normale incontrare ancora questo limite — il piano gratuito di Groq
+concede solo 1000 richieste al giorno e 8000 token al minuto in totale.
+Il retry automatico lo assorbe da solo; se dovesse ripresentarsi spesso
+anche fuori dai test, la soluzione sarebbe distanziare i cicli
+programmati (oggi ogni 6 ore, ampiamente sufficiente) o valutare un
+piano a pagamento — decisione che ti chiederò se e quando servisse.
+
 ---
 
 ## Step 9 — Dominio personalizzato (opzionale) ⏭️/⬜
