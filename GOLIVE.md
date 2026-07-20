@@ -139,7 +139,7 @@ A questo punto upload e admin **non funzionano ancora** (mancano Step 6-7): è n
 
 ---
 
-## Step 6 — Quarantena su Vercel Blob ⬜
+## Step 6 — Quarantena su Vercel Blob ✅ (2026-07-20)
 
 **Obiettivo**: lo spazio dove i file caricati aspettano il tuo verdetto,
 fuori dal mondo di ADE.
@@ -250,3 +250,5 @@ Poi: si condivide il link. Il Truman Show comincia.
   **https://ade-navy.vercel.app** (piano Hobby, deploy automatico da `main`).
   Nota: il sito non è raggiungibile dagli IP datacenter dell'ambiente di
   sviluppo (403 del firewall Vercel) — irrilevante per i visitatori reali.
+- **2026-07-20 — Step 6 completato.** Store Vercel Blob `ade-quarantena` creato
+  e collegato al progetto; `BLOB_READ_WRITE_TOKEN` presente tra le variabili.
