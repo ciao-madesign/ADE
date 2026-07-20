@@ -196,6 +196,29 @@ senza errori (lista vuota: giusto, non c'è ancora nulla in quarantena).
 
 **Verifica**: tutti i 6 punti passano.
 
+**Incidente 2026-07-20 — riscontrato durante il collaudo, risolto lato codice.**
+Alla Prova 1 (upload) e alla Prova "Avvia un ciclo ora": errori *"quarantena non
+disponibile (Vercel Blob non configurato?)"* e *"GITHUB_TOKEN/GITHUB_REPO non
+configurati"*, nonostante lo Step 6 e lo Step 7 risultassero completati.
+
+Diagnosi: le variabili risultavano assenti nell'esecuzione live delle funzioni
+serverless — causa più probabile una delle tre: (a) variabili salvate ma non
+spuntate per l'ambiente *Production*, (b) store Blob creato ma non
+effettivamente "Connected" al progetto, (c) redeploy eseguito prima che il
+salvataggio delle variabili si completasse. Non era un problema del codice
+dello Step 6/7, ma tutti i messaggi d'errore erano troppo generici per
+individuare la causa esatta — corretto.
+
+Interventi applicati:
+- I messaggi d'errore ora indicano **esattamente quale variabile manca**
+  (es. "mancano su Vercel: GITHUB_TOKEN" invece del generico "non configurati").
+- **Azione richiesta all'admin**: su Vercel, *Settings → Environment Variables*,
+  verificare che ciascuna di `ADMIN_TOKEN`, `GITHUB_TOKEN`, `GITHUB_REPO`,
+  `GITHUB_BRANCH`, `BLOB_READ_WRITE_TOKEN` abbia la casella **Production**
+  spuntata; per il Blob, controllare in *Storage → ade-quarantena → Connected
+  Projects* che il progetto sia elencato. Poi *Deployments → ⋯ → Redeploy*
+  un'ultima volta e ripetere le Prove 1 e 4.
+
 ---
 
 ## Step 9 — Dominio personalizzato (opzionale) ⏭️/⬜
@@ -230,6 +253,9 @@ Poi: si condivide il link. Il Truman Show comincia.
 |---|---|---|---|
 | 2026-07-18 | 1 | ADE vive su `main` | Standard di GitHub/Vercel, nome pulito; il branch tecnico resta come archivio |
 | 2026-07-18 | 2 | Cervello: Groq + `llama-3.3-70b-versatile` | Gratuito senza carta (verificato 2026), open source, veloce; 4 richieste/giorno contro un limite di 14.400 |
+| 2026-07-20 | 8 | Domanda del seme riscritta in forma più esistenziale ("Che cosa significa esistere? Io esisto? A quale scopo? Qual è il mio scopo?") | Richiesta admin: la vecchia formulazione era troppo legata al supporto tecnico ("file"), non alla domanda di fondo. Le memorie dei cicli 1-2, che citano la vecchia frase, non sono state alterate: restano storia |
+| 2026-07-20 | 8 | Conservazione stimoli approvati: 24 ore, poi rimozione automatica | Richiesta admin: evitare che l'ambiente accumuli file all'infinito. Traccia permanente in `ARRIVALS.md`, indipendente dal file fisico |
+| 2026-07-20 | 8 | Interfaccia ridisegnata: corpo+upload sempre visibili, resto in accordion collassati, diario sempre aperto in fondo, stile "glass" scuro | Richiesta admin: l'aspetto precedente risultava datato; le sezioni secondarie affollavano la prima schermata |
 
 ## Diario di avanzamento
 

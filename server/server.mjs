@@ -29,10 +29,13 @@ import http from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { scanFile, sanitizeName, MAX_SIZE } from "./scan.mjs";
+import { arrivalEntry, arrivalsHeader, RETENTION_MS } from "./retention.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const QUARANTINE = path.join(ROOT, "uploads", "quarantine");
 const INBOX = path.join(ROOT, "environment", "inbox");
+const ARRIVALS_FILE = path.join(ROOT, "ARRIVALS.md");
+const EXPIRY_FILE = path.join(INBOX, ".expiry.json");
 const PORT = Number(process.env.PORT || 8080);
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || "";
 const CYCLE_HOURS = Number(process.env.CYCLE_INTERVAL_HOURS || 6);
@@ -207,6 +210,20 @@ function decideUpload({ id, azione, motivo }) {
     fs.copyFileSync(binPath, dest);
     meta.stato = "approvato";
     meta.destinazione = path.relative(ROOT, dest).replaceAll("\\", "/");
+
+    const approvatoIl = new Date();
+    const scadeIl = new Date(approvatoIl.getTime() + RETENTION_MS);
+    if (!fs.existsSync(ARRIVALS_FILE)) fs.writeFileSync(ARRIVALS_FILE, arrivalsHeader());
+    fs.appendFileSync(ARRIVALS_FILE, arrivalEntry({
+      nome: meta.nome_sicuro, autore: meta.autore, nota: meta.nota,
+      destinazione: meta.destinazione, sha256: meta.rapporto.sha256,
+      approvatoIl: approvatoIl.toISOString(), scadeIl: scadeIl.toISOString(),
+    }));
+    const lista = fs.existsSync(EXPIRY_FILE) ? JSON.parse(fs.readFileSync(EXPIRY_FILE, "utf8")) : [];
+    lista.push({ file: path.basename(dest), expires_at: scadeIl.toISOString(), approved_at: approvatoIl.toISOString() });
+    fs.writeFileSync(EXPIRY_FILE, JSON.stringify(lista, null, 2) + "\n");
+    meta.scade_il = scadeIl.toISOString();
+
     if (process.env.GIT_AUTOCOMMIT === "1") gitCommit(`Stimolo approvato: ${path.basename(dest)}`);
   } else if (azione === "rifiuta") {
     meta.stato = "rifiutato";

@@ -11,6 +11,7 @@
  */
 
 import { timingSafeEqual } from "node:crypto";
+import { arrivalEntry, arrivalsHeader, RETENTION_MS } from "../server/retention.mjs";
 
 export function isAdmin(req) {
   const token = process.env.ADMIN_TOKEN || "";
@@ -41,6 +42,75 @@ function ghHeaders() {
 
 export function ghConfigured() {
   return !!(process.env.GITHUB_TOKEN && process.env.GITHUB_REPO);
+}
+
+/** Elenca per nome le variabili GitHub mancanti, per messaggi d'errore precisi. */
+export function ghMissingVars() {
+  const missing = [];
+  if (!process.env.GITHUB_TOKEN) missing.push("GITHUB_TOKEN");
+  if (!process.env.GITHUB_REPO) missing.push("GITHUB_REPO");
+  return missing;
+}
+
+/** Legge un file dal repo. Ritorna null se non esiste (utile per create-or-update). */
+export async function ghGetFile(repoPath) {
+  const repo = process.env.GITHUB_REPO;
+  const branch = process.env.GITHUB_BRANCH || "main";
+  const res = await fetch(
+    `${GH}/repos/${repo}/contents/${encodeURIComponent(repoPath).replaceAll("%2F", "/")}?ref=${encodeURIComponent(branch)}`,
+    { headers: ghHeaders() }
+  );
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`GitHub ${res.status}: ${(await res.text()).slice(0, 200)}`);
+  const data = await res.json();
+  return { content: Buffer.from(data.content, "base64").toString("utf8"), sha: data.sha };
+}
+
+/** Crea o aggiorna un file di testo (passare lo sha se il file esiste già). */
+export async function ghPutFile(repoPath, content, message, sha) {
+  const repo = process.env.GITHUB_REPO;
+  const branch = process.env.GITHUB_BRANCH || "main";
+  const body = { message, branch, content: Buffer.from(content, "utf8").toString("base64") };
+  if (sha) body.sha = sha;
+  const res = await fetch(`${GH}/repos/${repo}/contents/${encodeURIComponent(repoPath).replaceAll("%2F", "/")}`, {
+    method: "PUT",
+    headers: ghHeaders(),
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`GitHub ${res.status}: ${(await res.text()).slice(0, 200)}`);
+}
+
+/**
+ * Registra un arrivo approvato: riga permanente in ARRIVALS.md + voce nel
+ * registro di scadenza (environment/inbox/.expiry.json, invisibile ad ADE:
+ * i file che iniziano con "." non entrano nel suo inventario). La rimozione
+ * fisica dopo 24h avviene nel ciclo (agent/agent.mjs), non qui.
+ */
+export async function recordArrival({ nome, autore, nota, destinazione, sha256 }) {
+  const approvatoIl = new Date();
+  const scadeIl = new Date(approvatoIl.getTime() + RETENTION_MS);
+
+  const existingArrivals = await ghGetFile("ARRIVALS.md");
+  const nuovoContenuto =
+    (existingArrivals ? existingArrivals.content : arrivalsHeader()) +
+    arrivalEntry({
+      nome, autore, nota, destinazione, sha256,
+      approvatoIl: approvatoIl.toISOString(),
+      scadeIl: scadeIl.toISOString(),
+    });
+  await ghPutFile("ARRIVALS.md", nuovoContenuto, `Registrato arrivo: ${nome}`, existingArrivals?.sha);
+
+  const manifestPath = "environment/inbox/.expiry.json";
+  const existingManifest = await ghGetFile(manifestPath);
+  const lista = existingManifest ? JSON.parse(existingManifest.content) : [];
+  lista.push({
+    file: destinazione.split("/").pop(),
+    expires_at: scadeIl.toISOString(),
+    approved_at: approvatoIl.toISOString(),
+  });
+  await ghPutFile(manifestPath, JSON.stringify(lista, null, 2) + "\n", `Pianificata rimozione (24h): ${nome}`, existingManifest?.sha);
+
+  return { scadeIl: scadeIl.toISOString() };
 }
 
 /** Crea un file nel repository (commit diretto sul branch dell'entità). */

@@ -27,6 +27,8 @@ const LOG_FILE = path.join(ROOT, "ACTION_LOG.md");
 const ENERGY_FILE = path.join(ROOT, "agent", "state", "energy.json");
 const IDENTITY_FILE = path.join(ROOT, "agent", "prompts", "identity.md");
 const MEM_INDEX = path.join(MEM_DIR, "index.json");
+const INBOX_DIR = path.join(ENV_DIR, "inbox");
+const EXPIRY_FILE = path.join(INBOX_DIR, ".expiry.json");
 
 // Spazio riservato alla risposta del modello. I provider free-tier (Groq &co.)
 // contano prompt + spazio-risposta nel limite al minuto: teniamolo prudente.
@@ -218,6 +220,33 @@ function applyBody(newBody, motivo) {
     `\n## v${newBody.version} — ${today()}\n\n${(motivo || "Modifica del corpo.").trim()}\n`
   );
   return newBody.version;
+}
+
+/**
+ * Rimuove dall'ambiente gli stimoli approvati oltre 24 ore fa. Gira ad ogni
+ * ciclo, prima di tutto il resto — indipendentemente da energia o provider
+ * AI configurato — così il mondo di ADE non accumula file all'infinito.
+ * La traccia permanente dell'arrivo resta in ARRIVALS.md (scritto al momento
+ * dell'approvazione): qui si cancella solo il file fisico.
+ */
+function cleanupExpiredInbox() {
+  if (!fs.existsSync(EXPIRY_FILE)) return [];
+  let entries;
+  try { entries = JSON.parse(fs.readFileSync(EXPIRY_FILE, "utf8")); } catch { return []; }
+  const now = Date.now();
+  const kept = [];
+  const removed = [];
+  for (const e of entries) {
+    if (new Date(e.expires_at).getTime() <= now) {
+      const full = path.join(INBOX_DIR, e.file);
+      try { if (fs.existsSync(full)) fs.rmSync(full); } catch {}
+      removed.push(e.file);
+    } else {
+      kept.push(e);
+    }
+  }
+  if (removed.length) writeJSON(EXPIRY_FILE, kept);
+  return removed;
 }
 
 // ---------------------------------------------------------------- ambiente
@@ -491,6 +520,9 @@ async function cycleWithModel() {
 }
 
 // ---------------------------------------------------------------- main
+
+const scaduti = cleanupExpiredInbox();
+if (scaduti.length) console.log(`Rimossi per scadenza (24h): ${scaduti.join(", ")}`);
 
 const hasMemory = fs.existsSync(MEM_INDEX) && loadMemoryIndex().files.length > 0;
 if (!hasMemory) {

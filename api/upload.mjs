@@ -50,11 +50,16 @@ export default async function handler(req, res) {
     rapporto,
   };
 
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    return res.status(500).json({
+      errore: "quarantena non disponibile: manca BLOB_READ_WRITE_TOKEN. Verifica che lo store Vercel Blob sia collegato al progetto (Storage → il tuo store → Connected Projects) e che sia stato fatto un Redeploy dopo il collegamento.",
+    });
+  }
   try {
     await saveQuarantine(id, buffer, meta);
   } catch (e) {
     console.error("blob:", e);
-    return res.status(500).json({ errore: "quarantena non disponibile (Vercel Blob non configurato?)" });
+    return res.status(500).json({ errore: `quarantena non disponibile: ${e.message}` });
   }
 
   return res.status(200).json({ stato: "in_quarantena", id, rapporto });

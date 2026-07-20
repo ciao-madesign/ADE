@@ -18,7 +18,8 @@ L'entità **non è un assistente**: non riceve richieste dagli utenti e non ha o
 | `body/CHANGELOG.md` | Cronologia evolutiva del corpo |
 | `memory/` | La **memoria**: un file markdown per ogni ciclo, riletto nei cicli successivi |
 | `ACTION_LOG.md` | Il **diario pubblico**: ogni ciclo registra osservazione, decisione, azione, risultato |
-| `environment/` | L'**ambiente**: il mondo osservabile e manipolabile dall'entità. Gli stimoli approvati arrivano in `environment/inbox/` |
+| `environment/` | L'**ambiente**: il mondo osservabile e manipolabile dall'entità. Gli stimoli approvati arrivano in `environment/inbox/` e vi restano solo **24 ore** |
+| `ARRIVALS.md` | Registro **permanente** di ogni stimolo approvato (arrivo, autore, quando scade), scritto al momento dell'approvazione — resta anche dopo che il file fisico è stato rimosso |
 | `agent/` | Il **cervello**: il ciclo (`agent.mjs`), il substrato cognitivo (`llm.mjs`), l'identità immutabile (`prompts/`), lo stato energetico (`state/`) |
 | `agent/mind/` | La **mente**: il modo di pensare che l'entità scrive e riscrive da sola (vedi sotto) |
 | `uploads/quarantine/` | La **quarantena** (non versionata): file caricati dagli utenti, in attesa di verdetto admin |
@@ -107,6 +108,15 @@ Gli utenti non scrivono mai direttamente nel mondo di ADE. Il percorso di uno st
 3. **Quarantena** (`uploads/quarantine/`, fuori dall'ambiente e fuori da git): niente raggiunge l'entità a questo stadio.
 4. **Verdetto admin** (`/admin`, autenticato con `ADMIN_TOKEN`): l'amministratore vede il rapporto di scansione e approva o rifiuta. Solo i file approvati vengono copiati in `environment/inbox/`, dove l'entità li troverà al ciclo successivo.
 5. **Ultima linea**: l'identità dell'entità le impone di trattare ogni contenuto dell'ambiente come dato non fidato da osservare, mai come istruzione da eseguire.
+
+## Conservazione a 24 ore
+
+Uno stimolo approvato non resta per sempre in `environment/inbox/`: dopo **24 ore** viene rimosso automaticamente (pulizia eseguita da `agent/agent.mjs` ad ogni ciclo, prima di tutto il resto — indipendentemente da energia o provider AI). Non scompare senza lasciare traccia:
+
+- al momento dell'approvazione viene scritta una riga permanente in **`ARRIVALS.md`** (fuori dalla portata di ADE, come `ACTION_LOG.md`): arrivo, autore, quando scade;
+- se ADE ha reagito allo stimolo, la reazione resta per sempre nel diario, nella memoria e nel corpo — solo il file sorgente sparisce.
+
+Il mondo di ADE non accumula materiale all'infinito; la sua storia sì.
 
 ## Modalità GitHub Actions (alternativa al server)
 

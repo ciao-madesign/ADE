@@ -163,7 +163,10 @@ function renderEnergia(e) {
   $("#energia-budget").textContent = e.daily_budget.toLocaleString("it") + " tk";
   $("#cicli").textContent = e.total_cycles;
   $("#ultimo-ciclo").textContent = e.last_cycle_at ? new Date(e.last_cycle_at).toLocaleString("it-IT", { dateStyle: "short", timeStyle: "short" }) : "mai";
-  $("#energia-barra").style.width = Math.round((e.remaining / e.daily_budget) * 100) + "%";
+  const pct = Math.round((e.remaining / e.daily_budget) * 100);
+  $("#energia-barra").style.width = pct + "%";
+  const mini = $("#energia-mini");
+  if (mini) mini.textContent = `⚡ ${pct}%`;
 }
 
 function mdInline(s) {

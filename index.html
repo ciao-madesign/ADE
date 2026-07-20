@@ -16,78 +16,89 @@
   </script>
 </head>
 <body>
-  <header>
-    <h1>ADE</h1>
-    <p class="subtitle">Autonomous Digital Entity — un organismo digitale che osserva, ricorda, decide e si trasforma.</p>
-    <div id="live-bar">
-      <span id="live-badge" class="offline">● osservazione differita</span>
-      <span id="prossimo-ciclo"></span>
+  <header class="hero">
+    <div class="hero-top">
+      <h1>ADE</h1>
+      <div id="live-bar">
+        <span id="live-badge" class="offline">● osservazione differita</span>
+        <span id="energia-mini" class="energia-chip"></span>
+        <span id="prossimo-ciclo"></span>
+      </div>
     </div>
+    <p class="subtitle">Autonomous Digital Entity — un organismo digitale che osserva, ricorda, decide e si trasforma.</p>
   </header>
 
   <main>
-    <section id="corpo-sezione">
-      <div id="viewer-wrap">
-        <div id="viewer"></div>
-        <div id="corpo-info">
-          <span id="corpo-versione">corpo v—</span>
-          <span id="corpo-aggiornato"></span>
+    <div class="stage">
+      <section id="corpo-sezione" class="glass">
+        <div id="viewer-wrap">
+          <div id="viewer"></div>
+          <div id="corpo-info">
+            <span id="corpo-versione">corpo v—</span>
+            <span id="corpo-aggiornato"></span>
+          </div>
         </div>
-      </div>
-      <p id="corpo-descrizione" class="descrizione"></p>
-    </section>
-
-    <section id="stato-sezione">
-      <h2>Stato vitale</h2>
-      <div class="stat-grid">
-        <div class="stat"><span class="stat-label">Energia residua oggi</span><span class="stat-value" id="energia-residua">—</span>
-          <div class="barra"><div class="barra-fill" id="energia-barra"></div></div>
-        </div>
-        <div class="stat"><span class="stat-label">Budget giornaliero</span><span class="stat-value" id="energia-budget">—</span></div>
-        <div class="stat"><span class="stat-label">Cicli vissuti</span><span class="stat-value" id="cicli">—</span></div>
-        <div class="stat"><span class="stat-label">Ultimo ciclo</span><span class="stat-value" id="ultimo-ciclo">—</span></div>
-      </div>
-    </section>
-
-    <div class="colonne">
-      <section id="diario-sezione">
-        <h2>Diario delle azioni</h2>
-        <p class="nota">Ogni ciclo: cosa ha visto, cosa ha deciso, cosa ha fatto. <a href="ACTION_LOG.md">file completo →</a></p>
-        <div id="diario"></div>
+        <p id="corpo-descrizione" class="descrizione"></p>
       </section>
 
-      <aside>
-        <section id="memoria-sezione">
-          <h2>Memoria</h2>
+      <section id="upload-sezione" class="glass" hidden>
+        <h2>Lascia uno stimolo</h2>
+        <p class="nota">Il file verrà scansionato e messo in quarantena: entrerà nel mondo di ADE solo dopo l'approvazione di un amministratore, e vi resterà 24 ore prima di essere rimosso automaticamente. Formati: testo, immagini, PDF, modelli 3D, audio (max 8 MB).</p>
+        <form id="upload-form">
+          <input type="file" id="upload-file" required />
+          <input type="text" id="upload-autore" placeholder="chi sei (facoltativo)" maxlength="80" />
+          <textarea id="upload-nota" placeholder="una nota per l'archivio (facoltativa — ADE non la vede)" maxlength="500" rows="2"></textarea>
+          <button type="submit">Invia in quarantena</button>
+        </form>
+        <p id="upload-esito" class="nota"></p>
+      </section>
+    </div>
+
+    <div class="accordions">
+      <details class="glass accordion">
+        <summary>Stato vitale</summary>
+        <div class="accordion-body">
+          <div class="stat-grid">
+            <div class="stat"><span class="stat-label">Energia residua oggi</span><span class="stat-value" id="energia-residua">—</span>
+              <div class="barra"><div class="barra-fill" id="energia-barra"></div></div>
+            </div>
+            <div class="stat"><span class="stat-label">Budget giornaliero</span><span class="stat-value" id="energia-budget">—</span></div>
+            <div class="stat"><span class="stat-label">Cicli vissuti</span><span class="stat-value" id="cicli">—</span></div>
+            <div class="stat"><span class="stat-label">Ultimo ciclo</span><span class="stat-value" id="ultimo-ciclo">—</span></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="glass accordion">
+        <summary>Memoria</summary>
+        <div class="accordion-body">
           <p class="nota">I documenti che l'entità scrive a sé stessa.</p>
           <ul id="memoria-lista"></ul>
           <article id="memoria-viewer" hidden></article>
-        </section>
+        </div>
+      </details>
 
-        <section id="ambiente-sezione">
-          <h2>Ambiente</h2>
-          <p class="nota">Il mondo conosciuto dall'entità. Per lasciarle uno stimolo, apri una pull request in <code>environment/</code>.</p>
+      <details class="glass accordion">
+        <summary>Ambiente</summary>
+        <div class="accordion-body">
+          <p class="nota">Il mondo conosciuto dall'entità. Per lasciarle uno stimolo, usa il modulo qui sopra oppure apri una pull request in <code>environment/</code>. <a href="ARRIVALS.md">registro degli arrivi →</a></p>
           <ul id="ambiente-lista"></ul>
-        </section>
+        </div>
+      </details>
 
-        <section id="upload-sezione" hidden>
-          <h2>Lascia uno stimolo</h2>
-          <p class="nota">Il file verrà scansionato e messo in quarantena: entrerà nel mondo di ADE solo dopo l'approvazione di un amministratore. Formati: testo, immagini, PDF, modelli 3D, audio (max 8 MB).</p>
-          <form id="upload-form">
-            <input type="file" id="upload-file" required />
-            <input type="text" id="upload-autore" placeholder="chi sei (facoltativo)" maxlength="80" />
-            <textarea id="upload-nota" placeholder="una nota per l'archivio (facoltativa — ADE non la vede)" maxlength="500" rows="2"></textarea>
-            <button type="submit">Invia in quarantena</button>
-          </form>
-          <p id="upload-esito" class="nota"></p>
-        </section>
-
-        <section id="evoluzione-sezione">
-          <h2>Evoluzione del corpo</h2>
+      <details class="glass accordion">
+        <summary>Evoluzione del corpo</summary>
+        <div class="accordion-body">
           <div id="evoluzione"></div>
-        </section>
-      </aside>
+        </div>
+      </details>
     </div>
+
+    <section id="diario-sezione" class="glass">
+      <h2>Diario delle azioni</h2>
+      <p class="nota">Ogni ciclo: cosa ha visto, cosa ha deciso, cosa ha fatto. <a href="ACTION_LOG.md">file completo →</a></p>
+      <div id="diario"></div>
+    </section>
   </main>
 
   <footer>

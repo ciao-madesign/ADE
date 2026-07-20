@@ -5,8 +5,8 @@
  */
 import { sanitizeName } from "../../server/scan.mjs";
 import {
-  deleteBlobUrl, ghConfigured, ghCreateFile, listQuarantine,
-  readQuarantineBin, requireAdmin, updateQuarantineMeta,
+  deleteBlobUrl, ghConfigured, ghCreateFile, ghMissingVars, listQuarantine,
+  readQuarantineBin, recordArrival, requireAdmin, updateQuarantineMeta,
 } from "../_lib.mjs";
 
 export default async function handler(req, res) {
@@ -27,7 +27,11 @@ export default async function handler(req, res) {
     const bin = await readQuarantineBin(id);
 
     if (azione === "approva") {
-      if (!ghConfigured()) return res.status(500).json({ errore: "GITHUB_TOKEN/GITHUB_REPO non configurati" });
+      if (!ghConfigured()) {
+        return res.status(500).json({
+          errore: `mancano su Vercel: ${ghMissingVars().join(", ")}. Controlla Settings → Environment Variables (deve essere spuntato "Production"), poi fai un Redeploy.`,
+        });
+      }
       if (!bin) return res.status(410).json({ errore: "contenuto non più disponibile" });
       const dest = await ghCreateFile(
         `environment/inbox/${sanitizeName(meta.nome_sicuro)}`,
@@ -36,6 +40,11 @@ export default async function handler(req, res) {
       );
       meta.stato = "approvato";
       meta.destinazione = dest;
+      const { scadeIl } = await recordArrival({
+        nome: meta.nome_sicuro, autore: meta.autore, nota: meta.nota,
+        destinazione: dest, sha256: meta.rapporto.sha256,
+      });
+      meta.scade_il = scadeIl;
     } else {
       meta.stato = "rifiutato";
     }
