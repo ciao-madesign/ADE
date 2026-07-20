@@ -50,20 +50,23 @@ a Vercel.
 
 ---
 
-## Step 2 — Provider AI e chiave ⬜
+## Step 2 — Provider AI e chiave 🔄
 
-**Obiettivo**: dare ad ADE un cervello in cloud, gratis, senza installare nulla.
-
-**Decisione che ti chiederò**: quale provider. Il consigliato è **Groq**
-(free tier generoso, Llama 3.3 70B, veloce); alternative: OpenRouter, Google AI
-Studio, Cerebras. Differenze pratiche: limiti giornalieri e qualità del modello.
+**Deciso**: il cervello di ADE è **Groq** con il modello open source
+**`llama-3.3-70b-versatile`**. Verificato (2026-07): free tier senza carta di
+credito, 14.400 richieste/giorno — ADE ne usa 4. Unico limite da monitorare:
+6.000 token/minuto sul modello 70B; se allo Step 4 un ciclo venisse rifiutato
+per questo (errore 429), si passa a un modello con limiti più alti.
 
 **Chi fa cosa (tu, ~5 minuti dal browser)**:
-1. Registrati sul sito del provider scelto (es. console.groq.com).
-2. Crea una API key e **copiala subito** (spesso si vede una volta sola).
-3. Tienila da parte per lo Step 3. Non incollarla mai in chat o nel repo.
+1. Vai su **console.groq.com** → registrati con email o account Google.
+2. Menu a sinistra → **API Keys** → **Create API Key** → dalle un nome
+   (es. `ade`) → *Submit*.
+3. **Copia subito la chiave** (inizia con `gsk_`): si vede una volta sola.
+   Conservala in un posto sicuro (password manager) fino allo Step 3.
+4. Non incollarla mai in chat, nel repo o in file di progetto.
 
-**Verifica**: hai una chiave (per Groq inizia con `gsk_`).
+**Verifica**: hai una chiave `gsk_…` salvata in un posto sicuro.
 
 ---
 
@@ -214,6 +217,7 @@ Poi: si condivide il link. Il Truman Show comincia.
 | Data | Step | Decisione | Motivo |
 |---|---|---|---|
 | 2026-07-18 | 1 | ADE vive su `main` | Standard di GitHub/Vercel, nome pulito; il branch tecnico resta come archivio |
+| 2026-07-18 | 2 | Cervello: Groq + `llama-3.3-70b-versatile` | Gratuito senza carta (verificato 2026), open source, veloce; 4 richieste/giorno contro un limite di 14.400 |
 
 ## Diario di avanzamento
 
