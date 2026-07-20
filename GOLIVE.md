@@ -152,7 +152,7 @@ al progetto. La variabile `BLOB_READ_WRITE_TOKEN` si imposta da sola.
 
 ---
 
-## Step 7 — Chiavi del ponte Vercel ↔ GitHub ⬜
+## Step 7 — Chiavi del ponte Vercel ↔ GitHub ✅ (2026-07-20)
 
 **Obiettivo**: permettere al pannello admin di (a) committare gli stimoli
 approvati nel repo e (b) avviare cicli a comando. E proteggere l'admin con un token.
@@ -252,3 +252,7 @@ Poi: si condivide il link. Il Truman Show comincia.
   sviluppo (403 del firewall Vercel) — irrilevante per i visitatori reali.
 - **2026-07-20 — Step 6 completato.** Store Vercel Blob `ade-quarantena` creato
   e collegato al progetto; `BLOB_READ_WRITE_TOKEN` presente tra le variabili.
+- **2026-07-20 — Step 7 completato.** Fine-grained PAT `ade-vercel` creato
+  (solo repo ADE, solo Contents+Actions R/W, scadenza 90gg — andrà rigenerato);
+  variabili `ADMIN_TOKEN`, `GITHUB_TOKEN`, `GITHUB_REPO`, `GITHUB_BRANCH`
+  impostate su Vercel; redeploy eseguito. Verificato: login su /admin riuscito.
