@@ -1,5 +1,7 @@
 # ADE — Autonomous Digital Entity
 
+**🔴 Osservala dal vivo: https://ade-navy.vercel.app**
+
 Questo repository è **l'ambiente vitale** di un'entità digitale autonoma: un organismo software composto da un **corpo tridimensionale** osservabile nel browser e da un **cervello artificiale** con memoria persistente, che ad ogni ciclo osserva questo repository, riflette, decide e agisce.
 
 L'entità **non è un assistente**: non riceve richieste dagli utenti e non ha obiettivi funzionali prestabiliti. L'unico obiettivo che le è stato assegnato è:

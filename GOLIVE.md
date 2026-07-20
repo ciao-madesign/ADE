@@ -120,7 +120,11 @@ stimato: ~10.000 token. La chiave e la configurazione erano corrette.
 
 ---
 
-## Step 5 — Progetto su Vercel ⬜
+## Step 5 — Progetto su Vercel ✅ (2026-07-20)
+
+**Il sito è online: https://ade-navy.vercel.app** — verificato dall'admin dal
+browser: corpo 3D, diario con 2 cicli, energia, badge "live · sync 30s".
+Upload e /admin ancora inattivi come previsto (Step 6-7).
 
 **Obiettivo**: il sito pubblico online.
 
@@ -242,3 +246,7 @@ Poi: si condivide il link. Il Truman Show comincia.
   non modificare il corpo e ha scritto il suo primo file di mente
   (`agent/mind/approfondimento.md`). Energia: 4.018 token spesi su 100.000.
   Fix cosmetico applicato: deduplicazione del titolo nelle memorie.
+- **2026-07-20 — Step 5 completato.** Sito pubblicato su
+  **https://ade-navy.vercel.app** (piano Hobby, deploy automatico da `main`).
+  Nota: il sito non è raggiungibile dagli IP datacenter dell'ambiente di
+  sviluppo (403 del firewall Vercel) — irrilevante per i visitatori reali.
