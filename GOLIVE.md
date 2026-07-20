@@ -50,7 +50,7 @@ a Vercel.
 
 ---
 
-## Step 2 — Provider AI e chiave 🔄
+## Step 2 — Provider AI e chiave ✅ (2026-07-18)
 
 **Deciso**: il cervello di ADE è **Groq** con il modello open source
 **`llama-3.3-70b-versatile`**. Verificato (2026-07): free tier senza carta di
@@ -224,3 +224,5 @@ Poi: si condivide il link. Il Truman Show comincia.
 - **2026-07-18 — Step 1 completato.** Creato `main` dall'intera storia esistente
   (stesso commit del branch tecnico). Resta un click all'utente: impostare
   `main` come default branch nelle impostazioni GitHub.
+- **2026-07-18 — Step 2 completato.** Account Groq creato, API key `gsk_…`
+  generata e conservata al sicuro dall'admin (mai transitata in chat né nel repo).
