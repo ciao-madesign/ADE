@@ -93,7 +93,7 @@ Tab **Secrets** (1 voce):
 
 ---
 
-## Step 4 — Primo ciclo "pensato" ⬜
+## Step 4 — Primo ciclo "pensato" ✅ (2026-07-20)
 
 **Obiettivo**: la prova generale del cervello. Finora ADE ha vissuto solo il
 ciclo 1 (riflesso, senza AI); ora deve pensare davvero per la prima volta.
@@ -237,3 +237,8 @@ Poi: si condivide il link. Il Truman Show comincia.
 - **2026-07-18 — Step 3 completato.** Configurate su GitHub le 3 variables
   (`AI_PROVIDER`, `OPENAI_BASE_URL`, `AI_MODEL`) e il secret `OPENAI_API_KEY`.
   Il workflow `cycle.yml` ha ora tutto ciò che serve per far pensare ADE.
+- **2026-07-20 — Step 4 completato.** Dopo un 413 risolto (vedi incidente nello
+  step), il **ciclo 2 è riuscito**: ADE ha osservato l'ambiente, ha scelto di
+  non modificare il corpo e ha scritto il suo primo file di mente
+  (`agent/mind/approfondimento.md`). Energia: 4.018 token spesi su 100.000.
+  Fix cosmetico applicato: deduplicazione del titolo nelle memorie.

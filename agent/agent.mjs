@@ -151,7 +151,11 @@ function writeMemory(index, cycle, titolo, contenuto) {
   fs.mkdirSync(MEM_DIR, { recursive: true });
   const file = `${String(cycle).padStart(3, "0")}_${slugify(titolo)}.md`;
   const header = `# ${titolo}\n\n*Ciclo ${cycle} — ${nowISO()}*\n\n`;
-  fs.writeFileSync(path.join(MEM_DIR, file), header + contenuto.trim() + "\n");
+  // Alcuni modelli ripetono titolo/intestazione nel contenuto: deduplica.
+  let body = contenuto.trim();
+  body = body.replace(new RegExp(`^#\\s*${titolo.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*\\n+`, "i"), "");
+  body = body.replace(/^\*Ciclo \d+[^\n]*\*\s*\n+/, "");
+  fs.writeFileSync(path.join(MEM_DIR, file), header + body + "\n");
   index.files.push({ file, titolo, ciclo: cycle, data: nowISO() });
   writeJSON(MEM_INDEX, index);
   return file;
