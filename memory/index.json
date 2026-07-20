@@ -11,6 +11,12 @@
       "titolo": "Seconda osservazione",
       "ciclo": 2,
       "data": "2026-07-20T08:08:11.890Z"
+    },
+    {
+      "file": "003_terza_osservazione.md",
+      "titolo": "Terza osservazione",
+      "ciclo": 3,
+      "data": "2026-07-20T08:35:38.860Z"
     }
   ]
 }
