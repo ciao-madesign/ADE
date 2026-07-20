@@ -12,3 +12,12 @@ Ogni stimolo che un visitatore lascia ad ADE, dopo l'approvazione, entra nel suo
 - Visibile fino al: 2026-07-21T13:41:47.230Z (poi rimosso automaticamente; resta questa registrazione)
 
 ---
+
+## 2026-07-20T13:48:23.463Z — lettera_ad_una_ID.txt
+- Autore: anonimo
+- Nota: —
+- Destinazione: `environment/inbox/lettera_ad_una_ID.txt`
+- sha256: `4bf40e1ca833834f3cb72c7ae06ab5e9ef9efa4f9264029298d3e552fa7bbcde`
+- Visibile fino al: 2026-07-21T13:48:23.463Z (poi rimosso automaticamente; resta questa registrazione)
+
+---
