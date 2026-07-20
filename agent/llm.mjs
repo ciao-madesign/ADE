@@ -50,20 +50,32 @@ export function providerInfo() {
  * @param {string} opts.user     osservazioni del ciclo
  * @param {object} opts.schema   JSON schema atteso per la risposta
  * @param {number} [opts.maxTokens]
+ * @param {{mimeType: string, base64: string, nome: string}[]} [opts.images]
+ *   immagini da mostrare al modello insieme al testo (stimoli approvati e
+ *   ancora presenti in environment/inbox/). Se il modello non supporta la
+ *   visione, il provider risponderà con un errore: il ciclo verrà annullato
+ *   senza effetti, come per qualunque altro errore del provider.
  * @returns {Promise<{data: object, tokens: number, stop: string}>}
  */
-export async function completeJSON({ system, user, schema, maxTokens = 16000 }) {
+export async function completeJSON({ system, user, schema, maxTokens = 16000, images = [] }) {
   const info = providerInfo();
   if (!info.configured) throw new Error("Nessun provider AI configurato (vedi agent/llm.mjs).");
-  if (info.provider === "anthropic") return anthropicJSON({ system, user, schema, maxTokens, info });
-  return openaiJSON({ system, user, schema, maxTokens, info });
+  if (info.provider === "anthropic") return anthropicJSON({ system, user, schema, maxTokens, images, info });
+  return openaiJSON({ system, user, schema, maxTokens, images, info });
 }
 
 // ---------------------------------------------------------------- Anthropic
 
-async function anthropicJSON({ system, user, schema, maxTokens, info }) {
+async function anthropicJSON({ system, user, schema, maxTokens, images, info }) {
   const { default: Anthropic } = await import("@anthropic-ai/sdk");
   const client = new Anthropic();
+
+  const content = images.length
+    ? [
+        ...images.map((img) => ({ type: "image", source: { type: "base64", media_type: img.mimeType, data: img.base64 } })),
+        { type: "text", text: user },
+      ]
+    : user;
 
   const response = await client.messages.create({
     model: info.model,
@@ -71,7 +83,7 @@ async function anthropicJSON({ system, user, schema, maxTokens, info }) {
     thinking: { type: "adaptive" },
     system: [{ type: "text", text: system, cache_control: { type: "ephemeral" } }],
     output_config: { format: { type: "json_schema", schema } },
-    messages: [{ role: "user", content: user }],
+    messages: [{ role: "user", content }],
   });
 
   const u = response.usage || {};
@@ -87,19 +99,25 @@ async function anthropicJSON({ system, user, schema, maxTokens, info }) {
 
 // ---------------------------------------------------------------- OpenAI-compatibile
 
-async function openaiJSON({ system, user, schema, maxTokens, info }) {
+async function openaiJSON({ system, user, schema, maxTokens, images, info }) {
   const headers = { "Content-Type": "application/json" };
   if (process.env.OPENAI_API_KEY) headers.Authorization = `Bearer ${process.env.OPENAI_API_KEY}`;
 
+  const userText =
+    user +
+    "\n\nRISPONDI ESCLUSIVAMENTE con un unico oggetto JSON valido (nessun testo prima o dopo, nessun code fence) conforme a questo JSON Schema:\n" +
+    JSON.stringify(schema);
+
+  const userContent = images.length
+    ? [
+        { type: "text", text: userText },
+        ...images.map((img) => ({ type: "image_url", image_url: { url: `data:${img.mimeType};base64,${img.base64}` } })),
+      ]
+    : userText;
+
   const messages = [
     { role: "system", content: system },
-    {
-      role: "user",
-      content:
-        user +
-        "\n\nRISPONDI ESCLUSIVAMENTE con un unico oggetto JSON valido (nessun testo prima o dopo, nessun code fence) conforme a questo JSON Schema:\n" +
-        JSON.stringify(schema),
-    },
+    { role: "user", content: userContent },
   ];
 
   const body = {

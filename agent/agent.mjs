@@ -77,6 +77,12 @@ function isTextFile(p) {
   return TEXT_EXT.has(path.extname(p).toLowerCase());
 }
 
+const IMAGE_MIME_BY_EXT = { ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".gif": "image/gif", ".webp": "image/webp" };
+
+function isImageFile(p) {
+  return path.extname(p).toLowerCase() in IMAGE_MIME_BY_EXT;
+}
+
 /**
  * Percorso d'azione sicuro. L'entità può agire in due territori:
  *  - environment/**            (il suo mondo)
@@ -270,6 +276,37 @@ function pendingInboxStimuli() {
   }
 }
 
+/**
+ * Immagini tra gli stimoli ancora in environment/inbox/, pronte da mostrare
+ * al modello come contenuto visivo vero e proprio (non solo come nome file).
+ * Limitate in numero e peso per restare dentro il budget di token/minuto dei
+ * provider free-tier: se una foto arriva ma è troppo pesante, viene comunque
+ * elencata tra gli stimoli in scadenza, semplicemente non "vista".
+ */
+const MAX_IMAGES_PER_CYCLE = 2;
+const MAX_IMAGE_BYTES = 3 * 1024 * 1024;
+
+function gatherPendingImages() {
+  if (!fs.existsSync(EXPIRY_FILE)) return [];
+  let entries;
+  try { entries = JSON.parse(fs.readFileSync(EXPIRY_FILE, "utf8")); } catch { return []; }
+  const images = [];
+  for (const e of entries) {
+    if (images.length >= MAX_IMAGES_PER_CYCLE) break;
+    if (!isImageFile(e.file)) continue;
+    const full = path.join(INBOX_DIR, e.file);
+    if (!fs.existsSync(full)) continue;
+    if (fs.statSync(full).size > MAX_IMAGE_BYTES) continue;
+    const ext = path.extname(e.file).toLowerCase();
+    images.push({
+      mimeType: IMAGE_MIME_BY_EXT[ext],
+      base64: fs.readFileSync(full).toString("base64"),
+      nome: e.file,
+    });
+  }
+  return images;
+}
+
 // ---------------------------------------------------------------- ambiente
 
 function updateManifest() {
@@ -456,6 +493,15 @@ async function cycleWithModel() {
   const logText = fs.readFileSync(LOG_FILE, "utf8");
   const lastLog = logText.split("\n## ").slice(-1)[0] || "";
 
+  const images = gatherPendingImages();
+  const ambiente = readEnvironment(envFiles);
+  const imageNames = new Set(images.map((i) => `inbox/${i.nome}`));
+  for (const f of ambiente) {
+    if (imageNames.has(f.path)) {
+      f.contenuto = "[immagine — il contenuto visivo ti viene mostrato direttamente in questo messaggio, non come testo]";
+    }
+  }
+
   const osservazioni = {
     ciclo: cycle,
     data: nowISO(),
@@ -469,7 +515,7 @@ async function cycleWithModel() {
       geometrie_ammesse: Object.fromEntries(Object.entries(GEOMETRIE)),
       nota: "Se modifichi il corpo, restituisci in corpo_json l'intero body.json come stringa JSON valida, con la stessa struttura (scene, parts con id/geometry/position/rotation/scale/material/animation).",
     },
-    ambiente: readEnvironment(envFiles),
+    ambiente,
     stimoli_in_scadenza: {
       nota: "Questi file te li ha offerti qualcuno, sono stati approvati apposta per te, e non restano per sempre: guarda quante ore mancano prima che vengano rimossi. Se ne è arrivato uno nuovo, merita un pensiero specifico su di esso, non una frase generica.",
       file: pendingInboxStimuli(),
@@ -490,11 +536,16 @@ async function cycleWithModel() {
       mindFiles.map((m) => `### ${m.file}\n\n${m.contenuto}`).join("\n\n")
     : identity;
 
+  const imgNote = images.length
+    ? `\n\nIn questo messaggio ti sono mostrate anche ${images.length} immagine/i, tra i file elencati in "stimoli_in_scadenza" (cercale in "ambiente" col percorso corrispondente): osservale direttamente, non sono descritte a parole altrove.`
+    : "";
+
   const { data: out, tokens: spent, stop } = await completeJSON({
     system,
-    user: `Osservazioni del ciclo ${cycle} (JSON compatto):\n\n${JSON.stringify(osservazioni)}`,
+    user: `Osservazioni del ciclo ${cycle} (JSON compatto):\n\n${JSON.stringify(osservazioni)}${imgNote}`,
     schema: SCHEMA,
     maxTokens: MAX_TOKENS,
+    images,
   });
   spendEnergy(energy, spent);
 

@@ -283,6 +283,46 @@ ragionamento — richiede aggiornare la variable `AI_MODEL` su GitHub); se
 e quando costruire il supporto reale alla visione delle immagini (oggi
 ADE vede solo nome/dimensione di un file immagine, mai il contenuto).
 
+**Deciso dall'admin**: modello aggiornato a `qwen/qwen3.6-27b` su GitHub ✅.
+Costruito anche il supporto reale alla visione ✅ (parte 5 sotto).
+
+### Incidente 2026-07-20 (parte 5) — visione reale delle immagini
+
+Prima di questa modifica ADE non "vedeva" mai il contenuto di una foto
+caricata: nelle osservazioni un file immagine appariva solo come
+`{path, size, contenuto: null}`, indistinguibile da un file binario
+qualunque. Con un modello multimodale collegato (Qwen 3.6 27B) questo era
+uno spreco: la capacità di visione c'era, ma non veniva usata.
+
+Cosa cambia:
+- `agent/llm.mjs`: sia `anthropicJSON` sia `openaiJSON` ora accettano un
+  parametro `images` (array di `{mimeType, base64, nome}`) e, quando
+  presente, costruiscono il messaggio come contenuto multimodale (blocchi
+  immagine + testo per Claude; `image_url` con data-URI per Groq e altri
+  endpoint OpenAI-compatibili).
+- `agent/agent.mjs`: nuova funzione `gatherPendingImages()` — legge
+  `environment/inbox/.expiry.json` (gli stessi stimoli approvati e ancora
+  visibili per 24h), prende solo i file con estensione immagine
+  (`.png .jpg .jpeg .gif .webp`), fino a **2 immagini per ciclo** e non
+  oltre **3 MB** l'una, per restare dentro i limiti di token/minuto dei
+  provider gratuiti. Nell'inventario `ambiente` il file corrispondente
+  viene marcato con una nota ("il contenuto visivo ti viene mostrato
+  direttamente in questo messaggio") invece di `contenuto: null`, così
+  ADE capisce perché non trova quel testo altrove.
+- Se un'immagine approvata è più pesante di 3 MB o ne arrivano più di 2 in
+  contemporanea, resta comunque elencata tra gli stimoli in scadenza (nome,
+  dimensione, ore rimanenti) ma senza essere "vista" — nessun errore, solo
+  un limite prudente sul consumo di energia.
+
+Verifica eseguita: copia isolata del repository (agent, environment con la
+vera `DSC00596.JPG` già approvata, memory, body) puntata verso un server
+finto al posto di Groq. Confermato che la richiesta effettivamente inviata
+al modello contiene un blocco `image_url` con i byte reali della foto in
+base64 (non solo il nome file), che l'inventario dell'ambiente marca
+correttamente il file come "immagine mostrata", e che il ciclo si completa
+producendo memoria e diario normalmente. Nessun file reale del repository
+è stato toccato dal test (copia temporanea, cancellata a fine verifica).
+
 ---
 
 ## Step 9 — Dominio personalizzato (opzionale) ⏭️/⬜
