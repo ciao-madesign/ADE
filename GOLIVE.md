@@ -70,7 +70,7 @@ per questo (errore 429), si passa a un modello con limiti più alti.
 
 ---
 
-## Step 3 — Configurazione del ciclo su GitHub ⬜
+## Step 3 — Configurazione del ciclo su GitHub ✅ (2026-07-18)
 
 **Obiettivo**: dire al workflow `cycle.yml` quale cervello usare.
 
@@ -226,3 +226,6 @@ Poi: si condivide il link. Il Truman Show comincia.
   `main` come default branch nelle impostazioni GitHub.
 - **2026-07-18 — Step 2 completato.** Account Groq creato, API key `gsk_…`
   generata e conservata al sicuro dall'admin (mai transitata in chat né nel repo).
+- **2026-07-18 — Step 3 completato.** Configurate su GitHub le 3 variables
+  (`AI_PROVIDER`, `OPENAI_BASE_URL`, `AI_MODEL`) e il secret `OPENAI_API_KEY`.
+  Il workflow `cycle.yml` ha ora tutto ciò che serve per far pensare ADE.
