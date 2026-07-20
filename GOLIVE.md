@@ -343,6 +343,43 @@ visione, è esattamente `qwen/qwen3.6-27b`.
 3. Salva, poi rilancia il ciclo (*Actions* → workflow → *Run workflow*,
    oppure dal pannello admin del sito).
 
+### Incidente 2026-07-20 (parte 7) — 413, budget di token al minuto superato
+
+Corretto il nome del modello, il ciclo successivo è fallito con
+`413 rate_limit_exceeded`: `"Limit 8000, Requested 16879"` — il piano
+gratuito di Qwen 3.6 27B su Groq concede solo **8000 token al minuto in
+totale** (testo del prompt + immagine + spazio per la risposta), un
+budget molto più piccolo di quello di Claude. La richiesta di quel ciclo,
+soprattutto per via della foto allegata (una foto reale è tipicamente
+diverse migliaia di token da sola), lo superava di oltre il doppio.
+
+**Non serve nessuna azione dell'admin.** Corretto tutto nel codice:
+- `agent.mjs`: quando il provider non è Claude, tutti i "contesti" inviati
+  al modello ad ogni ciclo (ambiente, memorie recenti, mente, indice della
+  memoria, spazio riservato alla risposta) sono ora molto più compatti —
+  e non viene più spedito due volte lo stesso contenuto (la mente, prima
+  duplicata sia nel messaggio di sistema sia nelle osservazioni).
+- `agent.mjs`: la dimensione in pixel di ogni immagine viene ora letta
+  direttamente dal file (JPEG/PNG/GIF, senza librerie esterne) per stimare
+  con la stessa formula usata da Groq (tessere da 448×448, 256 token a
+  tessera) quanto costerà mostrarla: se una foto è troppo "pesante" in
+  token viene scartata per quel ciclo (resta comunque visibile fra gli
+  stimoli in scadenza), invece di far fallire tutto il ciclo.
+- `llm.mjs`: rete di sicurezza automatica. Se nonostante tutto il provider
+  risponde ancora "richiesta troppo grande" (413), il ciclo non viene più
+  annullato: si riprova subito senza immagine, e se non basta anche con
+  uno spazio di risposta più piccolo. Un ciclo "senza vista" quel giorno
+  vale più di nessun ciclo.
+
+Verificato con la stessa tecnica delle volte precedenti (copia isolata del
+progetto, server finto al posto di Groq): confermato che, con budget
+stretto, il totale stimato di un ciclo con la foto reale approvata si
+riduce sensibilmente; e verificato in modo esplicito, forzando un 413 solo
+quando la richiesta contiene un'immagine, che il ciclo si accorge
+dell'errore, ritenta automaticamente senza immagine e si completa
+normalmente (memoria e diario scritti). Nessun file reale del progetto è
+stato toccato dal test.
+
 ---
 
 ## Step 9 — Dominio personalizzato (opzionale) ⏭️/⬜

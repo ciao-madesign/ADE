@@ -108,45 +108,57 @@ async function openaiJSON({ system, user, schema, maxTokens, images, info }) {
     "\n\nRISPONDI ESCLUSIVAMENTE con un unico oggetto JSON valido (nessun testo prima o dopo, nessun code fence) conforme a questo JSON Schema:\n" +
     JSON.stringify(schema);
 
-  const userContent = images.length
-    ? [
-        { type: "text", text: userText },
-        ...images.map((img) => ({ type: "image_url", image_url: { url: `data:${img.mimeType};base64,${img.base64}` } })),
-      ]
-    : userText;
+  function buildBody(imgs, tokens, withResponseFormat) {
+    const userContent = imgs.length
+      ? [
+          { type: "text", text: userText },
+          ...imgs.map((img) => ({ type: "image_url", image_url: { url: `data:${img.mimeType};base64,${img.base64}` } })),
+        ]
+      : userText;
+    const body = {
+      model: info.model,
+      max_tokens: tokens,
+      // Temperatura più alta di default: un modello lasciato a un valore basso
+      // tende a ripiegare sulla risposta più "sicura" e prevedibile ad ogni
+      // ciclo, che con un'entità pensata per variare nel tempo si traduce in
+      // frasi quasi identiche una dopo l'altra. Regolabile con AI_TEMPERATURE.
+      temperature: process.env.AI_TEMPERATURE !== undefined ? Number(process.env.AI_TEMPERATURE) : 0.9,
+      messages: [{ role: "system", content: system }, { role: "user", content: userContent }],
+    };
+    if (withResponseFormat) body.response_format = { type: "json_object" };
+    // Alcuni modelli (es. qwen/qwen3.6-27b su Groq) supportano una modalità di
+    // ragionamento esplicita ("thinking"); altri la rifiutano se ricevuta.
+    // Per questo non è mai inviata di default: solo se impostata esplicitamente.
+    if (process.env.AI_REASONING_EFFORT) body.reasoning_effort = process.env.AI_REASONING_EFFORT;
+    return body;
+  }
 
-  const messages = [
-    { role: "system", content: system },
-    { role: "user", content: userContent },
-  ];
-
-  const body = {
-    model: info.model,
-    max_tokens: maxTokens,
-    // Temperatura più alta di default: un modello lasciato a un valore basso
-    // tende a ripiegare sulla risposta più "sicura" e prevedibile ad ogni
-    // ciclo, che con un'entità pensata per variare nel tempo si traduce in
-    // frasi quasi identiche una dopo l'altra. Regolabile con AI_TEMPERATURE.
-    temperature: process.env.AI_TEMPERATURE !== undefined ? Number(process.env.AI_TEMPERATURE) : 0.9,
-    messages,
-    response_format: { type: "json_object" },
-  };
-  // Alcuni modelli (es. qwen/qwen3.6-27b su Groq) supportano una modalità di
-  // ragionamento esplicita ("thinking"); altri la rifiutano se ricevuta.
-  // Per questo non è mai inviata di default: solo se impostata esplicitamente.
-  if (process.env.AI_REASONING_EFFORT) body.reasoning_effort = process.env.AI_REASONING_EFFORT;
-
-  let res = await fetch(`${info.baseUrl}/chat/completions`, {
-    method: "POST", headers, body: JSON.stringify(body),
-  });
-
-  // Alcuni server OpenAI-compatibili non supportano response_format: riprova senza.
-  if (res.status === 400) {
-    delete body.response_format;
-    res = await fetch(`${info.baseUrl}/chat/completions`, {
+  async function send(body) {
+    return fetch(`${info.baseUrl}/chat/completions`, {
       method: "POST", headers, body: JSON.stringify(body),
     });
   }
+
+  async function attempt(imgs, tokens) {
+    let r = await send(buildBody(imgs, tokens, true));
+    // Alcuni server OpenAI-compatibili non supportano response_format: riprova senza.
+    if (r.status === 400) r = await send(buildBody(imgs, tokens, false));
+    return r;
+  }
+
+  let res = await attempt(images, maxTokens);
+
+  // 413/429 "tokens": la richiesta supera il budget al minuto del provider.
+  // Invece di annullare il ciclo, ridimensioniamo e riproviamo: prima si
+  // toglie il "peso" più grande (le immagini), poi si riduce lo spazio di
+  // risposta. Un ciclo senza vista o più conciso vale più di nessun ciclo.
+  if (res.status === 413 && images.length) {
+    res = await attempt([], maxTokens);
+  }
+  if (res.status === 413) {
+    res = await attempt([], Math.max(600, Math.floor(maxTokens / 2)));
+  }
+
   if (!res.ok) {
     const errText = (await res.text()).slice(0, 400);
     throw new Error(`Provider ${info.baseUrl} ha risposto ${res.status}: ${errText}`);

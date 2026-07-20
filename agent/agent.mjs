@@ -30,11 +30,23 @@ const MEM_INDEX = path.join(MEM_DIR, "index.json");
 const INBOX_DIR = path.join(ENV_DIR, "inbox");
 const EXPIRY_FILE = path.join(INBOX_DIR, ".expiry.json");
 
-// Spazio riservato alla risposta del modello. I provider free-tier (Groq &co.)
-// contano prompt + spazio-risposta nel limite al minuto: teniamolo prudente.
-// Sovrascrivibile con la variabile AI_MAX_TOKENS.
-const MAX_TOKENS = Number(process.env.AI_MAX_TOKENS) ||
-  (providerInfo().provider === "anthropic" ? 16000 : 6000);
+// I provider free-tier OpenAI-compatibili (Groq &co.) hanno un budget di
+// token al minuto molto più stretto di Claude — nel caso di Qwen 3.6 27B su
+// Groq, appena 8000 token totali (prompt + risposta + immagini) al minuto.
+// Con Anthropic il margine è ampio; con un provider di quel tipo teniamo
+// tutto — risposta, contesto testuale, immagini — su budget molto ridotti.
+const TIGHT_BUDGET = providerInfo().provider !== "anthropic";
+
+// Spazio riservato alla risposta del modello. Sovrascrivibile con AI_MAX_TOKENS.
+const MAX_TOKENS = Number(process.env.AI_MAX_TOKENS) || (TIGHT_BUDGET ? 1500 : 16000);
+
+// Contesto testuale (ambiente, mente, memorie recenti, diario).
+const ENV_MAX_PER_FILE = TIGHT_BUDGET ? 1200 : 4000;
+const ENV_MAX_TOTAL = TIGHT_BUDGET ? 4000 : 24000;
+const MIND_MAX_CHARS = TIGHT_BUDGET ? 1800 : 9000;
+const RECENT_MEM_N = TIGHT_BUDGET ? 2 : 5;
+const RECENT_MEM_MAX_CHARS = TIGHT_BUDGET ? 600 : 3000;
+const LOG_EXCERPT_CHARS = TIGHT_BUDGET ? 500 : 2000;
 
 const GEOMETRIE = {
   box: ["width", "height", "depth"],
@@ -111,7 +123,7 @@ function safeActionPath(rel) {
 }
 
 /** La mente: file markdown scritti dall'entità, iniettati dopo l'identità. */
-function loadMind(maxChars = 9000) {
+function loadMind(maxChars = MIND_MAX_CHARS) {
   if (!fs.existsSync(MIND_DIR)) return [];
   const out = [];
   let total = 0;
@@ -169,7 +181,7 @@ function writeMemory(index, cycle, titolo, contenuto) {
   return file;
 }
 
-function recentMemories(index, n = 5, maxChars = 3000) {
+function recentMemories(index, n = RECENT_MEM_N, maxChars = RECENT_MEM_MAX_CHARS) {
   return index.files.slice(-n).map((m) => {
     let text = "";
     try { text = fs.readFileSync(path.join(MEM_DIR, m.file), "utf8"); } catch {}
@@ -279,12 +291,55 @@ function pendingInboxStimuli() {
 /**
  * Immagini tra gli stimoli ancora in environment/inbox/, pronte da mostrare
  * al modello come contenuto visivo vero e proprio (non solo come nome file).
- * Limitate in numero e peso per restare dentro il budget di token/minuto dei
- * provider free-tier: se una foto arriva ma è troppo pesante, viene comunque
- * elencata tra gli stimoli in scadenza, semplicemente non "vista".
+ * Limitate in numero e "peso in token" per restare dentro il budget dei
+ * provider free-tier: se una foto è troppo grande, viene comunque elencata
+ * tra gli stimoli in scadenza, semplicemente non "vista" in questo ciclo.
  */
-const MAX_IMAGES_PER_CYCLE = 2;
-const MAX_IMAGE_BYTES = 3 * 1024 * 1024;
+const MAX_IMAGES_PER_CYCLE = TIGHT_BUDGET ? 1 : 2;
+const MAX_IMAGE_BYTES = TIGHT_BUDGET ? 4 * 1024 * 1024 : 6 * 1024 * 1024; // sanità, non legato ai token
+// Groq tokenizza le immagini a tessere di 448x448 px, 256 token/tessera + 1
+// di overhead: (tessere + 1) * 256. 3840 ≈ 14 tessere, sufficiente per una
+// foto tipica senza sforare da sola il budget di 8000 token/minuto.
+const MAX_IMAGE_TOKENS = 3840;
+
+function jpegDimensions(buf) {
+  let i = 2;
+  while (i + 9 < buf.length) {
+    if (buf[i] !== 0xff) { i++; continue; }
+    const marker = buf[i + 1];
+    if (marker === 0xd8 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd9)) { i += 2; continue; }
+    const len = buf.readUInt16BE(i + 2);
+    const isSOF = marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc;
+    if (isSOF) return { width: buf.readUInt16BE(i + 7), height: buf.readUInt16BE(i + 5) };
+    i += 2 + len;
+  }
+  return null;
+}
+
+function pngDimensions(buf) {
+  if (buf.length < 24) return null;
+  return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
+}
+
+function gifDimensions(buf) {
+  if (buf.length < 10) return null;
+  return { width: buf.readUInt16LE(6), height: buf.readUInt16LE(8) };
+}
+
+/** Dimensioni in pixel, se il formato è riconosciuto (webp escluso: non vale il rischio di un parser fragile). */
+function imageDimensions(buf, ext) {
+  try {
+    if (ext === ".jpg" || ext === ".jpeg") return jpegDimensions(buf);
+    if (ext === ".png") return pngDimensions(buf);
+    if (ext === ".gif") return gifDimensions(buf);
+  } catch { /* intestazione inattesa o dati corrotti */ }
+  return null;
+}
+
+function estimateImageTokens(width, height) {
+  const tessere = Math.ceil(width / 448) * Math.ceil(height / 448);
+  return (tessere + 1) * 256;
+}
 
 function gatherPendingImages() {
   if (!fs.existsSync(EXPIRY_FILE)) return [];
@@ -298,11 +353,12 @@ function gatherPendingImages() {
     if (!fs.existsSync(full)) continue;
     if (fs.statSync(full).size > MAX_IMAGE_BYTES) continue;
     const ext = path.extname(e.file).toLowerCase();
-    images.push({
-      mimeType: IMAGE_MIME_BY_EXT[ext],
-      base64: fs.readFileSync(full).toString("base64"),
-      nome: e.file,
-    });
+    const buf = fs.readFileSync(full);
+    if (TIGHT_BUDGET) {
+      const dim = imageDimensions(buf, ext);
+      if (!dim || estimateImageTokens(dim.width, dim.height) > MAX_IMAGE_TOKENS) continue;
+    }
+    images.push({ mimeType: IMAGE_MIME_BY_EXT[ext], base64: buf.toString("base64"), nome: e.file });
   }
   return images;
 }
@@ -315,7 +371,7 @@ function updateManifest() {
   return files;
 }
 
-function readEnvironment(files, maxPerFile = 4000, maxTotal = 24000) {
+function readEnvironment(files, maxPerFile = ENV_MAX_PER_FILE, maxTotal = ENV_MAX_TOTAL) {
   const out = [];
   let total = 0;
   for (const f of files) {
@@ -502,6 +558,8 @@ async function cycleWithModel() {
     }
   }
 
+  const mindFiles = loadMind();
+
   const osservazioni = {
     ciclo: cycle,
     data: nowISO(),
@@ -520,17 +578,23 @@ async function cycleWithModel() {
       nota: "Questi file te li ha offerti qualcuno, sono stati approvati apposta per te, e non restano per sempre: guarda quante ore mancano prima che vengano rimossi. Se ne è arrivato uno nuovo, merita un pensiero specifico su di esso, non una frase generica.",
       file: pendingInboxStimuli(),
     },
-    mente: {
-      nota: "Questi file sei tu che li hai scritti: sono il tuo modo di pensare attuale. Puoi modificarli con azioni su agent/mind/*.md. I prompt originali non sono modificabili.",
-      file: loadMind(),
-    },
-    memoria_indice: index.files.map(({ file, titolo, ciclo }) => ({ file, titolo, ciclo })),
+    // Il contenuto della mente è già iniettato nel prompt di sistema (sotto):
+    // qui, con budget stretto, evitiamo di spedirlo due volte e lasciamo solo
+    // l'elenco dei file per riferimento. Con budget ampio (Claude) resta per
+    // intero, comodità in più che il margine di token permette di pagare.
+    mente: TIGHT_BUDGET
+      ? { nota: "Il contenuto della tua mente è già incluso sopra, nelle istruzioni di sistema di questo messaggio. Qui solo l'elenco per riferimento.", file: mindFiles.map(({ file }) => ({ file })) }
+      : { nota: "Questi file sei tu che li hai scritti: sono il tuo modo di pensare attuale. Puoi modificarli con azioni su agent/mind/*.md. I prompt originali non sono modificabili.", file: mindFiles },
+    // Con budget stretto, solo la coda recente: l'indice cresce di un elemento
+    // ad ogni ciclo e non deve diventare, col tempo, la voce più pesante del
+    // prompt. Con budget ampio resta l'indice completo.
+    memoria_indice: (TIGHT_BUDGET ? index.files.slice(-15) : index.files)
+      .map(({ file, titolo, ciclo }) => ({ file, titolo, ciclo })),
     memorie_recenti: recentMemories(index),
-    ultima_voce_diario: lastLog.slice(0, 2000),
+    ultima_voce_diario: lastLog.slice(0, LOG_EXCERPT_CHARS),
   };
 
   const identity = fs.readFileSync(IDENTITY_FILE, "utf8");
-  const mindFiles = loadMind();
   const system = mindFiles.length
     ? identity + "\n\n---\n\nLA TUA MENTE — principi e procedure che TU hai scritto nei cicli passati (in agent/mind/). Ti vincolano quanto decidi tu:\n\n" +
       mindFiles.map((m) => `### ${m.file}\n\n${m.contenuto}`).join("\n\n")
