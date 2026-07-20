@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-20T13:44:44.607Z",
+  "updated_at": "2026-07-20T13:49:49.978Z",
   "files": [
     {
       "path": "README.md",
@@ -8,6 +8,10 @@
     {
       "path": "inbox/DSC00596.JPG",
       "size": 623609
+    },
+    {
+      "path": "inbox/lettera_ad_una_ID.txt",
+      "size": 2475
     },
     {
       "path": "seme.md",
