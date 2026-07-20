@@ -188,14 +188,21 @@ senza errori (lista vuota: giusto, non c'è ancora nulla in quarantena).
 **Obiettivo**: provare l'intero giro prima di aprirlo al pubblico.
 
 **Faremo insieme, in ordine**:
-1. Dal sito: carica un'immagine o un piccolo testo con "Lascia uno stimolo".
-2. Su `/admin`: vedi il file in quarantena col rapporto di scansione → *Approva*.
-3. Su GitHub: verifica il commit "Stimolo approvato" in `environment/inbox/`.
-4. Da `/admin`: *Avvia un ciclo ora* → il workflow parte su GitHub.
-5. A ciclo finito: il sito si ri-deploya e mostra come ADE ha reagito (o ignorato!)
+1. ✅ Dal sito: carica un'immagine o un piccolo testo con "Lascia uno stimolo".
+2. ✅ Su `/admin`: vedi il file in quarantena col rapporto di scansione → *Approva*.
+3. ✅ Su GitHub: verifica il commit "Stimolo approvato" in `environment/inbox/`.
+4. ⬜ Da `/admin`: *Avvia un ciclo ora* → il workflow parte su GitHub.
+5. ⬜ A ciclo finito: il sito si ri-deploya e mostra come ADE ha reagito (o ignorato!)
    il tuo stimolo. Entrambe le reazioni sono un successo: è autonoma.
-6. Prova anche il percorso negativo: carica un file bloccato (es. rinomina un
+6. ⬜ Prova anche il percorso negativo: carica un file bloccato (es. rinomina un
    file in `.exe`) e verifica il rifiuto automatico.
+
+**2026-07-20 — Prove 1-3 superate.** Caricato `DSC00596.JPG`, approvato da
+`/admin`. Tre commit generati in sequenza, esattamente come da progetto:
+"Stimolo approvato" (file in `environment/inbox/`), "Registrato arrivo"
+(riga in `ARRIVALS.md`, scade 2026-07-21T13:41Z), "Pianificata rimozione"
+(voce in `.expiry.json`). Prima verifica in produzione della conservazione
+a 24 ore introdotta nel Problema 5 — funziona.
 
 **Verifica**: tutti i 6 punti passano.
 
