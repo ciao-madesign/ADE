@@ -110,6 +110,14 @@ risposte malformate, ti proporrò un modello alternativo **prima** di cambiare.
 inesistente (404), risposta non-JSON (ciclo annullato senza danni — è il
 comportamento previsto).
 
+**Incidente 2026-07-18, primo tentativo — risolto.** Errore 413 da Groq:
+la richiesta "pesava" 20.308 token contro un limite di 12.000/minuto, perché
+Groq conta prompt + spazio riservato alla risposta, e lo spazio-risposta era
+tarato su Claude (16.000). Correzione nel codice: spazio-risposta ridotto a
+6.000 token sui provider OpenAI-compatibili (regolabile con la variabile
+`AI_MAX_TOKENS`) e osservazioni serializzate in JSON compatto. Nuovo peso
+stimato: ~10.000 token. La chiave e la configurazione erano corrette.
+
 ---
 
 ## Step 5 — Progetto su Vercel ⬜

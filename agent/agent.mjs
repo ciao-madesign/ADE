@@ -28,7 +28,11 @@ const ENERGY_FILE = path.join(ROOT, "agent", "state", "energy.json");
 const IDENTITY_FILE = path.join(ROOT, "agent", "prompts", "identity.md");
 const MEM_INDEX = path.join(MEM_DIR, "index.json");
 
-const MAX_TOKENS = 16000;
+// Spazio riservato alla risposta del modello. I provider free-tier (Groq &co.)
+// contano prompt + spazio-risposta nel limite al minuto: teniamolo prudente.
+// Sovrascrivibile con la variabile AI_MAX_TOKENS.
+const MAX_TOKENS = Number(process.env.AI_MAX_TOKENS) ||
+  (providerInfo().provider === "anthropic" ? 16000 : 6000);
 
 const GEOMETRIE = {
   box: ["width", "height", "depth"],
@@ -430,7 +434,7 @@ async function cycleWithModel() {
 
   const { data: out, tokens: spent, stop } = await completeJSON({
     system,
-    user: `Osservazioni del ciclo ${cycle}:\n\n${JSON.stringify(osservazioni, null, 1)}`,
+    user: `Osservazioni del ciclo ${cycle} (JSON compatto):\n\n${JSON.stringify(osservazioni)}`,
     schema: SCHEMA,
     maxTokens: MAX_TOKENS,
   });
