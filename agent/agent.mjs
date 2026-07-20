@@ -249,6 +249,27 @@ function cleanupExpiredInbox() {
   return removed;
 }
 
+/**
+ * Stimoli attualmente visibili in environment/inbox/, con il conto alla
+ * rovescia prima della rimozione automatica. Reso esplicito nelle
+ * osservazioni (invece di lasciarlo annegare in un lungo elenco di file)
+ * perché un file con un orologio che corre merita più attenzione di uno
+ * che è lì da sempre.
+ */
+function pendingInboxStimuli() {
+  if (!fs.existsSync(EXPIRY_FILE)) return [];
+  try {
+    const entries = JSON.parse(fs.readFileSync(EXPIRY_FILE, "utf8"));
+    return entries.map((e) => ({
+      percorso: `environment/inbox/${e.file}`,
+      arrivato_il: e.approved_at,
+      ore_rimanenti_prima_della_rimozione: Math.max(0, Math.round((new Date(e.expires_at) - Date.now()) / 3600000)),
+    }));
+  } catch {
+    return [];
+  }
+}
+
 // ---------------------------------------------------------------- ambiente
 
 function updateManifest() {
@@ -449,6 +470,10 @@ async function cycleWithModel() {
       nota: "Se modifichi il corpo, restituisci in corpo_json l'intero body.json come stringa JSON valida, con la stessa struttura (scene, parts con id/geometry/position/rotation/scale/material/animation).",
     },
     ambiente: readEnvironment(envFiles),
+    stimoli_in_scadenza: {
+      nota: "Questi file te li ha offerti qualcuno, sono stati approvati apposta per te, e non restano per sempre: guarda quante ore mancano prima che vengano rimossi. Se ne è arrivato uno nuovo, merita un pensiero specifico su di esso, non una frase generica.",
+      file: pendingInboxStimuli(),
+    },
     mente: {
       nota: "Questi file sei tu che li hai scritti: sono il tuo modo di pensare attuale. Puoi modificarli con azioni su agent/mind/*.md. I prompt originali non sono modificabili.",
       file: loadMind(),

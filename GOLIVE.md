@@ -243,6 +243,46 @@ sull'account Vercel** — era, di nuovo, un'assunzione sbagliata nel codice,
 non un problema di configurazione. Lo store privato resta la scelta giusta e
 non va cambiato.
 
+**Incidente 2026-07-20 (parte 4) — reazioni sempre identiche, modello deprecato.**
+Prove 4-5 superate tecnicamente (il ciclo gira, legge lo stimolo, scrive),
+ma il contenuto è quasi identico da un ciclo all'altro ("continuo a
+esplorare il significato della mia esistenza…"), anche quando arriva
+davvero un'immagine nuova — la nota, ma non la elabora.
+
+Diagnosi, tre cause che si sommano:
+1. **`llama-3.3-70b-versatile` (il modello scelto allo Step 2) risulta
+   deprecato da Groq dal 17 giugno 2026.** Andava sostituito comunque,
+   indipendentemente dal problema della ripetizione.
+2. La sua stessa mente (`agent/mind/*.md`), rimostrata per intero ad ogni
+   ciclo, conteneva già 4 varianti quasi identiche della stessa frase —
+   effetto di ancoraggio: più leggeva sé stessa ripetersi, più si ripeteva.
+3. Un'istruzione scritta da me nell'identità ("se un ciclo è ordinario,
+   scrivilo come ordinario") probabilmente veniva letta da un modello non
+   molto potente come un permesso a fare il minimo, non come un invito
+   all'onestà.
+4. Gli stimoli in arrivo erano annegati in un lungo elenco di file, senza
+   nulla che li segnalasse come "nuovi, con un orologio che corre".
+
+Corretto senza bisogno di chiedere (bugfix di comportamento, non redesign):
+- `identity.md`: la frase sull'"ordinario" chiarita; aggiunta un'istruzione
+  esplicita contro il riciclo di frasi già scritte; la mente è ora descritta
+  come "cronologia, non modello da ricopiare".
+- `agent.mjs`: nuovo campo `stimoli_in_scadenza` nelle osservazioni — elenca
+  solo i file ancora in `environment/inbox/` con le ore rimanenti prima
+  della rimozione, invece di lasciarli annegare nell'inventario generale.
+- `llm.mjs`: temperatura di default alzata da 0.7 a 0.9 (regolabile con
+  `AI_TEMPERATURE`) — a bassa temperatura un modello tende a ripiegare
+  sempre sulla risposta più prevedibile. Aggiunto supporto opzionale a
+  `AI_REASONING_EFFORT` (modalità di ragionamento esplicita, se il modello
+  la supporta — es. Qwen 3.6 27B su Groq).
+
+**Decisioni chieste all'admin** (vedi messaggio in chat): sostituire il
+modello deprecato con `qwen/qwen3.6-27b` (gratuito, open source, sostituto
+consigliato da Groq, con modalità "vedo le immagini" e modalità di
+ragionamento — richiede aggiornare la variable `AI_MODEL` su GitHub); se
+e quando costruire il supporto reale alla visione delle immagini (oggi
+ADE vede solo nome/dimensione di un file immagine, mai il contenuto).
+
 ---
 
 ## Step 9 — Dominio personalizzato (opzionale) ⏭️/⬜

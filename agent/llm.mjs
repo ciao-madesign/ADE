@@ -105,10 +105,18 @@ async function openaiJSON({ system, user, schema, maxTokens, info }) {
   const body = {
     model: info.model,
     max_tokens: maxTokens,
-    temperature: 0.7,
+    // Temperatura più alta di default: un modello lasciato a un valore basso
+    // tende a ripiegare sulla risposta più "sicura" e prevedibile ad ogni
+    // ciclo, che con un'entità pensata per variare nel tempo si traduce in
+    // frasi quasi identiche una dopo l'altra. Regolabile con AI_TEMPERATURE.
+    temperature: process.env.AI_TEMPERATURE !== undefined ? Number(process.env.AI_TEMPERATURE) : 0.9,
     messages,
     response_format: { type: "json_object" },
   };
+  // Alcuni modelli (es. qwen/qwen3.6-27b su Groq) supportano una modalità di
+  // ragionamento esplicita ("thinking"); altri la rifiutano se ricevuta.
+  // Per questo non è mai inviata di default: solo se impostata esplicitamente.
+  if (process.env.AI_REASONING_EFFORT) body.reasoning_effort = process.env.AI_REASONING_EFFORT;
 
   let res = await fetch(`${info.baseUrl}/chat/completions`, {
     method: "POST", headers, body: JSON.stringify(body),
