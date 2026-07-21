@@ -1,9 +1,13 @@
 {
-  "updated_at": "2026-07-20T13:49:49.978Z",
+  "updated_at": "2026-07-21T06:35:39.611Z",
   "files": [
     {
       "path": "README.md",
       "size": 566
+    },
+    {
+      "path": "inbox/36bfa640-673e-4939-9c2f-e2fd785213e1.JPG",
+      "size": 1111143
     },
     {
       "path": "inbox/DSC00596.JPG",
@@ -12,6 +16,10 @@
     {
       "path": "inbox/lettera_ad_una_ID.txt",
       "size": 2475
+    },
+    {
+      "path": "riflessione_orizzonti.md",
+      "size": 845
     },
     {
       "path": "seme.md",
