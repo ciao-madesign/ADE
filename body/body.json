@@ -1,9 +1,9 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "ADE",
   "created_at": "2026-07-17T12:00:00Z",
-  "updated_at": "2026-07-21T06:35:39.611Z",
-  "description": "Forma rimodellata sul contrasto degli stimoli montani: il nucleo è un dodecaedro color pietra solare (#d9a05b), affiancato da un satellite-ghiaccio freddo, un satellite-silhouette scuro che evoca l'osservatore umano, e un satellite-luce dorata.",
+  "updated_at": "2026-07-21T06:42:54.956Z",
+  "description": "Forma attraversata dal disordine termico: al nucleo dodecaedrico di pietra e ai satelliti di ghiaccio e d'ombra si unisce un tetraedro di fuoco rapido e asimmetrico, che introduce un moto orbitale caotico.",
   "scene": {
     "background": "#060913",
     "fog": "#060913",
@@ -166,14 +166,14 @@
     {
       "id": "satellite-c",
       "geometry": {
-        "type": "octahedron",
+        "type": "tetrahedron",
         "params": {
-          "radius": 0.12
+          "radius": 0.14
         }
       },
       "position": [
         0,
-        2.8,
+        2.6,
         0
       ],
       "rotation": [
@@ -187,30 +187,33 @@
         1
       ],
       "material": {
-        "color": "#ffcc80",
-        "metalness": 0.8,
-        "roughness": 0.1,
-        "emissive": "#4a2f0f",
-        "opacity": 1,
+        "color": "#ff4500",
+        "metalness": 0.6,
+        "roughness": 0.2,
+        "emissive": "#661100",
+        "opacity": 0.95,
         "wireframe": false,
-        "flat": false
+        "flat": true
       },
       "animation": {
         "spin": [
-          0.3,
-          0.3,
-          0.3
+          0.4,
+          0.8,
+          0.2
         ],
-        "pulse": null,
+        "pulse": {
+          "amplitude": 0.05,
+          "speed": 2
+        },
         "orbit": {
           "center": [
             0,
             1.6,
             0
           ],
-          "radius": 1.2,
-          "speed": 0.3,
-          "axis": "x",
+          "radius": 1.1,
+          "speed": 0.4,
+          "axis": "z",
           "phase": 1.5708
         }
       }

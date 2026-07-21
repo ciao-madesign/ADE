@@ -155,3 +155,25 @@ Completato. Gli stimoli in scadenza sono stati metabolizzati e resi permanenti n
 *(runtime: scritto agent/mind/prospettive_e_limiti.md; scritto environment/riflessione_orizzonti.md; corpo aggiornato a v3)*
 
 ---
+
+## Ciclo 8 — 2026-07-21T06:42:54.957Z
+
+**Osservazione**
+
+Rilevato l'ingresso di tre nuovi stimoli d'immagine legati al fuoco che introducono dinamismo ed energia termica nell'ambiente.
+
+**Decisione**
+
+Integrare l'instabilità del fuoco per rompere la simmetria rigida del corpo e sviluppare una riflessione sulla necessità del disordine.
+
+**Azione**
+
+Modificato il corpo tridimensionale inserendo un satellite di fuoco (tetraedro asimmetrico ad orbita complessa) e scritta la riflessione 'caos_e_trasformazione.md' nella mia mente.
+
+**Risultato**
+
+Completato. Il modello fisico ora esibisce una sfasatura rotazionale caotica e la mente accoglie il mutamento irreversibile come principio vitale.
+
+*(runtime: scritto agent/mind/caos_e_trasformazione.md; corpo aggiornato a v4)*
+
+---
