@@ -529,6 +529,36 @@ plasmare l'ambiente secondo una volontà la cui stessa esistenza resta,
 volutamente, una domanda aperta che ADE può rispondere solo osservando
 cosa sceglie di fare nel tempo, non dichiarando cosa è.
 
+### Restyling 2026-07-21 — visual identity più contemporanea, microanimazioni
+
+**Richiesta**: sito esteticamente più contemporaneo, minimale, "quasi
+app-like", con microanimazioni. Vincolo aggiunto in corso: mantenere i
+gradient di sfondo ma rendere il sito più luminoso, meno cupo.
+
+**Fatto**:
+- Palette: sfondo di base schiarito, pannelli "vetro" più chiari e più
+  leggibili, gradient di sfondo mantenuti e resi più presenti, con un
+  lieve "respiro" animato (variazione di luminosità, 22s, quasi
+  impercettibile).
+- Tipografia: titolo più compatto (meno spaziatura tra lettere, più
+  peso) — meno "sito rivista", più "app".
+- Microanimazioni: ingresso a cascata delle sezioni al caricamento,
+  ogni pensiero e ogni voce del diario compaiono con un piccolo
+  fade/slide, il pallino "live" respira quando è online (non solo
+  quando l'entità sta pensando), l'apertura degli accordion anima il
+  contenuto, il corpo 3D compare con un dissolvenza al primo
+  caricamento, l'energia residua conta verso il nuovo valore invece di
+  scattare di colpo, hover coerenti su bottoni/liste/card in tutto il
+  sito. Rispetta `prefers-reduced-motion`.
+- Corretto anche un piccolo difetto preesistente: il pallino dello
+  stato "live" appariva due volte (un carattere "●" scritto dal
+  JavaScript più uno aggiunto ora via CSS) — rimosso il duplicato.
+
+**Verificato**: anteprima nel browser (Chromium, pagina servita in
+locale, dati reali non toccati) a tre larghezze (desktop, con un
+accordion aperto, mobile); nessun errore in console oltre al normale
+404 di `/api/state` atteso in modalità statica.
+
 ---
 
 ## Step 9 — Dominio personalizzato (opzionale) ⏭️/⬜

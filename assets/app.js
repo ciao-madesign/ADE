@@ -158,8 +158,23 @@ function renderCorpoInfo(body) {
   $("#corpo-descrizione").textContent = body.description || "";
 }
 
+let energiaPrecedente = null;
+
+function animaNumero(el, da, a, suffisso, durata = 700) {
+  const inizio = performance.now();
+  function tick(ora) {
+    const t = Math.min(1, (ora - inizio) / durata);
+    const smorzato = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.round(da + (a - da) * smorzato).toLocaleString("it") + suffisso;
+    if (t < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
 function renderEnergia(e) {
-  $("#energia-residua").textContent = e.remaining.toLocaleString("it") + " tk";
+  const da = energiaPrecedente === null ? e.remaining : energiaPrecedente;
+  animaNumero($("#energia-residua"), da, e.remaining, " tk");
+  energiaPrecedente = e.remaining;
   $("#energia-budget").textContent = e.daily_budget.toLocaleString("it") + " tk";
   $("#cicli").textContent = e.total_cycles;
   $("#ultimo-ciclo").textContent = e.last_cycle_at ? new Date(e.last_cycle_at).toLocaleString("it-IT", { dateStyle: "short", timeStyle: "short" }) : "mai";
@@ -278,7 +293,7 @@ async function refreshAll() {
 function setBadge(stato, testo) {
   const b = $("#live-badge");
   b.className = stato;
-  b.textContent = "● " + testo;
+  b.textContent = testo;
 }
 
 function setCountdown(iso) {
@@ -345,7 +360,20 @@ function setupUpload() {
   });
 }
 
+function setupAccordionAnimazione() {
+  for (const dettaglio of document.querySelectorAll("details.accordion")) {
+    const corpo = dettaglio.querySelector(".accordion-body");
+    dettaglio.addEventListener("toggle", () => {
+      if (!dettaglio.open) return;
+      corpo.classList.remove("entrando");
+      void corpo.offsetWidth; // forza il reflow: riavvia l'animazione anche se già vista
+      corpo.classList.add("entrando");
+    });
+  }
+}
+
 (async () => {
+  setupAccordionAnimazione();
   await refreshAll();
   try {
     const state = await fetchJSON("/api/state");
