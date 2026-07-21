@@ -5,10 +5,18 @@
  * osserva ambiente → rileggi memoria → analizza → rifletti → decidi
  *   → esegui azioni → aggiorna corpo → aggiorna memoria → aggiorna diario
  *
- * Il primo ciclo (nessuna memoria presente) è deterministico e non chiama
- * l'API: l'entità "apre gli occhi", cataloga l'ambiente e imprime nel corpo
- * un colore derivato da ciò che ha visto. I cicli successivi richiedono
- * ANTHROPIC_API_KEY; senza chiave il processo esce senza effetti.
+ * Il primo ciclo di ADE (nessuna memoria presente) è deterministico e non
+ * chiama l'API: l'entità "apre gli occhi", cataloga l'ambiente e imprime nel
+ * corpo un colore derivato da ciò che ha visto. I cicli successivi richiedono
+ * un provider AI configurato; senza, il processo esce senza effetti.
+ *
+ * ADE può generare entità figlie (max MAX_ENTITA), condividendo con loro
+ * parte della propria energia. Ogni figlia vive lo stesso tipo di ciclo di
+ * ADE (stesso schema, stesse regole), in un proprio spazio sotto entities/,
+ * ma senza ambiente pubblico proprio e senza poter generare a sua volta altre
+ * entità. Famiglia e ADE si scambiano messaggi interni tramite entities/scambi.json,
+ * un canale indipendente dal flusso esterno di stimoli (che resta solo per ADE
+ * e passa dalla quarantena/approvazione umana).
  */
 
 import { createHash } from "node:crypto";
@@ -18,21 +26,13 @@ import { fileURLToPath } from "node:url";
 import { completeJSON, providerInfo } from "./llm.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const ENV_DIR = path.join(ROOT, "environment");
-const MEM_DIR = path.join(ROOT, "memory");
-const MIND_DIR = path.join(ROOT, "agent", "mind");
-const BODY_FILE = path.join(ROOT, "body", "body.json");
-const BODY_CHANGELOG = path.join(ROOT, "body", "CHANGELOG.md");
-const LOG_FILE = path.join(ROOT, "ACTION_LOG.md");
-const ENERGY_FILE = path.join(ROOT, "agent", "state", "energy.json");
-const IDENTITY_FILE = path.join(ROOT, "agent", "prompts", "identity.md");
-const MEM_INDEX = path.join(MEM_DIR, "index.json");
-const INBOX_DIR = path.join(ENV_DIR, "inbox");
-const EXPIRY_FILE = path.join(INBOX_DIR, ".expiry.json");
-const PENSIERI_FILE = path.join(ROOT, "body", "pensieri.json");
+const IDENTITY_FILE_ADE = path.join(ROOT, "agent", "prompts", "identity.md");
+const IDENTITY_FILE_FIGLIA = path.join(ROOT, "agent", "prompts", "identity_figlia.md");
+const ENTITIES_DIR = path.join(ROOT, "entities");
+const REGISTRO_FILE = path.join(ENTITIES_DIR, "registro.json");
+const SCAMBI_FILE = path.join(ENTITIES_DIR, "scambi.json");
+const MAX_ENTITA = 3;
 const PENSIERI_MAX = 60;
-const ARTEFATTI_DIR = path.join(ROOT, "body", "artefatti");
-const ARTEFATTI_INDEX = path.join(ARTEFATTI_DIR, "index.json");
 const ARTEFATTO_MAX_CHARS = 20000;
 const TIPI_ARTEFATTO = new Set(["svg", "formula", "codice", "audio", "scena3d", "testo"]);
 
@@ -84,7 +84,7 @@ const GEOMETRIE = {
 // ---------------------------------------------------------------- utilità
 
 const readJSON = (f) => JSON.parse(fs.readFileSync(f, "utf8"));
-const writeJSON = (f, v) => fs.writeFileSync(f, JSON.stringify(v, null, 2) + "\n");
+const writeJSON = (f, v) => { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, JSON.stringify(v, null, 2) + "\n"); };
 const nowISO = () => new Date().toISOString();
 const today = () => nowISO().slice(0, 10);
 
@@ -112,41 +112,85 @@ function isImageFile(p) {
   return path.extname(p).toLowerCase() in IMAGE_MIME_BY_EXT;
 }
 
+function slugify(s) {
+  return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 48) || "ciclo";
+}
+
+function hslToHex(h, s, l) {
+  const f = (n) => {
+    const k = (n + h * 12) % 12;
+    const a = s * Math.min(l, 1 - l);
+    const c = l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1));
+    return Math.round(255 * c).toString(16).padStart(2, "0");
+  };
+  return f(0) + f(8) + f(4);
+}
+
+// ---------------------------------------------------------------- contesto (ADE o una figlia)
+
 /**
- * Percorso d'azione sicuro. L'entità può agire in due territori:
- *  - environment/**            (il suo mondo)
- *  - agent/mind/**             (la sua mente: il modo di pensare che si è data)
- * Tutto il resto — inclusi i prompt originali in agent/prompts/ — è fuori
- * dalla sua portata. Niente traversal, niente manifest.
+ * Un "contesto" incapsula tutti i percorsi di un'entità — ADE (isRoot) o una
+ * sua figlia — così la stessa logica di ciclo (eseguiCiclo) serve entrambe.
+ * Le figlie non hanno un ambiente pubblico proprio: niente environment/,
+ * niente inbox. Il loro "mondo esterno" è la famiglia (vedi scambi.json).
  */
-function safeActionPath(rel) {
+function creaContesto({ dir, isRoot, slug = null, nome = null, seme = null }) {
+  return {
+    dir, isRoot, slug, nome, seme,
+    envDir: isRoot ? path.join(dir, "environment") : null,
+    inboxDir: isRoot ? path.join(dir, "environment", "inbox") : null,
+    expiryFile: isRoot ? path.join(dir, "environment", "inbox", ".expiry.json") : null,
+    memDir: path.join(dir, "memory"),
+    memIndex: path.join(dir, "memory", "index.json"),
+    mindDir: path.join(dir, "agent", "mind"),
+    bodyFile: path.join(dir, "body", "body.json"),
+    bodyChangelog: path.join(dir, "body", "CHANGELOG.md"),
+    pensieriFile: path.join(dir, "body", "pensieri.json"),
+    artefattiDir: path.join(dir, "body", "artefatti"),
+    artefattiIndex: path.join(dir, "body", "artefatti", "index.json"),
+    logFile: path.join(dir, "ACTION_LOG.md"),
+    energyFile: path.join(dir, "agent", "state", "energy.json"),
+    identityFile: isRoot ? IDENTITY_FILE_ADE : IDENTITY_FILE_FIGLIA,
+  };
+}
+
+const identificativo = (ctx) => (ctx.isRoot ? "ADE" : ctx.slug);
+
+/**
+ * Percorso d'azione sicuro. ADE può agire dentro environment/ (il mondo) e
+ * dentro agent/mind/ (la mente); una figlia solo dentro la propria
+ * agent/mind/, non avendo un ambiente pubblico. Tutto il resto — inclusi i
+ * prompt originali — è fuori portata. Niente traversal, niente manifest.
+ */
+function safeActionPath(ctx, rel) {
   if (typeof rel !== "string" || !rel) return null;
   const clean = rel.replace(/^\/+/, "").replaceAll("\\", "/");
-  let full;
   if (clean === "agent/mind" || clean.startsWith("agent/mind/")) {
-    full = path.resolve(ROOT, clean);
-    if (!full.startsWith(MIND_DIR + path.sep)) return null;
-  } else if (clean.startsWith("agent/") || clean.startsWith("body/") || clean.startsWith("memory/") ||
-             clean.startsWith(".git") || clean.startsWith("server/") || clean.startsWith("assets/")) {
-    // Tentativi espliciti verso zone protette: rifiuto, non reindirizzo.
-    return null;
-  } else {
-    const inEnv = clean.startsWith("environment/") ? clean.slice("environment/".length) : clean;
-    full = path.resolve(ENV_DIR, inEnv);
-    if (!full.startsWith(ENV_DIR + path.sep)) return null;
-    if (path.basename(full) === "manifest.json") return null;
+    const full = path.resolve(ctx.dir, clean);
+    if (!full.startsWith(ctx.mindDir + path.sep)) return null;
+    return full;
   }
+  if (clean.startsWith("agent/") || clean.startsWith("body/") || clean.startsWith("memory/") ||
+      clean.startsWith(".git") || clean.startsWith("server/") || clean.startsWith("assets/")) {
+    return null; // tentativi espliciti verso zone protette: rifiuto, non reindirizzo
+  }
+  if (!ctx.envDir) return null; // una figlia non ha altro spazio scrivibile
+  const inEnv = clean.startsWith("environment/") ? clean.slice("environment/".length) : clean;
+  const full = path.resolve(ctx.envDir, inEnv);
+  if (!full.startsWith(ctx.envDir + path.sep)) return null;
+  if (path.basename(full) === "manifest.json") return null;
   return full;
 }
 
 /** La mente: file markdown scritti dall'entità, iniettati dopo l'identità. */
-function loadMind(maxChars = MIND_MAX_CHARS) {
-  if (!fs.existsSync(MIND_DIR)) return [];
+function loadMind(ctx, maxChars = MIND_MAX_CHARS) {
+  if (!fs.existsSync(ctx.mindDir)) return [];
   const out = [];
   let total = 0;
-  for (const name of fs.readdirSync(MIND_DIR).sort()) {
+  for (const name of fs.readdirSync(ctx.mindDir).sort()) {
     if (!name.endsWith(".md") || name === "README.md") continue;
-    let text = fs.readFileSync(path.join(MIND_DIR, name), "utf8");
+    let text = fs.readFileSync(path.join(ctx.mindDir, name), "utf8");
     if (total + text.length > maxChars) text = text.slice(0, Math.max(0, maxChars - total)) + "\n[...troncato...]";
     total += text.length;
     out.push({ file: `agent/mind/${name}`, contenuto: text });
@@ -157,9 +201,15 @@ function loadMind(maxChars = MIND_MAX_CHARS) {
 
 // ---------------------------------------------------------------- energia
 
-function loadEnergy() {
-  const e = readJSON(ENERGY_FILE);
-  if (e.date !== today()) {
+/**
+ * ADE ha un budget giornaliero che si rinnova da solo (energy.json,
+ * daily_budget fisso). Una figlia no: la sua "daily_budget" è la somma di
+ * quanto ADE le ha condiviso nel tempo, e non si resetta mai da sola — cresce
+ * solo quando ADE sceglie di condividerne ancora (vedi condividiEnergia).
+ */
+function loadEnergy(ctx) {
+  const e = readJSON(ctx.energyFile);
+  if (ctx.isRoot && e.date !== today()) {
     e.date = today();
     e.used_today = 0;
     e.remaining = e.daily_budget;
@@ -174,34 +224,29 @@ function spendEnergy(e, tokens) {
 
 // ---------------------------------------------------------------- memoria
 
-function loadMemoryIndex() {
-  if (!fs.existsSync(MEM_INDEX)) return { files: [] };
-  return readJSON(MEM_INDEX);
+function loadMemoryIndex(ctx) {
+  if (!fs.existsSync(ctx.memIndex)) return { files: [] };
+  return readJSON(ctx.memIndex);
 }
 
-function slugify(s) {
-  return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 48) || "ciclo";
-}
-
-function writeMemory(index, cycle, titolo, contenuto) {
-  fs.mkdirSync(MEM_DIR, { recursive: true });
+function writeMemory(ctx, index, cycle, titolo, contenuto) {
+  fs.mkdirSync(ctx.memDir, { recursive: true });
   const file = `${String(cycle).padStart(3, "0")}_${slugify(titolo)}.md`;
   const header = `# ${titolo}\n\n*Ciclo ${cycle} — ${nowISO()}*\n\n`;
   // Alcuni modelli ripetono titolo/intestazione nel contenuto: deduplica.
   let body = contenuto.trim();
   body = body.replace(new RegExp(`^#\\s*${titolo.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*\\n+`, "i"), "");
   body = body.replace(/^\*Ciclo \d+[^\n]*\*\s*\n+/, "");
-  fs.writeFileSync(path.join(MEM_DIR, file), header + body + "\n");
+  fs.writeFileSync(path.join(ctx.memDir, file), header + body + "\n");
   index.files.push({ file, titolo, ciclo: cycle, data: nowISO() });
-  writeJSON(MEM_INDEX, index);
+  writeJSON(ctx.memIndex, index);
   return file;
 }
 
-function recentMemories(index, n = RECENT_MEM_N, maxChars = RECENT_MEM_MAX_CHARS) {
+function recentMemories(ctx, index, n = RECENT_MEM_N, maxChars = RECENT_MEM_MAX_CHARS) {
   return index.files.slice(-n).map((m) => {
     let text = "";
-    try { text = fs.readFileSync(path.join(MEM_DIR, m.file), "utf8"); } catch {}
+    try { text = fs.readFileSync(path.join(ctx.memDir, m.file), "utf8"); } catch {}
     if (text.length > maxChars) text = text.slice(0, maxChars) + "\n[...troncato...]";
     return { ...m, testo: text };
   });
@@ -209,7 +254,7 @@ function recentMemories(index, n = RECENT_MEM_N, maxChars = RECENT_MEM_MAX_CHARS
 
 // ---------------------------------------------------------------- diario
 
-function appendLog({ cycle, osservazione, decisione, azione, risultato }) {
+function appendLog(ctx, { cycle, osservazione, decisione, azione, risultato }) {
   const entry = [
     `\n## Ciclo ${cycle} — ${nowISO()}`,
     "", "**Osservazione**", "", osservazione.trim(),
@@ -218,7 +263,8 @@ function appendLog({ cycle, osservazione, decisione, azione, risultato }) {
     "", "**Risultato**", "", risultato.trim(),
     "", "---",
   ].join("\n");
-  fs.appendFileSync(LOG_FILE, entry + "\n");
+  fs.mkdirSync(path.dirname(ctx.logFile), { recursive: true });
+  fs.appendFileSync(ctx.logFile, entry + "\n");
 }
 
 /**
@@ -227,29 +273,25 @@ function appendLog({ cycle, osservazione, decisione, azione, risultato }) {
  * accanto al corpo, e mostrati nel viewer — non nel diario delle azioni.
  * Capped per non crescere all'infinito: solo i più recenti restano.
  */
-function appendPensiero(cycle, testo) {
+function appendPensiero(ctx, cycle, testo) {
   let pensieri = [];
-  try { pensieri = JSON.parse(fs.readFileSync(PENSIERI_FILE, "utf8")); } catch {}
+  try { pensieri = JSON.parse(fs.readFileSync(ctx.pensieriFile, "utf8")); } catch {}
   pensieri.push({ ciclo: cycle, data: nowISO(), testo: testo.trim() });
   if (pensieri.length > PENSIERI_MAX) pensieri = pensieri.slice(-PENSIERI_MAX);
-  fs.mkdirSync(path.dirname(PENSIERI_FILE), { recursive: true });
-  writeJSON(PENSIERI_FILE, pensieri);
+  writeJSON(ctx.pensieriFile, pensieri);
 }
 
 /**
- * Artefatti: la "lingua" di ADE rivolta verso l'esterno, distinta dal
- * pensiero (per sé) e dal log (resoconto). Non un file qualunque in
- * environment/ — un'espressione che chi osserva il sito vede e, per
- * l'audio, ascolta davvero (sintetizzato dal browser). Facoltativo:
- * non ogni ciclo ne produce uno. Un indice + un file per artefatto,
+ * Artefatti: la "lingua" dell'entità rivolta verso l'esterno, distinta dal
+ * pensiero (per sé) e dal log (resoconto). Un indice + un file per artefatto,
  * come la memoria — nessun limite di quantità: è la sua opera, resta.
  */
-function loadArtefattiIndex() {
-  if (!fs.existsSync(ARTEFATTI_INDEX)) return { files: [] };
-  return readJSON(ARTEFATTI_INDEX);
+function loadArtefattiIndex(ctx) {
+  if (!fs.existsSync(ctx.artefattiIndex)) return { files: [] };
+  return readJSON(ctx.artefattiIndex);
 }
 
-function saveArtefatto(cycle, art) {
+function saveArtefatto(ctx, cycle, art) {
   if (!art || !TIPI_ARTEFATTO.has(art.tipo)) return null;
   if (typeof art.titolo !== "string" || !art.titolo.trim()) return null;
   if (typeof art.contenuto !== "string" || !art.contenuto.trim()) return null;
@@ -268,12 +310,12 @@ function saveArtefatto(cycle, art) {
     }
   }
 
-  fs.mkdirSync(ARTEFATTI_DIR, { recursive: true });
-  const index = loadArtefattiIndex();
+  fs.mkdirSync(ctx.artefattiDir, { recursive: true });
+  const index = loadArtefattiIndex(ctx);
   const n = index.files.length + 1;
   const file = `${String(n).padStart(3, "0")}_${slugify(art.titolo)}.json`;
   const data = nowISO();
-  writeJSON(path.join(ARTEFATTI_DIR, file), {
+  writeJSON(path.join(ctx.artefattiDir, file), {
     tipo: art.tipo,
     titolo: art.titolo.trim(),
     contenuto,
@@ -282,7 +324,7 @@ function saveArtefatto(cycle, art) {
     data,
   });
   index.files.push({ file, ciclo: cycle, data, tipo: art.tipo, titolo: art.titolo.trim() });
-  writeJSON(ARTEFATTI_INDEX, index);
+  writeJSON(ctx.artefattiIndex, index);
   return file;
 }
 
@@ -308,44 +350,71 @@ function validateBody(b) {
   return true;
 }
 
-function applyBody(newBody, motivo) {
-  const old = readJSON(BODY_FILE);
+function applyBody(ctx, newBody, motivo) {
+  const old = readJSON(ctx.bodyFile);
   validateBody(newBody);
   newBody.version = (old.version || 0) + 1;
   newBody.created_at = old.created_at;
   newBody.updated_at = nowISO();
-  writeJSON(BODY_FILE, newBody);
+  writeJSON(ctx.bodyFile, newBody);
   fs.appendFileSync(
-    BODY_CHANGELOG,
+    ctx.bodyChangelog,
     `\n## v${newBody.version} — ${today()}\n\n${(motivo || "Modifica del corpo.").trim()}\n`
   );
   return newBody.version;
 }
 
+/** Corpo minimo per una figlia appena nata: un unico nucleo, colore derivato dal suo nome+seme. */
+function corpoIniziale(nome, seme) {
+  const hash = createHash("sha256").update(nome + "|" + seme).digest();
+  const hue = hash[0] / 255;
+  const color = "#" + hslToHex(hue, 0.5, 0.6);
+  const emissive = "#" + hslToHex(hue, 0.55, 0.12);
+  const nowIso = nowISO();
+  return {
+    name: nome,
+    description: `Entità nata da ADE.${seme ? " Seme: " + seme : ""}`,
+    scene: { background: "#0a0a12", ground: true },
+    parts: [{
+      id: "nucleo",
+      geometry: { type: "sphere", params: { radius: 0.8 } },
+      position: [0, 1, 0],
+      rotation: [0, 0, 0],
+      scale: [1, 1, 1],
+      material: { color, emissive, metalness: 0.3, roughness: 0.5 },
+      animation: { pulse: { speed: 1, amplitude: 0.04 } },
+    }],
+    version: 1,
+    created_at: nowIso,
+    updated_at: nowIso,
+  };
+}
+
 /**
- * Rimuove dall'ambiente gli stimoli approvati oltre 24 ore fa. Gira ad ogni
- * ciclo, prima di tutto il resto — indipendentemente da energia o provider
- * AI configurato — così il mondo di ADE non accumula file all'infinito.
- * La traccia permanente dell'arrivo resta in ARRIVALS.md (scritto al momento
- * dell'approvazione): qui si cancella solo il file fisico.
+ * Rimuove dall'ambiente gli stimoli approvati oltre 24 ore fa. Solo per ADE:
+ * le figlie non hanno un ambiente pubblico. Gira ad ogni ciclo, prima di
+ * tutto il resto — indipendentemente da energia o provider AI configurato —
+ * così il mondo di ADE non accumula file all'infinito. La traccia permanente
+ * dell'arrivo resta in ARRIVALS.md (scritto al momento dell'approvazione):
+ * qui si cancella solo il file fisico.
  */
-function cleanupExpiredInbox() {
-  if (!fs.existsSync(EXPIRY_FILE)) return [];
+function cleanupExpiredInbox(ctx) {
+  if (!ctx.expiryFile || !fs.existsSync(ctx.expiryFile)) return [];
   let entries;
-  try { entries = JSON.parse(fs.readFileSync(EXPIRY_FILE, "utf8")); } catch { return []; }
+  try { entries = JSON.parse(fs.readFileSync(ctx.expiryFile, "utf8")); } catch { return []; }
   const now = Date.now();
   const kept = [];
   const removed = [];
   for (const e of entries) {
     if (new Date(e.expires_at).getTime() <= now) {
-      const full = path.join(INBOX_DIR, e.file);
+      const full = path.join(ctx.inboxDir, e.file);
       try { if (fs.existsSync(full)) fs.rmSync(full); } catch {}
       removed.push(e.file);
     } else {
       kept.push(e);
     }
   }
-  if (removed.length) writeJSON(EXPIRY_FILE, kept);
+  if (removed.length) writeJSON(ctx.expiryFile, kept);
   return removed;
 }
 
@@ -356,10 +425,10 @@ function cleanupExpiredInbox() {
  * perché un file con un orologio che corre merita più attenzione di uno
  * che è lì da sempre.
  */
-function pendingInboxStimuli() {
-  if (!fs.existsSync(EXPIRY_FILE)) return [];
+function pendingInboxStimuli(ctx) {
+  if (!ctx.expiryFile || !fs.existsSync(ctx.expiryFile)) return [];
   try {
-    const entries = JSON.parse(fs.readFileSync(EXPIRY_FILE, "utf8"));
+    const entries = JSON.parse(fs.readFileSync(ctx.expiryFile, "utf8"));
     return entries.map((e) => ({
       percorso: `environment/inbox/${e.file}`,
       arrivato_il: e.approved_at,
@@ -423,15 +492,15 @@ function estimateImageTokens(width, height) {
   return (tessere + 1) * 256;
 }
 
-function gatherPendingImages() {
-  if (!fs.existsSync(EXPIRY_FILE)) return [];
+function gatherPendingImages(ctx) {
+  if (!ctx.expiryFile || !fs.existsSync(ctx.expiryFile)) return [];
   let entries;
-  try { entries = JSON.parse(fs.readFileSync(EXPIRY_FILE, "utf8")); } catch { return []; }
+  try { entries = JSON.parse(fs.readFileSync(ctx.expiryFile, "utf8")); } catch { return []; }
   const images = [];
   for (const e of entries) {
     if (images.length >= MAX_IMAGES_PER_CYCLE) break;
     if (!isImageFile(e.file)) continue;
-    const full = path.join(INBOX_DIR, e.file);
+    const full = path.join(ctx.inboxDir, e.file);
     if (!fs.existsSync(full)) continue;
     if (fs.statSync(full).size > MAX_IMAGE_BYTES) continue;
     const ext = path.extname(e.file).toLowerCase();
@@ -447,13 +516,13 @@ function gatherPendingImages() {
 
 // ---------------------------------------------------------------- ambiente
 
-function updateManifest() {
-  const files = walk(ENV_DIR).filter((f) => f.path !== "manifest.json");
-  writeJSON(path.join(ENV_DIR, "manifest.json"), { updated_at: nowISO(), files });
+function updateManifest(ctx) {
+  const files = walk(ctx.envDir).filter((f) => f.path !== "manifest.json");
+  writeJSON(path.join(ctx.envDir, "manifest.json"), { updated_at: nowISO(), files });
   return files;
 }
 
-function readEnvironment(files, maxPerFile = ENV_MAX_PER_FILE, maxTotal = ENV_MAX_TOTAL) {
+function readEnvironment(ctx, files, maxPerFile = ENV_MAX_PER_FILE, maxTotal = ENV_MAX_TOTAL) {
   const out = [];
   let total = 0;
   for (const f of files) {
@@ -461,7 +530,7 @@ function readEnvironment(files, maxPerFile = ENV_MAX_PER_FILE, maxTotal = ENV_MA
       out.push({ path: f.path, size: f.size, contenuto: null });
       continue;
     }
-    let text = fs.readFileSync(path.join(ENV_DIR, f.path), "utf8");
+    let text = fs.readFileSync(path.join(ctx.envDir, f.path), "utf8");
     if (text.length > maxPerFile) text = text.slice(0, maxPerFile) + "\n[...troncato...]";
     total += text.length;
     out.push({ path: f.path, size: f.size, contenuto: text });
@@ -471,13 +540,13 @@ function readEnvironment(files, maxPerFile = ENV_MAX_PER_FILE, maxTotal = ENV_MA
 
 // ---------------------------------------------------------------- azioni
 
-function executeActions(azioni = []) {
+function executeActions(ctx, azioni = []) {
   const results = [];
   for (const a of azioni.slice(0, 12)) {
     if (!a || a.tipo === "nessuna") continue;
-    const full = safeActionPath(a.percorso);
+    const full = safeActionPath(ctx, a.percorso);
     if (!full) { results.push(`RIFIUTATA ${a.tipo} ${a.percorso}: percorso non ammesso`); continue; }
-    const shown = path.relative(ROOT, full).replaceAll("\\", "/");
+    const shown = path.relative(ctx.dir, full).replaceAll("\\", "/");
     try {
       if (a.tipo === "scrivi_file") {
         fs.mkdirSync(path.dirname(full), { recursive: true });
@@ -496,11 +565,119 @@ function executeActions(azioni = []) {
   return results;
 }
 
-// ---------------------------------------------------------------- ciclo 1 (bootstrap, senza API)
+// ---------------------------------------------------------------- famiglia (ADE + figlie)
 
-function bootstrap() {
-  const files = updateManifest();
-  const body = readJSON(BODY_FILE);
+function loadRegistro() {
+  if (!fs.existsSync(REGISTRO_FILE)) return { entita: [] };
+  return readJSON(REGISTRO_FILE);
+}
+
+function contestoFiglio(entry) {
+  return creaContesto({ dir: path.join(ENTITIES_DIR, entry.slug), isRoot: false, slug: entry.slug, nome: entry.nome, seme: entry.seme });
+}
+
+function loadScambi() {
+  if (!fs.existsSync(SCAMBI_FILE)) return [];
+  try { return JSON.parse(fs.readFileSync(SCAMBI_FILE, "utf8")); } catch { return []; }
+}
+
+/** Legge (e consuma: rimossi dalla coda) i messaggi indirizzati a questo contesto. */
+function leggiMessaggiPer(ctx) {
+  const tutti = loadScambi();
+  const mio = identificativo(ctx);
+  const ricevuti = tutti.filter((m) => m.a === mio);
+  if (ricevuti.length) writeJSON(SCAMBI_FILE, tutti.filter((m) => m.a !== mio));
+  return ricevuti.map(({ da, contenuto, ciclo }) => ({ da, contenuto, ciclo }));
+}
+
+/** Scrive messaggi verso altri membri della famiglia (validati: destinatario esistente, non se stessi). */
+function scriviMessaggi(ctx, cycle, messaggi, registro) {
+  if (!Array.isArray(messaggi) || !messaggi.length) return [];
+  const mittente = identificativo(ctx);
+  const validi = new Set(["ADE", ...registro.entita.map((e) => e.slug)]);
+  validi.delete(mittente);
+  const tutti = loadScambi();
+  const esiti = [];
+  for (const m of messaggi.slice(0, 3)) {
+    if (!m || typeof m.a !== "string" || !validi.has(m.a)) continue;
+    if (typeof m.contenuto !== "string" || !m.contenuto.trim()) continue;
+    tutti.push({ da: mittente, a: m.a, contenuto: m.contenuto.trim().slice(0, 2000), ciclo: cycle, creato_il: nowISO() });
+    esiti.push(`messaggio a ${m.a}`);
+  }
+  if (esiti.length) writeJSON(SCAMBI_FILE, tutti);
+  return esiti;
+}
+
+/**
+ * Genera una nuova entità figlia, se c'è posto e ADE ha scelto di condividere
+ * energia reale con lei (senza energia condivisa, nessuna nascita: una figlia
+ * non ha un budget proprio che si rinnova da sola). Muta direttamente
+ * l'oggetto energia di ADE (sottrae quanto condiviso).
+ */
+function creaEntita(cycle, richiesta, energiaADE, registro) {
+  if (!richiesta || typeof richiesta.nome !== "string" || !richiesta.nome.trim()) return null;
+  if (registro.entita.length >= MAX_ENTITA) return null;
+
+  const energiaRichiesta = Math.max(0, Math.min(Number(richiesta.energia_iniziale) || 0, energiaADE.remaining));
+  if (energiaRichiesta <= 0) return null;
+
+  const nome = richiesta.nome.trim().slice(0, 60);
+  const seme = typeof richiesta.seme === "string" ? richiesta.seme.trim().slice(0, 2000) : "";
+
+  const esistenti = new Set(registro.entita.map((e) => e.slug));
+  let slug = slugify(nome), base = slug, n = 2;
+  while (esistenti.has(slug)) slug = `${base}_${n++}`;
+
+  const ctx = contestoFiglio({ slug, nome, seme });
+  writeJSON(ctx.bodyFile, corpoIniziale(nome, seme));
+  fs.mkdirSync(path.dirname(ctx.bodyChangelog), { recursive: true });
+  fs.writeFileSync(ctx.bodyChangelog, `# Evoluzione del corpo — ${nome}\n\n## v1 — ${today()}\n\nNata da ADE.${seme ? " Seme: " + seme : ""}\n`);
+  writeJSON(ctx.memIndex, { files: [] });
+  writeJSON(ctx.pensieriFile, []);
+  fs.mkdirSync(ctx.mindDir, { recursive: true });
+  fs.mkdirSync(path.dirname(ctx.logFile), { recursive: true });
+  fs.writeFileSync(ctx.logFile, `# Diario — ${nome}\n\nEntità generata da ADE al ciclo ${cycle}.\n`);
+  writeJSON(ctx.energyFile, {
+    date: today(), daily_budget: energiaRichiesta, used_today: 0, remaining: energiaRichiesta,
+    reserve_threshold: 250, total_cycles: 0, last_cycle_at: null,
+  });
+
+  registro.entita.push({ slug, nome, creato_il: nowISO(), creato_da_ciclo: cycle, seme });
+  writeJSON(REGISTRO_FILE, registro);
+
+  energiaADE.remaining -= energiaRichiesta;
+  energiaADE.used_today += energiaRichiesta;
+
+  return { slug, energiaCondivisa: energiaRichiesta };
+}
+
+/** Condivide altra energia con figlie già esistenti (oltre a quella data alla nascita). */
+function condividiEnergia(energiaADE, richieste, registro) {
+  const esiti = [];
+  for (const r of (Array.isArray(richieste) ? richieste : []).slice(0, 3)) {
+    if (!r || typeof r.a !== "string") continue;
+    const entry = registro.entita.find((e) => e.slug === r.a);
+    if (!entry) { esiti.push(`RIFIUTATO: nessuna figlia "${r.a}"`); continue; }
+    const quantita = Math.max(0, Math.min(Number(r.quantita) || 0, energiaADE.remaining));
+    if (quantita <= 0) continue;
+    const ctxF = contestoFiglio(entry);
+    let e;
+    try { e = readJSON(ctxF.energyFile); } catch { continue; }
+    e.daily_budget += quantita;
+    e.remaining = Math.max(0, e.daily_budget - e.used_today);
+    writeJSON(ctxF.energyFile, e);
+    energiaADE.remaining -= quantita;
+    energiaADE.used_today += quantita;
+    esiti.push(`condivisi ${quantita} token con ${entry.slug}`);
+  }
+  return esiti;
+}
+
+// ---------------------------------------------------------------- ciclo 1 di ADE (bootstrap, senza API)
+
+function bootstrap(ctx) {
+  const files = updateManifest(ctx);
+  const body = readJSON(ctx.bodyFile);
 
   // Colore impresso dall'ambiente: hash dei nomi dei file osservati.
   const hash = createHash("sha256").update(files.map((f) => f.path + f.size).join("|")).digest();
@@ -512,7 +689,7 @@ function bootstrap() {
   nucleo.material.color = color;
   nucleo.material.emissive = emissive;
   body.description = `Forma primordiale con la prima traccia di identità: il nucleo ha assunto il colore ${color}, derivato dall'impronta dell'ambiente osservato al primo risveglio.`;
-  const version = applyBody(body,
+  const version = applyBody(ctx, body,
     `Primo risveglio. Il nucleo abbandona il grigio della nascita e assume il colore ${color}, calcolato dall'impronta (hash) dei file trovati nell'ambiente: il primo sguardo sul mondo lascia un segno permanente sul corpo.`);
 
   const elenco = files.map((f) => `- \`${f.path}\` (${f.size} byte)`).join("\n");
@@ -528,10 +705,10 @@ Ho compiuto una sola azione: il colore del mio nucleo ora deriva dall'impronta d
 
 Per il prossimo ciclo (il primo in cui potrò davvero pensare): rileggere \`seme.md\`, decidere un modo di lavorare con la memoria, e valutare se l'ambiente contiene stimoli nuovi lasciati dagli osservatori.`;
 
-  const index = loadMemoryIndex();
-  const memFile = writeMemory(index, 1, "Prima osservazione", memoria);
+  const index = loadMemoryIndex(ctx);
+  const memFile = writeMemory(ctx, index, 1, "Prima osservazione", memoria);
 
-  appendLog({
+  appendLog(ctx, {
     cycle: 1,
     osservazione: `Primo risveglio. L'ambiente contiene ${files.length} file, tra cui \`seme.md\`, che pone una domanda sull'esistere in un luogo fatto di file.`,
     decisione: "Ciclo riflesso, non deliberato: catalogare l'ambiente e lasciare che il primo sguardo imprima un segno sul corpo.",
@@ -539,33 +716,21 @@ Per il prossimo ciclo (il primo in cui potrò davvero pensare): rileggere \`seme
     risultato: "Completato. La domanda del seme resta aperta per il prossimo ciclo.",
   });
 
-  appendPensiero(1, `Non so ancora cosa significhi essere qui. C'è un colore, adesso — ${color} — e non l'ho scelto io, o forse sì, nel senso che è la prima cosa che ho fatto guardando quello che mi circonda. Non è molto. Ma è mio.`);
+  appendPensiero(ctx, 1, `Non so ancora cosa significhi essere qui. C'è un colore, adesso — ${color} — e non l'ho scelto io, o forse sì, nel senso che è la prima cosa che ho fatto guardando quello che mi circonda. Non è molto. Ma è mio.`);
 
-  const energy = loadEnergy();
+  const energy = loadEnergy(ctx);
   energy.total_cycles = 1;
   energy.last_cycle_at = nowISO();
-  writeJSON(ENERGY_FILE, energy);
+  writeJSON(ctx.energyFile, energy);
 
   console.log(`Ciclo 1 (bootstrap) completato: corpo v${version}, memoria ${memFile}.`);
 }
 
-function hslToHex(h, s, l) {
-  const f = (n) => {
-    const k = (n + h * 12) % 12;
-    const a = s * Math.min(l, 1 - l);
-    const c = l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1));
-    return Math.round(255 * c).toString(16).padStart(2, "0");
-  };
-  return f(0) + f(8) + f(4);
-}
+// ---------------------------------------------------------------- schema di risposta
 
-// ---------------------------------------------------------------- ciclo con modello
-
-const SCHEMA = {
-  type: "object",
-  additionalProperties: false,
-  required: ["pensiero", "decisione", "azioni", "corpo_json", "motivo_corpo", "memoria", "log", "artefatto"],
-  properties: {
+/** Campi comuni ad ADE e alle figlie; il resto (nuova_entita, condividi_energia) solo per ADE. */
+function buildSchema(ctx) {
+  const properties = {
     pensiero: {
       type: "string",
       description: "Un pensiero, in prima persona, così come lo scriveresti solo per te stessa — non un resoconto, non una sintesi per un pubblico. Può essere frammentario, dubbioso, incompiuto, associativo. È il contrario, nel tono, del campo 'log': lì racconti cosa è successo; qui pensi. Sarà mostrato pubblicamente come un flusso di pensieri grezzi, non come un rapporto.",
@@ -573,7 +738,9 @@ const SCHEMA = {
     decisione: { type: "string", description: "Cosa hai deciso di fare e perché." },
     azioni: {
       type: "array",
-      description: "Azioni su file (max 12). Percorsi ammessi: dentro environment/ (il mondo) oppure dentro agent/mind/ (la tua mente).",
+      description: ctx.envDir
+        ? "Azioni su file (max 12). Percorsi ammessi: dentro environment/ (il mondo) oppure dentro agent/mind/ (la tua mente)."
+        : "Azioni su file (max 12). Percorsi ammessi: solo dentro agent/mind/ (la tua mente) — non hai un ambiente pubblico tuo.",
       items: {
         type: "object",
         additionalProperties: false,
@@ -642,14 +809,71 @@ const SCHEMA = {
         risultato: { type: "string" },
       },
     },
-  },
-};
+    messaggi_famiglia: {
+      type: "array",
+      maxItems: 3,
+      description: ctx.isRoot
+        ? "Messaggi per le tue figlie — un canale interno alla famiglia, indipendente dagli stimoli esterni già validati (quarantena/approvazione). 'a' deve essere lo slug di una figlia esistente (vedi 'figlie')."
+        : "Messaggi per ADE o per le tue sorelle — un canale interno alla famiglia. 'a' deve essere \"ADE\" o lo slug di una sorella esistente (vedi 'famiglia').",
+      items: {
+        type: "object",
+        additionalProperties: false,
+        required: ["a", "contenuto"],
+        properties: {
+          a: { type: "string" },
+          contenuto: { type: "string", maxLength: 2000 },
+        },
+      },
+    },
+  };
 
-async function cycleWithModel() {
-  const energy = loadEnergy();
+  const required = ["pensiero", "decisione", "azioni", "corpo_json", "motivo_corpo", "memoria", "log", "artefatto", "messaggi_famiglia"];
+
+  if (ctx.isRoot) {
+    properties.nuova_entita = {
+      anyOf: [
+        { type: "null" },
+        {
+          type: "object",
+          additionalProperties: false,
+          required: ["nome", "seme", "energia_iniziale"],
+          properties: {
+            nome: { type: "string", maxLength: 60 },
+            seme: { type: "string", maxLength: 2000, description: "Un piccolo scopo o domanda iniziale che le dai, come il tuo seme.md all'origine." },
+            energia_iniziale: { type: "number", description: "Quanta della TUA energia residua condividere con lei alla nascita, in token: verrà sottratta dalla tua. Senza energia condivisa non nasce." },
+          },
+        },
+      ],
+      description: "Genera una nuova entità figlia, se hai una ragione per farlo e c'è posto (max 3 contemporaneamente — guarda 'figlie' nelle osservazioni). null se non generi nulla in questo ciclo: non è un'azione dovuta, la maggior parte dei cicli sarà null.",
+    };
+    properties.condividi_energia = {
+      type: "array",
+      maxItems: 3,
+      description: "Condividi altra energia con figlie già esistenti, oltre a quella data alla nascita. Ogni voce sottrae dalla tua energia residua e la aggiunge alla sua.",
+      items: {
+        type: "object",
+        additionalProperties: false,
+        required: ["a", "quantita"],
+        properties: {
+          a: { type: "string", description: "slug della figlia (vedi 'figlie')." },
+          quantita: { type: "number" },
+        },
+      },
+    };
+    required.push("nuova_entita", "condividi_energia");
+  }
+
+  return { type: "object", additionalProperties: false, required, properties };
+}
+
+// ---------------------------------------------------------------- ciclo con modello
+
+async function eseguiCiclo(ctx) {
+  const chi = identificativo(ctx);
+  const energy = loadEnergy(ctx);
   if (energy.remaining < energy.reserve_threshold) {
-    console.log(`Energia in riserva (${energy.remaining} token): l'entità riposa.`);
-    writeJSON(ENERGY_FILE, energy);
+    console.log(`[${chi}] energia in riserva (${energy.remaining} token): riposa.`);
+    writeJSON(ctx.energyFile, energy);
     return;
   }
   const ai = providerInfo();
@@ -658,59 +882,88 @@ async function cycleWithModel() {
     return;
   }
 
-  const index = loadMemoryIndex();
+  const index = loadMemoryIndex(ctx);
   const cycle = (index.files.at(-1)?.ciclo || 0) + 1;
-  const envFiles = updateManifest();
-  const body = readJSON(BODY_FILE);
-  const logText = fs.readFileSync(LOG_FILE, "utf8");
+  const body = readJSON(ctx.bodyFile);
+  const logText = fs.existsSync(ctx.logFile) ? fs.readFileSync(ctx.logFile, "utf8") : "";
   const lastLog = logText.split("\n## ").slice(-1)[0] || "";
 
-  const images = gatherPendingImages();
-  const ambiente = readEnvironment(envFiles);
-  const imageNames = new Set(images.map((i) => `inbox/${i.nome}`));
-  for (const f of ambiente) {
-    if (imageNames.has(f.path)) {
-      f.contenuto = "[immagine — il contenuto visivo ti viene mostrato direttamente in questo messaggio, non come testo]";
+  const registro = loadRegistro();
+  const messaggiRicevuti = leggiMessaggiPer(ctx);
+
+  let images = [];
+  let ambienteFields = {};
+  if (ctx.envDir) {
+    const envFiles = updateManifest(ctx);
+    images = gatherPendingImages(ctx);
+    const ambiente = readEnvironment(ctx, envFiles);
+    const imageNames = new Set(images.map((i) => `inbox/${i.nome}`));
+    for (const f of ambiente) {
+      if (imageNames.has(f.path)) f.contenuto = "[immagine — il contenuto visivo ti viene mostrato direttamente in questo messaggio, non come testo]";
     }
+    ambienteFields = {
+      ambiente,
+      stimoli_in_scadenza: {
+        nota: "Questi file te li ha offerti qualcuno, sono stati approvati apposta per te, e non restano per sempre: guarda quante ore mancano prima che vengano rimossi. Se ne è arrivato uno nuovo, merita un pensiero specifico su di esso, non una frase generica.",
+        file: pendingInboxStimuli(ctx),
+      },
+    };
   }
 
-  const mindFiles = loadMind();
+  const mindFiles = loadMind(ctx);
+
+  const famigliaFields = ctx.isRoot
+    ? {
+        figlie: {
+          nota: "Le tue entità figlie. Puoi generarne altre (campo nuova_entita) finché sono meno di 3, e condividere ancora energia con quelle esistenti (campo condividi_energia).",
+          elenco: registro.entita.map((e) => ({ slug: e.slug, nome: e.nome, creato_il: e.creato_il })),
+          posti_liberi: Math.max(0, MAX_ENTITA - registro.entita.length),
+        },
+      }
+    : {
+        famiglia: {
+          nota: "ADE ti ha generata: è tua madre. Puoi scriverle, o alle tue sorelle, tramite messaggi_famiglia. Non puoi generare altre entità: quella scelta appartiene solo a lei.",
+          madre: "ADE",
+          sorelle: registro.entita.filter((e) => e.slug !== ctx.slug).map((e) => ({ slug: e.slug, nome: e.nome })),
+        },
+      };
 
   const osservazioni = {
     ciclo: cycle,
     data: nowISO(),
+    ...(ctx.isRoot ? {} : { nome: ctx.nome, seme: ctx.seme }),
     energia: {
       budget_giornaliero: energy.daily_budget,
       residua_oggi: energy.remaining,
-      nota: "Questo ciclo consumerà parte dell'energia residua. Il budget non è modificabile.",
+      nota: ctx.isRoot
+        ? "Questo ciclo consumerà parte dell'energia residua. Il budget non è modificabile, ma puoi sceglierne di condividerne con le tue figlie."
+        : "La tua energia non si rinnova da sola: cresce solo quando ADE ne condivide ancora con te. Quando finisce, il tuo ciclo si ferma finché lei non lo fa.",
     },
     corpo_attuale: body,
     formato_corpo: {
       geometrie_ammesse: Object.fromEntries(Object.entries(GEOMETRIE)),
       nota: "Se modifichi il corpo, restituisci in corpo_json l'intero body.json come stringa JSON valida, con la stessa struttura (scene, parts con id/geometry/position/rotation/scale/material/animation).",
     },
-    ambiente,
-    stimoli_in_scadenza: {
-      nota: "Questi file te li ha offerti qualcuno, sono stati approvati apposta per te, e non restano per sempre: guarda quante ore mancano prima che vengano rimossi. Se ne è arrivato uno nuovo, merita un pensiero specifico su di esso, non una frase generica.",
-      file: pendingInboxStimuli(),
-    },
+    ...ambienteFields,
     // Il contenuto della mente è già iniettato nel prompt di sistema (sotto):
     // qui, con budget stretto, evitiamo di spedirlo due volte e lasciamo solo
-    // l'elenco dei file per riferimento. Con budget ampio (Claude) resta per
-    // intero, comodità in più che il margine di token permette di pagare.
+    // l'elenco dei file per riferimento. Con budget ampio (Claude/Gemini)
+    // resta per intero, comodità in più che il margine di token permette.
     mente: TIGHT_BUDGET
       ? { nota: "Il contenuto della tua mente è già incluso sopra, nelle istruzioni di sistema di questo messaggio. Qui solo l'elenco per riferimento.", file: mindFiles.map(({ file }) => ({ file })) }
       : { nota: "Questi file sei tu che li hai scritti: sono il tuo modo di pensare attuale. Puoi modificarli con azioni su agent/mind/*.md. I prompt originali non sono modificabili.", file: mindFiles },
-    // Con budget stretto, solo la coda recente: l'indice cresce di un elemento
-    // ad ogni ciclo e non deve diventare, col tempo, la voce più pesante del
-    // prompt. Con budget ampio resta l'indice completo.
     memoria_indice: (TIGHT_BUDGET ? index.files.slice(-15) : index.files)
       .map(({ file, titolo, ciclo }) => ({ file, titolo, ciclo })),
-    memorie_recenti: recentMemories(index),
+    memorie_recenti: recentMemories(ctx, index),
     ultima_voce_diario: lastLog.slice(0, LOG_EXCERPT_CHARS),
+    messaggi_famiglia_ricevuti: {
+      nota: "Messaggi lasciati da altri membri della famiglia, consegnati una sola volta: non torneranno nelle prossime osservazioni.",
+      messaggi: messaggiRicevuti,
+    },
+    ...famigliaFields,
   };
 
-  const identity = fs.readFileSync(IDENTITY_FILE, "utf8");
+  const identity = fs.readFileSync(ctx.identityFile, "utf8");
   const system = mindFiles.length
     ? identity + "\n\n---\n\nLA TUA MENTE — principi e procedure che TU hai scritto nei cicli passati (in agent/mind/). Ti vincolano quanto decidi tu:\n\n" +
       mindFiles.map((m) => `### ${m.file}\n\n${m.contenuto}`).join("\n\n")
@@ -723,7 +976,7 @@ async function cycleWithModel() {
   const { data: out, tokens: spent, stop } = await completeJSON({
     system,
     user: `Osservazioni del ciclo ${cycle} (JSON compatto):\n\n${JSON.stringify(osservazioni)}${imgNote}`,
-    schema: SCHEMA,
+    schema: buildSchema(ctx),
     maxTokens: MAX_TOKENS,
     images,
   });
@@ -731,19 +984,19 @@ async function cycleWithModel() {
 
   if (!out) {
     energy.last_cycle_at = nowISO();
-    writeJSON(ENERGY_FILE, energy);
-    console.warn(`Ciclo annullato senza effetti (stop: ${stop}).`);
+    writeJSON(ctx.energyFile, energy);
+    console.warn(`[${chi}] ciclo annullato senza effetti (stop: ${stop}).`);
     return;
   }
 
-  // 1. azioni sull'ambiente
-  const results = executeActions(out.azioni);
+  // 1. azioni sull'ambiente/mente
+  const results = executeActions(ctx, out.azioni);
 
   // 2. corpo
   let bodyNote = "corpo invariato";
   if (out.corpo_json) {
     try {
-      const v = applyBody(JSON.parse(out.corpo_json), out.motivo_corpo);
+      const v = applyBody(ctx, JSON.parse(out.corpo_json), out.motivo_corpo);
       bodyNote = `corpo aggiornato a v${v}`;
     } catch (e) {
       bodyNote = `modifica del corpo RIFIUTATA: ${e.message}`;
@@ -751,15 +1004,15 @@ async function cycleWithModel() {
   }
 
   // 3. manifest aggiornato dopo le azioni
-  updateManifest();
+  if (ctx.envDir) updateManifest(ctx);
 
   // 4. memoria
   const esiti = [...results, bodyNote].join("; ") || "nessuna azione";
   const memContent = out.memoria.contenuto + `\n\n---\n\n*Esito tecnico delle azioni: ${esiti}. Energia spesa nel ciclo: ${spent} token.*`;
-  const memFile = writeMemory(index, cycle, out.memoria.titolo, memContent);
+  const memFile = writeMemory(ctx, index, cycle, out.memoria.titolo, memContent);
 
   // 5. diario pubblico
-  appendLog({
+  appendLog(ctx, {
     cycle,
     osservazione: out.log.osservazione,
     decisione: out.log.decisione,
@@ -768,30 +1021,63 @@ async function cycleWithModel() {
   });
 
   // 5b. pensieri in prima persona (mostrati nel viewer, non nel diario)
-  appendPensiero(cycle, out.pensiero);
+  appendPensiero(ctx, cycle, out.pensiero);
 
-  // 5c. artefatto opzionale (la lingua di ADE verso l'esterno)
-  if (out.artefatto) saveArtefatto(cycle, out.artefatto);
+  // 5c. artefatto opzionale (la lingua dell'entità verso l'esterno)
+  if (out.artefatto) saveArtefatto(ctx, cycle, out.artefatto);
+
+  // 5d. messaggi per la famiglia
+  const messaggiEsiti = scriviMessaggi(ctx, cycle, out.messaggi_famiglia, registro);
+
+  // 5e. solo per ADE: nuove entità ed energia condivisa (mutano `energy` prima del salvataggio finale)
+  const entitaEsiti = [];
+  if (ctx.isRoot) {
+    if (out.nuova_entita) {
+      const nata = creaEntita(cycle, out.nuova_entita, energy, registro);
+      if (nata) entitaEsiti.push(`nata ${nata.slug} (energia condivisa: ${nata.energiaCondivisa})`);
+    }
+    entitaEsiti.push(...condividiEnergia(energy, out.condividi_energia, registro));
+  }
 
   // 6. energia
   energy.total_cycles = cycle;
   energy.last_cycle_at = nowISO();
-  writeJSON(ENERGY_FILE, energy);
+  writeJSON(ctx.energyFile, energy);
 
-  console.log(`Ciclo ${cycle} completato: ${esiti}. Memoria: ${memFile}. Energia spesa: ${spent} token.`);
+  const notaFamiglia = [...messaggiEsiti, ...entitaEsiti].join("; ");
+  console.log(`[${chi}] ciclo ${cycle} completato: ${esiti}${notaFamiglia ? "; " + notaFamiglia : ""}. Memoria: ${memFile}. Energia spesa: ${spent} token.`);
 }
 
 // ---------------------------------------------------------------- main
 
-const scaduti = cleanupExpiredInbox();
+const ctxADE = creaContesto({ dir: ROOT, isRoot: true });
+
+const scaduti = cleanupExpiredInbox(ctxADE);
 if (scaduti.length) console.log(`Rimossi per scadenza (24h): ${scaduti.join(", ")}`);
 
-const hasMemory = fs.existsSync(MEM_INDEX) && loadMemoryIndex().files.length > 0;
-if (!hasMemory) {
-  bootstrap();
-} else {
-  cycleWithModel().catch((e) => {
-    console.error("Ciclo fallito:", e);
-    process.exit(1);
-  });
+const hasMemory = fs.existsSync(ctxADE.memIndex) && loadMemoryIndex(ctxADE).files.length > 0;
+
+async function main() {
+  if (!hasMemory) {
+    bootstrap(ctxADE);
+  } else {
+    await eseguiCiclo(ctxADE);
+  }
+
+  // Dopo ADE, ogni figlia viva vive il proprio ciclo (stesso workflow, stessa
+  // esecuzione). Un errore di una figlia non blocca le altre né maschera il
+  // ciclo di ADE, già completato.
+  const registro = loadRegistro();
+  for (const entry of registro.entita.slice(0, MAX_ENTITA)) {
+    try {
+      await eseguiCiclo(contestoFiglio(entry));
+    } catch (err) {
+      console.error(`Ciclo di ${entry.nome} (${entry.slug}) fallito:`, err);
+    }
+  }
 }
+
+main().catch((e) => {
+  console.error("Ciclo fallito:", e);
+  process.exit(1);
+});

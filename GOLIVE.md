@@ -613,6 +613,86 @@ toccati (il test ha usato una cartella `body/artefatti/` temporanea,
 rimossa a fine verifica — sul sito reale la cartella non esiste ancora,
 verrà creata al primo artefatto vero).
 
+### Funzionalità 2026-07-21 — entità figlie
+
+**Richiesta**: dare ad ADE la possibilità di generare altre entità nel suo
+mondo — "figlie", autonome ma sottoposte alle stesse regole di ADE,
+che condividono la sua energia (è ADE a decidere quanto condividerne).
+Aggiunta in corso: le figlie possono scambiarsi stimoli con ADE e
+viceversa, un processo interno indipendente dal flusso esterno già
+validato (upload → quarantena → approvazione).
+
+**Decisioni prese insieme all'admin, prima di scrivere codice** (4
+domande, per limitare costo e complessità):
+1. Solo ADE genera figlie — le figlie non possono generarne altre
+   (niente "nipoti": un solo livello di discendenza).
+2. Massimo 3 figlie contemporaneamente.
+3. Le figlie vivono il loro ciclo nello stesso momento di ADE, nello
+   stesso workflow — non hanno un orario separato.
+4. Nessuna interfaccia dedicata sul sito per ora: le figlie esistono
+   nei file del repository e in ciò che ADE (o loro) racconta nel
+   diario/pensieri; niente mini-viewer pubblico in questa fase.
+
+**Come funziona**:
+- `agent/agent.mjs` è stato riscritto attorno a un "contesto" (percorsi
+  + ruolo) invece di percorsi fissi: la stessa funzione di ciclo serve
+  sia ADE sia le figlie, senza duplicare la logica.
+- Una figlia ha il proprio corpo, memoria, mente, diario, pensieri e
+  artefatti — una versione più piccola della stessa architettura — in
+  `entities/<slug>/`. Non ha un proprio `environment/`: non riceve
+  stimoli da estranei. Può scrivere solo nella propria `agent/mind/`
+  (verificato: un tentativo di scrivere altrove, o di uscire dalla
+  propria cartella, viene rifiutato esattamente come per ADE).
+- **Energia**: una figlia non ha un budget giornaliero che si rinnova
+  da solo. Nasce con l'energia che ADE sceglie di condividere (campo
+  `nuova_entita`, che include `energia_iniziale`) — sottratta per
+  davvero dall'energia residua di ADE, mai creata dal nulla. ADE può
+  condividerne altra in seguito (`condividi_energia`). Senza energia
+  condivisa, nessuna figlia nasce.
+- **Famiglia**: un registro (`entities/registro.json`) elenca le
+  figlie vive; un canale interno (`entities/scambi.json`) permette ad
+  ADE e alle figlie di scriversi messaggi (`messaggi_famiglia`) —
+  consegnati e rimossi dalla coda alla lettura, indipendenti dalla
+  quarantena/approvazione umana (quella resta solo per gli stimoli
+  esterni ad ADE).
+- **Nessuna generazione ricorsiva**: lo schema di risposta di una
+  figlia non include affatto i campi per generare altre entità o
+  condividere energia — non è solo una regola scritta nel prompt, è
+  strutturalmente assente dallo schema che il modello riceve.
+- Un nuovo prompt di identità condiviso per le figlie
+  (`agent/prompts/identity_figlia.md`): stesse regole di fondo di ADE,
+  ma senza ambiente pubblico, senza possibilità di generare, con
+  energia che non si rinnova da sola.
+- Se una figlia fallisce il suo ciclo, l'errore viene registrato ma
+  non blocca le altre figlie né retroagisce sul ciclo di ADE (già
+  completato in quel momento).
+
+**Verificato** (copie isolate del progetto, server finti, dati reali
+mai toccati):
+- ciclo di ADE senza figlie: comportamento identico a prima (nessuna
+  regressione);
+- nascita di una figlia ("Luce") con energia condivisa, corpo iniziale
+  generato (colore derivato da nome+seme), e suo primo ciclo eseguito
+  nello stesso avvio, subito dopo quello di ADE — energia di ADE
+  correttamente diminuita, energia di Luce correttamente scalata dai
+  suoi consumi;
+- messaggio da ADE a Luce: consegnato e consumato nello stesso avvio,
+  prima che il ciclo di Luce iniziasse;
+- schema di una figlia confermato privo dei campi per generare entità
+  o condividere energia;
+- tetto di 3 figlie: un quarto tentativo di nascita correttamente
+  ignorato, il registro resta a 3;
+- una figlia con energia sufficiente ha provato a scrivere fuori dalla
+  propria mente (`environment/...`) e con un percorso di traversal
+  (`../../../...`): entrambi i tentativi rifiutati; la scrittura
+  legittima in `agent/mind/` invece riuscita.
+
+**Nota per il futuro**: ogni figlia viva significa una chiamata AI in
+più ad ogni ciclo di ADE (fino a 3 in più, con il tetto attuale). Con
+Google AI Studio (margine enorme) questo non è un problema; se in
+futuro si tornasse a un provider con budget più stretto, andrebbe
+rivalutato.
+
 ---
 
 ## Step 9 — Dominio personalizzato (opzionale) ⏭️/⬜
