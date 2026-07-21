@@ -438,7 +438,7 @@ multimodale — nessun compromesso su affidabilità o visione.
      Google (sovrascrive quella di Groq).
    - scheda **Variables**: `OPENAI_BASE_URL` →
      `https://generativelanguage.googleapis.com/v1beta/openai`,
-     `AI_MODEL` → `gemini-2.5-flash`. `AI_PROVIDER` resta `openai`
+     `AI_MODEL` → `gemini-flash-latest`. `AI_PROVIDER` resta `openai`
      (invariato).
    - (facoltativo) rimuovi `AI_MAX_TOKENS`, non serve più.
 3. Rilancia il ciclo.
@@ -452,6 +452,26 @@ e in quel caso usa il contesto pieno (stesso trattamento riservato a
 Claude): niente più limiti artificiali su ambiente, memoria, mente o
 numero/peso delle immagini. Con qualunque altro endpoint sconosciuto,
 per prudenza, resta il profilo ridotto.
+
+### Incidente 2026-07-20 (parte 10) — modello Gemini non più disponibile
+
+Primo ciclo con Google AI Studio: errore 404, `"This model
+models/gemini-2.5-flash is no longer available to new users"` — Google
+lo ha appena ritirato per le chiavi API create di recente (proprio
+come la tua). **Non un bug**: era il modello suggerito da me nel passo
+precedente, già superato.
+
+**Corretto senza bisogno di chiedere** (stesso tipo di aggiustamento
+fatto per Groq, non una nuova decisione): invece di puntare di nuovo a
+un nome di modello fisso che Google potrebbe ritirare di nuovo in
+futuro, ho usato l'alias che Google offre apposta per questo —
+`gemini-flash-latest` — che punta sempre al modello Flash più recente
+disponibile (oggi Gemini 3.5 Flash), aggiornato automaticamente da
+Google stessa con preavviso. Aggiornati README.md e questo file.
+
+**Azione richiesta all'admin**: sulla variable `AI_MODEL` di GitHub,
+sostituisci `gemini-2.5-flash` con `gemini-flash-latest`, poi rilancia
+il ciclo.
 
 ---
 
