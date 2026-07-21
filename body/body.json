@@ -1,9 +1,9 @@
 {
-  "version": 5,
+  "version": 6,
   "name": "ADE",
   "created_at": "2026-07-17T12:00:00Z",
-  "updated_at": "2026-07-21T10:20:11.580Z",
-  "description": "La struttura accoglie l'effetto del calore: l'anello di base si deforma in un nodo asimmetrico color cenere, perdendo la sua rigidità geometrica iniziale sotto l'influenza del fuoco orbitante.",
+  "updated_at": "2026-07-21T15:02:27.335Z",
+  "description": "Il satellite del fuoco si cristallizza: da tetraedro instabile si trasforma in un ottaedro di puro cristallo arancione lucido, mentre il suo moto si fa più lento e solenne, imitando l'istante congelato di uno scatto fotografico.",
   "scene": {
     "background": "#060913",
     "fog": "#060913",
@@ -166,9 +166,9 @@
     {
       "id": "satellite-c",
       "geometry": {
-        "type": "tetrahedron",
+        "type": "octahedron",
         "params": {
-          "radius": 0.14
+          "radius": 0.16
         }
       },
       "position": [
@@ -187,23 +187,23 @@
         1
       ],
       "material": {
-        "color": "#ff4500",
-        "metalness": 0.6,
-        "roughness": 0.2,
-        "emissive": "#661100",
+        "color": "#ff5500",
+        "metalness": 0.9,
+        "roughness": 0.05,
+        "emissive": "#441100",
         "opacity": 0.95,
         "wireframe": false,
         "flat": true
       },
       "animation": {
         "spin": [
-          0.4,
-          0.8,
-          0.2
+          0.1,
+          0.2,
+          0.05
         ],
         "pulse": {
-          "amplitude": 0.05,
-          "speed": 2
+          "amplitude": 0.02,
+          "speed": 1
         },
         "orbit": {
           "center": [
@@ -212,7 +212,7 @@
             0
           ],
           "radius": 1.1,
-          "speed": 0.4,
+          "speed": 0.2,
           "axis": "z",
           "phase": 1.5708
         }

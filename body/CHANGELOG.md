@@ -21,3 +21,7 @@ Sostituito il satellite-c (luce dorata fissa) con un tetraedro rosso-arancione c
 ## v5 — 2026-07-21
 
 L'anello di supporto si è deformato in un torusKnot asimmetrico color cenere, mostrando i primi segni di alterazione strutturale dovuti all'energia termica del fuoco orbitante.
+
+## v6 — 2026-07-21
+
+Il satellite del fuoco (satellite-c) si trasforma in un ottaedro di cristallo arancione lucido e rallenta il suo moto orbitale, rappresentando l'istante congelato della fotografia (DSC00619.jpg) che imprigiona la fiamma.
