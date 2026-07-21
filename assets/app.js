@@ -545,9 +545,40 @@ function setupAccordionAnimazione() {
   }
 }
 
+/** Il viewer può espandersi, collassando il riquadro di upload a una barra sottile. */
+function setupEspansioneViewer() {
+  const stage = document.querySelector(".stage");
+  const bottone = $("#espandi-viewer");
+  const titolo = $("#upload-titolo");
+  if (!stage || !bottone) return;
+
+  function imposta(espanso) {
+    stage.classList.toggle("espanso", espanso);
+    bottone.setAttribute("aria-pressed", String(espanso));
+    bottone.textContent = espanso ? "⤡" : "⤢";
+    bottone.title = espanso ? "riduci il viewer" : "espandi il viewer";
+    if (titolo) titolo.setAttribute("aria-expanded", String(!espanso));
+    // Il canvas Three.js non segue da solo il ridimensionamento CSS del
+    // contenitore (solo il resize della finestra è collegato): notifichiamo
+    // noi, sia subito sia a transizione conclusa, per un canvas sempre nitido.
+    const viewer = $("#viewer");
+    const notifica = () => dispatchEvent(new Event("resize"));
+    notifica();
+    if (viewer) viewer.addEventListener("transitionend", notifica, { once: true });
+  }
+
+  bottone.addEventListener("click", () => imposta(!stage.classList.contains("espanso")));
+  if (titolo) {
+    const riapri = () => { if (stage.classList.contains("espanso")) imposta(false); };
+    titolo.addEventListener("click", riapri);
+    titolo.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); riapri(); } });
+  }
+}
+
 (async () => {
   setupAccordionAnimazione();
   setupArtefattiNav();
+  setupEspansioneViewer();
   await refreshAll();
   try {
     const state = await fetchJSON("/api/state");

@@ -757,6 +757,38 @@ persistente su tutti e tre i tentativi — il ciclo fallisce in modo
 pulito con lo stesso messaggio di errore di prima (nessun tentativo
 infinito).
 
+**Conferma dalla produzione**: il ciclo 9 reale (dopo tutti i fix di
+oggi) è il primo ad aver prodotto un vero artefatto — un SVG intitolato
+"La Soglia dell'Orizzonte e la Fiamma", una scena disegnata con
+montagne, una silhouette e linee di fuoco, con un testo poetico
+impresso. L'intera pipeline (Gemini, visione, artefatti, retry) ora
+funziona end-to-end in produzione.
+
+### Funzionalità 2026-07-21 — viewer espandibile
+
+**Richiesta**: rendere il riquadro del viewer espandibile, collassando
+il riquadro di upload per fargli spazio.
+
+**Fatto**: un pulsante (⤢) nella fascia info sopra il corpo 3D espande
+il viewer (più largo, più alto) e riduce "Lascia uno stimolo" a una
+sottile barra verticale con solo il titolo — cliccabile per tornare
+allo stato normale. Su schermi stretti la barra collassata torna
+orizzontale invece che verticale. Il canvas 3D si ridimensiona insieme
+al contenitore (prima seguiva solo il resize della finestra).
+
+**Bug scoperto e corretto durante il collaudo** (non richiesto,
+preesistente): il riquadro degli artefatti (`#artefatto-box`) restava
+visibile — vuoto — anche quando nessun artefatto esiste ancora. Causa:
+una regola CSS con `display: flex` sull'id aveva una specificità più
+alta di quella che nasconde gli elementi con l'attributo `hidden`
+dello user-agent, e la sovrascriveva silenziosamente. Corretto
+aggiungendo una regola esplicita `#artefatto-box[hidden]`.
+
+**Verificato**: nel browser, ciclo completo desktop (normale → espanso
+→ richiuso) e mobile (barra orizzontale in fondo alla pagina invece
+che verticale); confermato che il riquadro artefatti resta
+correttamente nascosto quando non c'è nulla da mostrare.
+
 ---
 
 ## Step 9 — Dominio personalizzato (opzionale) ⏭️/⬜

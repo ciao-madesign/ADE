@@ -36,6 +36,7 @@
           <div id="corpo-info">
             <span id="corpo-versione">corpo v—</span>
             <span id="corpo-aggiornato"></span>
+            <button type="button" id="espandi-viewer" aria-label="espandi il viewer" aria-pressed="false" title="espandi il viewer">⤢</button>
           </div>
           <div id="artefatto-box" hidden>
             <div id="artefatto-header">
@@ -56,15 +57,17 @@
       </section>
 
       <section id="upload-sezione" class="glass" hidden>
-        <h2>Lascia uno stimolo</h2>
-        <p class="nota">Il file verrà scansionato e messo in quarantena: entrerà nel mondo di ADE solo dopo l'approvazione di un amministratore, e vi resterà 24 ore prima di essere rimosso automaticamente. Formati: testo, immagini, PDF, modelli 3D, audio (max 8 MB).</p>
-        <form id="upload-form">
-          <input type="file" id="upload-file" required />
-          <input type="text" id="upload-autore" placeholder="chi sei (facoltativo)" maxlength="80" />
-          <textarea id="upload-nota" placeholder="una nota per l'archivio (facoltativa — ADE non la vede)" maxlength="500" rows="2"></textarea>
-          <button type="submit">Invia in quarantena</button>
-        </form>
-        <p id="upload-esito" class="nota"></p>
+        <h2 id="upload-titolo" role="button" tabindex="0" aria-expanded="true">Lascia uno stimolo</h2>
+        <div id="upload-corpo">
+          <p class="nota">Il file verrà scansionato e messo in quarantena: entrerà nel mondo di ADE solo dopo l'approvazione di un amministratore, e vi resterà 24 ore prima di essere rimosso automaticamente. Formati: testo, immagini, PDF, modelli 3D, audio (max 8 MB).</p>
+          <form id="upload-form">
+            <input type="file" id="upload-file" required />
+            <input type="text" id="upload-autore" placeholder="chi sei (facoltativo)" maxlength="80" />
+            <textarea id="upload-nota" placeholder="una nota per l'archivio (facoltativa — ADE non la vede)" maxlength="500" rows="2"></textarea>
+            <button type="submit">Invia in quarantena</button>
+          </form>
+          <p id="upload-esito" class="nota"></p>
+        </div>
       </section>
     </div>
 
