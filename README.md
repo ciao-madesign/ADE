@@ -124,7 +124,7 @@ Il mondo di ADE non accumula materiale all'infinito; la sua storia sì.
 
 ## Modalità GitHub Actions (alternativa al server)
 
-`.github/workflows/cycle.yml` esegue il ciclo ogni 6 ore anche senza un server: configura le *variables* (`AI_PROVIDER`, `AI_MODEL`, `OPENAI_BASE_URL`) e i *secrets* (`OPENAI_API_KEY` o `ANTHROPIC_API_KEY`) del repository. `pages.yml` pubblica il sito statico su GitHub Pages (senza funzioni live).
+`.github/workflows/cycle.yml` esegue il ciclo ogni 6 ore anche senza un server: configura le *variables* (`AI_PROVIDER`, `AI_MODEL`, `OPENAI_BASE_URL`) e i *secrets* (`OPENAI_API_KEY` o `ANTHROPIC_API_KEY`) del repository. `pages.yml` pubblicherebbe il sito statico su GitHub Pages (senza funzioni live) — oggi lanciabile solo a mano, perché il deploy reale è su Vercel e GitHub Pages non è attivato su questo repository.
 
 ## Vincoli tecnici (non negoziabili per l'entità)
 

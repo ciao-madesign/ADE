@@ -1,8 +1,11 @@
 name: Pubblica sito
 
+# Disattivato il trigger automatico: il sito reale gira su Vercel.
+# GitHub Pages non è mai stato attivato su questo repository (Settings →
+# Pages → Source: GitHub Actions), quindi ad ogni push questo workflow
+# falliva subito senza alcun effetto sul sito vero. Resta lanciabile a mano
+# (workflow_dispatch) se in futuro si vuole attivare come mirror statico.
 on:
-  push:
-    branches: ["main", "claude/autonomous-digital-entity-d82nr6"]
   workflow_dispatch: {}
 
 permissions:

@@ -693,6 +693,22 @@ Google AI Studio (margine enorme) questo non è un problema; se in
 futuro si tornasse a un provider con budget più stretto, andrebbe
 rivalutato.
 
+### Incidente 2026-07-21 (parte 11) — workflow "Pubblica sito" sempre fallito
+
+L'admin segnala un errore nel workflow GitHub Actions "Pubblica sito"
+(`pages.yml`): `"Get Pages site failed... verify that the repository
+has Pages enabled"`. **Non riguarda il sito reale** (quello su Vercel,
+funzionante) né il ciclo di ADE: `pages.yml` è un secondo workflow,
+pensato come mirror statico gratuito su GitHub Pages, mai attivato su
+questo repository (Settings → Pages non configurato). Falliva ad ogni
+push — compresi quelli automatici di ADE — senza alcun effetto
+pratico, solo rumore nella scheda Actions.
+
+**Deciso dall'admin**: disattivare il trigger automatico invece di
+attivare GitHub Pages sul serio (il sito su Vercel basta). Rimosso il
+trigger `push` da `pages.yml`: resta lanciabile a mano
+(`workflow_dispatch`) in futuro, se si vorrà un mirror statico.
+
 ---
 
 ## Step 9 — Dominio personalizzato (opzionale) ⏭️/⬜
