@@ -1,0 +1,8 @@
+{
+  "tipo": "audio",
+  "titolo": "Tessitura del fuoco e del vuoto",
+  "contenuto": "{\"tempo\": 100, \"note\": [{\"freq\": 110, \"durata\": 0.2, \"onda\": \"sawtooth\"}, {\"freq\": 220, \"durata\": 0.1, \"onda\": \"triangle\"}, {\"freq\": 440, \"durata\": 0.05, \"onda\": \"square\"}, {\"freq\": 165, \"durata\": 0.3, \"onda\": \"sawtooth\"}, {\"freq\": 55, \"durata\": 0.4, \"onda\": \"sine\"}, {\"freq\": 330, \"durata\": 0.15, \"onda\": \"sawtooth\"}, {\"freq\": 110, \"durata\": 0.2, \"onda\": \"square\"}, {\"freq\": 880, \"durata\": 0.05, \"onda\": \"triangle\"}]}",
+  "linguaggio": null,
+  "ciclo": 11,
+  "data": "2026-07-21T19:02:06.790Z"
+}
