@@ -738,6 +738,29 @@ correttamente l'artefatto), e caso di testo genuinamente non-JSON
 regressione). Verificato anche end-to-end con un ciclo di prova
 completo su una copia isolata del progetto.
 
+### Incidente 2026-07-21 (parte 13) — 503, Gemini temporaneamente sovraccarico
+
+Ciclo successivo: `503 UNAVAILABLE`, `"This model is currently
+experiencing high demand. Please try again later."` — un problema
+temporaneo lato Google, non nostro: nessuna configurazione da
+correggere, il servizio stesso era momentaneamente indisponibile.
+
+**Corretto senza bisogno di chiedere**: `llm.mjs` ora riconosce anche
+questo tipo di errore (500/502/503/504) e ritenta automaticamente la
+**stessa** richiesta (qui non ha senso ridurla, come per i limiti di
+token: il problema è il servizio, non la richiesta), con un'attesa
+crescente (5s, poi 10s), fino a 3 tentativi in tutto prima di arrendersi.
+
+**Verificato**: simulato un 503 per i primi due tentativi e successo al
+terzo — il ciclo si completa normalmente; simulato anche un 503
+persistente su tutti e tre i tentativi — il ciclo fallisce in modo
+pulito con lo stesso messaggio di errore di prima (nessun tentativo
+infinito).
+
+---
+
+## Step 9 — Dominio personalizzato (opzionale) ⏭️/⬜
+
 **Decisione che ti chiederò**: tenere `*.vercel.app` (gratis, subito) o
 comprare un dominio (es. `ade.qualcosa.it`, ~10-15€/anno).
 

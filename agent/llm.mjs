@@ -147,6 +147,7 @@ async function openaiJSON({ system, user, schema, maxTokens, images, info }) {
   }
 
   const isRateLimit = (r) => r.status === 413 || r.status === 429;
+  const isTransientServerError = (r) => [500, 502, 503, 504].includes(r.status);
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   /** Estrae "riprova tra X secondi" dal corpo dell'errore Groq, se presente. */
@@ -157,7 +158,21 @@ async function openaiJSON({ system, user, schema, maxTokens, images, info }) {
     await sleep(seconds * 1000);
   }
 
-  let res = await attempt(images, maxTokens);
+  // 500/502/503/504: il provider stesso ha un problema temporaneo (es. "alta
+  // domanda" su Gemini) — non è colpa della richiesta, quindi non ha senso
+  // ridurla. Si riprova la stessa richiesta, con un'attesa crescente, fino a
+  // 3 tentativi in tutto: se il servizio è davvero giù, meglio fallire dopo
+  // uno sforzo ragionevole che far durare il ciclo all'infinito.
+  async function attemptConRipetizione(imgs, tokens, tentativiMax = 3) {
+    let r = await attempt(imgs, tokens);
+    for (let tentativo = 1; tentativo < tentativiMax && isTransientServerError(r); tentativo++) {
+      await sleep(Math.min(30, tentativo * 5) * 1000);
+      r = await attempt(imgs, tokens);
+    }
+    return r;
+  }
+
+  let res = await attemptConRipetizione(images, maxTokens);
 
   // 413: la singola richiesta supera da sola il budget al minuto del
   // provider. 429 "tokens": il budget del minuto è già in parte consumato
