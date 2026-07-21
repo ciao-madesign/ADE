@@ -191,7 +191,8 @@ senza errori (lista vuota: giusto, non c'è ancora nulla in quarantena).
 1. ✅ Dal sito: carica un'immagine o un piccolo testo con "Lascia uno stimolo".
 2. ✅ Su `/admin`: vedi il file in quarantena col rapporto di scansione → *Approva*.
 3. ✅ Su GitHub: verifica il commit "Stimolo approvato" in `environment/inbox/`.
-4. ⬜ Da `/admin`: *Avvia un ciclo ora* → il workflow parte su GitHub.
+4. ✅ Da `/admin` (o GitHub Actions): *Avvia un ciclo ora* → ciclo completato
+   senza errori su Google AI Studio / Gemini 3.5 Flash (2026-07-20).
 5. ⬜ A ciclo finito: il sito si ri-deploya e mostra come ADE ha reagito (o ignorato!)
    il tuo stimolo. Entrambe le reazioni sono un successo: è autonoma.
 6. ⬜ Prova anche il percorso negativo: carica un file bloccato (es. rinomina un
@@ -472,6 +473,11 @@ Google stessa con preavviso. Aggiornati README.md e questo file.
 **Azione richiesta all'admin**: sulla variable `AI_MODEL` di GitHub,
 sostituisci `gemini-2.5-flash` con `gemini-flash-latest`, poi rilancia
 il ciclo.
+
+**Confermato dall'admin (2026-07-20): funziona.** Ciclo completato senza
+errori su Google AI Studio / Gemini 3.5 Flash, con visione reale delle
+immagini e senza limiti di token che blocchino il ciclo. Chiusa la
+serie di incidenti delle parti 1-10.
 
 ---
 
