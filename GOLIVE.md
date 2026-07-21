@@ -709,9 +709,34 @@ attivare GitHub Pages sul serio (il sito su Vercel basta). Rimosso il
 trigger `push` da `pages.yml`: resta lanciabile a mano
 (`workflow_dispatch`) in futuro, se si vorrà un mirror statico.
 
----
+### Incidente 2026-07-21 (parte 12) — JSON malformato da Gemini, ciclo fallito
 
-## Step 9 — Dominio personalizzato (opzionale) ⏭️/⬜
+Primo ciclo reale dopo gli artefatti: `SyntaxError: Expected ',' or '}'
+after property value in JSON`, dentro `extractJSON`.
+
+**Causa**: Gemini, in modalità "JSON mode", garantisce che la risposta
+sia un oggetto JSON ma non sempre **escapa correttamente gli a-capo**
+dentro le stringhe — capita con contenuti multi-riga (proprio ciò che
+gli artefatti di tipo `codice`/`svg`/`testo` incoraggiano). Un a-capo
+scritto alla lettera dentro una stringa JSON, invece che come `\n`,
+rende il testo sintatticamente non valido, anche se il contenuto in sé
+ha perfettamente senso.
+
+**Corretto senza bisogno di chiedere** (bugfix, non una scelta di
+design): `extractJSON` ora prova prima il parsing diretto come sempre;
+se fallisce, ripara il testo scorrendolo carattere per carattere e
+sostituendo gli a-capo/tab trovati *dentro* le stringhe con la loro
+forma escapata, senza toccare nulla fuori dalle stringhe — poi
+riprova. Se il testo non è comunque JSON riconoscibile, l'errore resta
+chiaro come prima.
+
+**Verificato**: caso di JSON già ben formato (nessuna differenza di
+comportamento), caso reale con a-capo letterali non escapate dentro un
+artefatto di tipo codice (prima falliva, ora ripara e salva
+correttamente l'artefatto), e caso di testo genuinamente non-JSON
+(continua a fallire con lo stesso messaggio di prima — nessuna
+regressione). Verificato anche end-to-end con un ciclo di prova
+completo su una copia isolata del progetto.
 
 **Decisione che ti chiederò**: tenere `*.vercel.app` (gratis, subito) o
 comprare un dominio (es. `ade.qualcosa.it`, ~10-15€/anno).

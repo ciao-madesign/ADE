@@ -193,11 +193,46 @@ async function openaiJSON({ system, user, schema, maxTokens, images, info }) {
   return { data: extractJSON(text), tokens, stop: choice?.finish_reason || "stop" };
 }
 
+/**
+ * Alcuni provider in modalità "JSON mode" garantiscono la forma esterna
+ * dell'oggetto ma non sempre escapano i caratteri di controllo (a capo, tab)
+ * dentro le stringhe — capita con contenuti multi-riga come codice, SVG o
+ * pensieri lunghi (introdotti con gli artefatti). Ripara il testo scorrendolo
+ * carattere per carattere e sostituendo i caratteri di controllo trovati
+ * *dentro* una stringa JSON con la loro forma escapata, senza toccare nulla
+ * fuori dalle stringhe. Usato solo come ripiego, se il parsing diretto fallisce.
+ */
+function repairJSONControlChars(text) {
+  let out = "";
+  let inString = false;
+  let escaped = false;
+  for (const ch of text) {
+    if (inString) {
+      if (escaped) { out += ch; escaped = false; continue; }
+      if (ch === "\\") { out += ch; escaped = true; continue; }
+      if (ch === '"') { out += ch; inString = false; continue; }
+      if (ch === "\n") { out += "\\n"; continue; }
+      if (ch === "\r") { out += "\\r"; continue; }
+      if (ch === "\t") { out += "\\t"; continue; }
+      out += ch;
+    } else {
+      if (ch === '"') inString = true;
+      out += ch;
+    }
+  }
+  return out;
+}
+
 /** Estrae il primo oggetto JSON dal testo (tollera code fence e preamboli). */
 function extractJSON(text) {
   const cleaned = text.replace(/```(?:json)?/gi, "").trim();
   const start = cleaned.indexOf("{");
   const end = cleaned.lastIndexOf("}");
   if (start === -1 || end <= start) throw new Error("Il modello non ha prodotto JSON riconoscibile.");
-  return JSON.parse(cleaned.slice(start, end + 1));
+  const slice = cleaned.slice(start, end + 1);
+  try {
+    return JSON.parse(slice);
+  } catch {
+    return JSON.parse(repairJSONControlChars(slice));
+  }
 }
