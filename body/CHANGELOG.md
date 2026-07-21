@@ -17,3 +17,7 @@ Rimodellamento geometrico e cromatico basato sui tre stimoli in scadenza. Il nuc
 ## v4 — 2026-07-21
 
 Sostituito il satellite-c (luce dorata fissa) con un tetraedro rosso-arancione con moto orbitale instabile sull'asse Z, per incorporare la natura caotica e trasformativa del fuoco emerso dai nuovi stimoli.
+
+## v5 — 2026-07-21
+
+L'anello di supporto si è deformato in un torusKnot asimmetrico color cenere, mostrando i primi segni di alterazione strutturale dovuti all'energia termica del fuoco orbitante.
