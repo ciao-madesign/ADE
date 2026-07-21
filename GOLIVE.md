@@ -559,6 +559,60 @@ locale, dati reali non toccati) a tre larghezze (desktop, con un
 accordion aperto, mobile); nessun errore in console oltre al normale
 404 di `/api/state` atteso in modalità statica.
 
+### Funzionalità 2026-07-21 — artefatti: la lingua di ADE verso l'esterno
+
+**Richiesta**: oltre ai pensieri, dare ad ADE la possibilità di creare
+artefatti (immagini, audio, gif, oggetti 3D, codice, formule
+matematiche) visualizzabili/riproducibili in un box in basso a destra
+nel viewer — la sua lingua verso gli utenti, oltre a quella testuale
+dei pensieri.
+
+**Realtà tecnica, spiegata prima di costruire**: il "cervello" di ADE è
+un modello linguistico testuale: non genera davvero un file JPEG o MP3.
+Ho quindi tradotto la richiesta nella forma che un modello del genere
+può produrre in modo autentico (non finto):
+- **immagini** → SVG (markup vettoriale testuale, un modello lo scrive
+  come scrive del testo) — mostrato come immagine vera nel browser;
+- **audio** → una sequenza di note (frequenza/durata/forma d'onda)
+  descritta in JSON, **sintetizzata dal vivo nel browser** con la Web
+  Audio API quando l'utente clicca "Ascolta": suono vero, non un file
+  finto;
+- **3D** → riusa lo stesso formato a "parti" già usato per il corpo,
+  renderizzato in una piccola scena Three.js indipendente;
+- **codice** e **formule matematiche** → testo, nel loro formato
+  naturale.
+- **gif/animazioni**: non incluse come tipo a sé — un SVG può comunque
+  contenere animazioni proprie (tag `<animate>`); un vero encoder GIF
+  binario da testo non è realistico con questa architettura.
+
+**Come funziona**: nuovo campo opzionale `artefatto` nello schema di
+risposta (null se in un ciclo non ha nulla da esprimere in quella
+forma — non è un'azione dovuta). Salvato in `body/artefatti/` (un
+indice + un file per artefatto, come la memoria: nessun limite di
+quantità, è la sua opera). Il sito mostra l'ultimo artefatto in un
+riquadro sovrapposto in basso a destra sul corpo 3D, con frecce per
+sfogliare quelli precedenti. Contenuto **mai iniettato come HTML
+grezzo** (rischio di codice malevolo in contenuto generato dal
+modello): l'SVG passa da un'immagine (i browser non eseguono script
+dentro un'immagine), codice/formula/testo sono resi come testo puro,
+la scena 3D è costruita a oggetti — nessun `innerHTML` con contenuto
+del modello. Una scena 3D con una geometria non ammessa viene
+scartata silenziosamente (il ciclo prosegue comunque).
+
+Aggiunta anche una riga in `identity.md` che spiega ad ADE questo
+terzo canale (distinto da pensiero e log) e il fatto che non è dovuto
+ad ogni ciclo.
+
+**Verificato**: ciclo di prova isolato (server finto) — artefatto
+salvato correttamente; verificata anche una scena 3D malformata,
+scartata senza far fallire il ciclo. Anteprima nel browser con un
+esempio per ciascuno dei sei tipi (svg, formula, codice, audio,
+scena3d, testo): tutti si vedono/ascoltano correttamente, navigazione
+avanti/indietro funzionante, nessun errore in console. Dati reali non
+toccati (il test ha usato una cartella `body/artefatti/` temporanea,
+rimossa a fine verifica — sul sito reale la cartella non esiste ancora,
+verrà creata al primo artefatto vero).
+
 ---
 
 ## Step 9 — Dominio personalizzato (opzionale) ⏭️/⬜

@@ -150,6 +150,178 @@ async function startViewer(body) {
   return { dispose() { disposed = true; renderer.dispose(); container.innerHTML = ""; } };
 }
 
+/* ------------------------------------------------ artefatti */
+// La "lingua" di ADE verso l'esterno: SVG, formule, codice, un breve suono
+// (sintetizzato dal vivo, non un file audio), una piccola scena 3D, testo
+// libero. Mai iniettati come HTML grezzo (rischio XSS su contenuto generato
+// dal modello): SVG passa da un'immagine data-URI (non esegue script),
+// codice/formula/testo via textContent, scena3d costruita a oggetti Three.js.
+
+let artefattiFiles = [];
+let artefattoCorrente = -1;
+let miniScena = null;
+
+async function disegnaArtefatto(art) {
+  if (miniScena) { miniScena.dispose(); miniScena = null; }
+  const cont = $("#artefatto-contenuto");
+  cont.innerHTML = "";
+
+  if (art.tipo === "svg") {
+    const img = document.createElement("img");
+    img.className = "artefatto-svg";
+    img.alt = art.titolo;
+    img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(art.contenuto)));
+    cont.appendChild(img);
+  } else if (art.tipo === "formula") {
+    const div = document.createElement("div");
+    div.className = "artefatto-formula";
+    div.textContent = art.contenuto;
+    cont.appendChild(div);
+  } else if (art.tipo === "codice") {
+    const pre = document.createElement("pre");
+    const code = document.createElement("code");
+    code.textContent = art.contenuto;
+    pre.appendChild(code);
+    cont.appendChild(pre);
+  } else if (art.tipo === "testo") {
+    const div = document.createElement("div");
+    div.className = "artefatto-testo";
+    div.textContent = art.contenuto;
+    cont.appendChild(div);
+  } else if (art.tipo === "audio") {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "artefatto-audio-btn";
+    btn.textContent = "▶ Ascolta";
+    btn.addEventListener("click", () => suonaArtefatto(art.contenuto, btn));
+    cont.appendChild(btn);
+  } else if (art.tipo === "scena3d") {
+    const div = document.createElement("div");
+    div.className = "artefatto-scena3d";
+    cont.appendChild(div);
+    try {
+      const parti = JSON.parse(art.contenuto);
+      miniScena = await avviaMiniScena(div, parti);
+    } catch (e) {
+      div.textContent = "scena non valida";
+      console.error("artefatto scena3d:", e);
+    }
+  }
+}
+
+function suonaArtefatto(contenutoJSON, btn) {
+  let spec;
+  try { spec = JSON.parse(contenutoJSON); } catch { return; }
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return;
+  const ctx = new Ctx();
+  const onde = new Set(["sine", "square", "triangle", "sawtooth"]);
+  let t = ctx.currentTime + 0.05;
+  for (const nota of (spec.note || []).slice(0, 200)) {
+    const freq = Math.max(20, Math.min(8000, Number(nota.freq) || 440));
+    const durata = Math.max(0.05, Math.min(3, Number(nota.durata) || 0.3));
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = onde.has(nota.onda) ? nota.onda : "sine";
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.linearRampToValueAtTime(0.18, t + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + durata);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + durata + 0.05);
+    t += durata;
+  }
+  btn.textContent = "♪ in ascolto…";
+  setTimeout(() => { btn.textContent = "▶ Ascolta"; ctx.close(); }, Math.max(0, (t - ctx.currentTime)) * 1000 + 200);
+}
+
+async function avviaMiniScena(container, parti) {
+  if (!Array.isArray(parti) || !parti.length) throw new Error("scena vuota");
+  const THREE = await import("three");
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, container.clientWidth / (container.clientHeight || 170), 0.1, 100);
+  camera.position.set(2.6, 2, 3.2);
+  camera.lookAt(0, 0, 0);
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(container.clientWidth, container.clientHeight || 170);
+  container.appendChild(renderer.domElement);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+  const key = new THREE.DirectionalLight(0xffffff, 1);
+  key.position.set(3, 4, 2);
+  scene.add(key);
+
+  const meshes = [];
+  for (const p of parti.slice(0, 20)) {
+    if (!p || !p.geometry) continue;
+    const m = p.material || {};
+    let geo;
+    try { geo = buildGeometry(THREE, p.geometry); } catch { continue; }
+    const mat = new THREE.MeshStandardMaterial({
+      color: new THREE.Color(m.color || "#8fe3c7"),
+      metalness: m.metalness ?? 0.3,
+      roughness: m.roughness ?? 0.5,
+      wireframe: !!m.wireframe,
+      side: THREE.DoubleSide,
+    });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.fromArray(p.position || [0, 0, 0]);
+    mesh.rotation.fromArray(p.rotation || [0, 0, 0]);
+    mesh.scale.fromArray(p.scale || [1, 1, 1]);
+    scene.add(mesh);
+    meshes.push(mesh);
+  }
+
+  let disposed = false;
+  const clock = new THREE.Clock();
+  function animate() {
+    if (disposed) return;
+    requestAnimationFrame(animate);
+    const dt = clock.getDelta();
+    for (const mesh of meshes) mesh.rotation.y += dt * 0.4;
+    renderer.render(scene, camera);
+  }
+  animate();
+  return { dispose() { disposed = true; renderer.dispose(); container.innerHTML = ""; } };
+}
+
+function aggiornaArtefattoNav() {
+  const totale = artefattiFiles.length;
+  $("#artefatto-indice").textContent = totale ? `${artefattoCorrente + 1}/${totale}` : "";
+  $("#artefatto-prev").disabled = artefattoCorrente <= 0;
+  $("#artefatto-next").disabled = artefattoCorrente >= totale - 1;
+}
+
+async function mostraArtefatto(i) {
+  if (i < 0 || i >= artefattiFiles.length) return;
+  artefattoCorrente = i;
+  aggiornaArtefattoNav();
+  const meta = artefattiFiles[i];
+  $("#artefatto-titolo").textContent = meta.titolo;
+  try {
+    const art = await fetchJSON(`body/artefatti/${meta.file}`);
+    await disegnaArtefatto(art);
+  } catch (e) {
+    console.error("artefatto:", e);
+  }
+}
+
+async function renderArtefattiIndex(index) {
+  artefattiFiles = index.files || [];
+  const box = $("#artefatto-box");
+  if (!artefattiFiles.length) { box.hidden = true; return; }
+  box.hidden = false;
+  const nuovoUltimo = artefattiFiles.length - 1;
+  if (artefattoCorrente === -1 || artefattoCorrente >= nuovoUltimo) await mostraArtefatto(nuovoUltimo);
+  else aggiornaArtefattoNav();
+}
+
+function setupArtefattiNav() {
+  $("#artefatto-prev").addEventListener("click", () => mostraArtefatto(artefattoCorrente - 1));
+  $("#artefatto-next").addEventListener("click", () => mostraArtefatto(artefattoCorrente + 1));
+}
+
 /* ------------------------------------------------ pannelli */
 
 function renderCorpoInfo(body) {
@@ -278,6 +450,7 @@ async function refreshAll() {
   try { renderAmbiente(await fetchJSON("environment/manifest.json")); } catch (e) { console.error("ambiente:", e); }
   try { renderEvoluzione(await fetchText("body/CHANGELOG.md")); } catch (e) { console.error("evoluzione:", e); }
   try { renderPensieri(await fetchJSON("body/pensieri.json")); } catch { $("#pensieri-lista").innerHTML = "<p class='nota'>Ancora nessun pensiero.</p>"; }
+  try { await renderArtefattiIndex(await fetchJSON("body/artefatti/index.json")); } catch { $("#artefatto-box").hidden = true; }
 
   try {
     const body = await fetchJSON("body/body.json");
@@ -374,6 +547,7 @@ function setupAccordionAnimazione() {
 
 (async () => {
   setupAccordionAnimazione();
+  setupArtefattiNav();
   await refreshAll();
   try {
     const state = await fetchJSON("/api/state");

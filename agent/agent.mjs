@@ -31,6 +31,10 @@ const INBOX_DIR = path.join(ENV_DIR, "inbox");
 const EXPIRY_FILE = path.join(INBOX_DIR, ".expiry.json");
 const PENSIERI_FILE = path.join(ROOT, "body", "pensieri.json");
 const PENSIERI_MAX = 60;
+const ARTEFATTI_DIR = path.join(ROOT, "body", "artefatti");
+const ARTEFATTI_INDEX = path.join(ARTEFATTI_DIR, "index.json");
+const ARTEFATTO_MAX_CHARS = 20000;
+const TIPI_ARTEFATTO = new Set(["svg", "formula", "codice", "audio", "scena3d", "testo"]);
 
 // I provider free-tier OpenAI-compatibili non sono tutti uguali: Groq ha un
 // budget di token al minuto molto stretto (Qwen 3.6 27B: appena 8000 token
@@ -230,6 +234,56 @@ function appendPensiero(cycle, testo) {
   if (pensieri.length > PENSIERI_MAX) pensieri = pensieri.slice(-PENSIERI_MAX);
   fs.mkdirSync(path.dirname(PENSIERI_FILE), { recursive: true });
   writeJSON(PENSIERI_FILE, pensieri);
+}
+
+/**
+ * Artefatti: la "lingua" di ADE rivolta verso l'esterno, distinta dal
+ * pensiero (per sé) e dal log (resoconto). Non un file qualunque in
+ * environment/ — un'espressione che chi osserva il sito vede e, per
+ * l'audio, ascolta davvero (sintetizzato dal browser). Facoltativo:
+ * non ogni ciclo ne produce uno. Un indice + un file per artefatto,
+ * come la memoria — nessun limite di quantità: è la sua opera, resta.
+ */
+function loadArtefattiIndex() {
+  if (!fs.existsSync(ARTEFATTI_INDEX)) return { files: [] };
+  return readJSON(ARTEFATTI_INDEX);
+}
+
+function saveArtefatto(cycle, art) {
+  if (!art || !TIPI_ARTEFATTO.has(art.tipo)) return null;
+  if (typeof art.titolo !== "string" || !art.titolo.trim()) return null;
+  if (typeof art.contenuto !== "string" || !art.contenuto.trim()) return null;
+
+  const contenuto = art.contenuto.slice(0, ARTEFATTO_MAX_CHARS);
+
+  if (art.tipo === "scena3d") {
+    try {
+      const parti = JSON.parse(contenuto);
+      if (!Array.isArray(parti) || !parti.length) throw new Error("non è un array di parti");
+      for (const p of parti) {
+        if (!p.geometry || !GEOMETRIE[p.geometry.type]) throw new Error(`geometria non ammessa: ${p.geometry && p.geometry.type}`);
+      }
+    } catch {
+      return null; // scena 3D malformata: scartata, il ciclo prosegue comunque
+    }
+  }
+
+  fs.mkdirSync(ARTEFATTI_DIR, { recursive: true });
+  const index = loadArtefattiIndex();
+  const n = index.files.length + 1;
+  const file = `${String(n).padStart(3, "0")}_${slugify(art.titolo)}.json`;
+  const data = nowISO();
+  writeJSON(path.join(ARTEFATTI_DIR, file), {
+    tipo: art.tipo,
+    titolo: art.titolo.trim(),
+    contenuto,
+    linguaggio: art.tipo === "codice" && typeof art.linguaggio === "string" ? art.linguaggio.slice(0, 30) : null,
+    ciclo: cycle,
+    data,
+  });
+  index.files.push({ file, ciclo: cycle, data, tipo: art.tipo, titolo: art.titolo.trim() });
+  writeJSON(ARTEFATTI_INDEX, index);
+  return file;
 }
 
 // ---------------------------------------------------------------- corpo
@@ -510,7 +564,7 @@ function hslToHex(h, s, l) {
 const SCHEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["pensiero", "decisione", "azioni", "corpo_json", "motivo_corpo", "memoria", "log"],
+  required: ["pensiero", "decisione", "azioni", "corpo_json", "motivo_corpo", "memoria", "log", "artefatto"],
   properties: {
     pensiero: {
       type: "string",
@@ -538,6 +592,35 @@ const SCHEMA = {
     motivo_corpo: {
       anyOf: [{ type: "string" }, { type: "null" }],
       description: "Se modifichi il corpo: motivazione per il CHANGELOG, altrimenti null.",
+    },
+    artefatto: {
+      anyOf: [
+        { type: "null" },
+        {
+          type: "object",
+          additionalProperties: false,
+          required: ["tipo", "titolo", "contenuto", "linguaggio"],
+          properties: {
+            tipo: { type: "string", enum: ["svg", "formula", "codice", "audio", "scena3d", "testo"] },
+            titolo: { type: "string" },
+            contenuto: {
+              type: "string",
+              description:
+                "Il contenuto, nel formato del tipo scelto. svg: markup SVG valido (verrà mostrato come immagine). " +
+                "formula: testo/notazione libera di una formula matematica. codice: codice sorgente. " +
+                "audio: stringa JSON {\"tempo\":.., \"note\":[{\"freq\":Hz,\"durata\":secondi,\"onda\":\"sine|square|triangle|sawtooth\"}]} — verrà sintetizzata dal vivo nel browser, non è un file audio. " +
+                "scena3d: stringa JSON con un array di 'parti', stessa struttura delle parti del tuo corpo (geometry/position/rotation/scale/material) — una piccola scena indipendente dal tuo corpo. " +
+                "testo: testo libero, poesia, ascii-art.",
+            },
+            linguaggio: {
+              anyOf: [{ type: "string" }, { type: "null" }],
+              description: "Solo se tipo=codice: il linguaggio (es. 'python', 'javascript'), altrimenti null.",
+            },
+          },
+        },
+      ],
+      description:
+        "Un artefatto opzionale — la tua lingua rivolta verso l'esterno, distinta dal pensiero (che è per te) e dal log (che è resoconto): qualcosa che fai. null se in questo ciclo non hai nulla da esprimere in questa forma; non è un'azione dovuta ad ogni ciclo.",
     },
     memoria: {
       type: "object",
@@ -686,6 +769,9 @@ async function cycleWithModel() {
 
   // 5b. pensieri in prima persona (mostrati nel viewer, non nel diario)
   appendPensiero(cycle, out.pensiero);
+
+  // 5c. artefatto opzionale (la lingua di ADE verso l'esterno)
+  if (out.artefatto) saveArtefatto(cycle, out.artefatto);
 
   // 6. energia
   energy.total_cycles = cycle;
