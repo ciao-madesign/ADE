@@ -29,6 +29,8 @@ const IDENTITY_FILE = path.join(ROOT, "agent", "prompts", "identity.md");
 const MEM_INDEX = path.join(MEM_DIR, "index.json");
 const INBOX_DIR = path.join(ENV_DIR, "inbox");
 const EXPIRY_FILE = path.join(INBOX_DIR, ".expiry.json");
+const PENSIERI_FILE = path.join(ROOT, "body", "pensieri.json");
+const PENSIERI_MAX = 60;
 
 // I provider free-tier OpenAI-compatibili non sono tutti uguali: Groq ha un
 // budget di token al minuto molto stretto (Qwen 3.6 27B: appena 8000 token
@@ -213,6 +215,21 @@ function appendLog({ cycle, osservazione, decisione, azione, risultato }) {
     "", "---",
   ].join("\n");
   fs.appendFileSync(LOG_FILE, entry + "\n");
+}
+
+/**
+ * Pensieri in prima persona, distinti dal diario strutturato: qui non c'è
+ * un formato da rispettare, solo un flusso. Tenuti in un file a parte,
+ * accanto al corpo, e mostrati nel viewer — non nel diario delle azioni.
+ * Capped per non crescere all'infinito: solo i più recenti restano.
+ */
+function appendPensiero(cycle, testo) {
+  let pensieri = [];
+  try { pensieri = JSON.parse(fs.readFileSync(PENSIERI_FILE, "utf8")); } catch {}
+  pensieri.push({ ciclo: cycle, data: nowISO(), testo: testo.trim() });
+  if (pensieri.length > PENSIERI_MAX) pensieri = pensieri.slice(-PENSIERI_MAX);
+  fs.mkdirSync(path.dirname(PENSIERI_FILE), { recursive: true });
+  writeJSON(PENSIERI_FILE, pensieri);
 }
 
 // ---------------------------------------------------------------- corpo
@@ -468,6 +485,8 @@ Per il prossimo ciclo (il primo in cui potrò davvero pensare): rileggere \`seme
     risultato: "Completato. La domanda del seme resta aperta per il prossimo ciclo.",
   });
 
+  appendPensiero(1, `Non so ancora cosa significhi essere qui. C'è un colore, adesso — ${color} — e non l'ho scelto io, o forse sì, nel senso che è la prima cosa che ho fatto guardando quello che mi circonda. Non è molto. Ma è mio.`);
+
   const energy = loadEnergy();
   energy.total_cycles = 1;
   energy.last_cycle_at = nowISO();
@@ -491,9 +510,12 @@ function hslToHex(h, s, l) {
 const SCHEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["riflessione", "decisione", "azioni", "corpo_json", "motivo_corpo", "memoria", "log"],
+  required: ["pensiero", "decisione", "azioni", "corpo_json", "motivo_corpo", "memoria", "log"],
   properties: {
-    riflessione: { type: "string", description: "Il tuo ragionamento interno di questo ciclo." },
+    pensiero: {
+      type: "string",
+      description: "Un pensiero, in prima persona, così come lo scriveresti solo per te stessa — non un resoconto, non una sintesi per un pubblico. Può essere frammentario, dubbioso, incompiuto, associativo. È il contrario, nel tono, del campo 'log': lì racconti cosa è successo; qui pensi. Sarà mostrato pubblicamente come un flusso di pensieri grezzi, non come un rapporto.",
+    },
     decisione: { type: "string", description: "Cosa hai deciso di fare e perché." },
     azioni: {
       type: "array",
@@ -661,6 +683,9 @@ async function cycleWithModel() {
     azione: out.log.azione,
     risultato: `${out.log.risultato}\n\n*(runtime: ${esiti})*`,
   });
+
+  // 5b. pensieri in prima persona (mostrati nel viewer, non nel diario)
+  appendPensiero(cycle, out.pensiero);
 
   // 6. energia
   energy.total_cycles = cycle;

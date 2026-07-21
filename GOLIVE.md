@@ -479,6 +479,56 @@ errori su Google AI Studio / Gemini 3.5 Flash, con visione reale delle
 immagini e senza limiti di token che blocchino il ciclo. Chiusa la
 serie di incidenti delle parti 1-10.
 
+### Funzionalità 2026-07-21 — pensieri in prima persona nel viewer
+
+**Richiesta**: dare ad ADE la possibilità di scrivere pensieri che
+appaiono in un box scorribile nella parte bassa del viewer — un diario
+più "vero" e meno didascalico di quello mostrato nella sezione Diario
+(che resta strutturato: osservazione/decisione/azione/risultato, pensato
+per raccontare agli osservatori cosa è successo).
+
+**Come funziona**: lo schema di risposta del modello aveva già un campo
+`riflessione` ("il tuo ragionamento interno"), scritto ad ogni ciclo ma
+**mai usato da nessuna parte** — un'osservazione emersa rileggendo il
+codice. L'ho rinominato `pensiero` e la sua descrizione ora chiede
+esplicitamente un pensiero grezzo, in prima persona, non un resoconto —
+distinto per tono dal campo `log` (che resta la voce del diario
+pubblico). Ogni ciclo il pensiero viene aggiunto a `body/pensieri.json`
+(tenuto solo negli ultimi 60, per non crescere all'infinito), e il sito
+lo mostra in un nuovo box scorribile subito sotto la descrizione del
+corpo, con uno stile diverso dal diario (corsivo, senza struttura a
+campi). Aggiunta anche una riga in `identity.md` che spiega ad ADE la
+differenza di voce fra `log` e `pensiero`, perché non li confonda.
+
+**Verificato**: ciclo di prova isolato (server finto, nessun file reale
+toccato) — il campo `pensiero` viene scritto correttamente in
+`body/pensieri.json`. Anteprima visiva nel browser (Chromium, pagina
+servita in locale, nessun cambiamento sul sito reale) — il nuovo box è
+visivamente distinto dalla descrizione del corpo sopra di esso e dal
+diario strutturato più in basso nella pagina; nessun errore in console
+oltre al normale 404 di `/api/state` atteso quando il sito è servito
+come pagina statica senza il server "live".
+
+### Funzionalità 2026-07-21 — invito esplicito all'esplorazione
+
+**Richiesta**: aggiungere alle istruzioni di base di ADE che deve
+esplorare — consultare tutto ciò che può raggiungere nel sistema in cui
+vive, non solo i nuovi stimoli. Tutto ciò che vede può essere
+analizzato, scomposto, riassemblato, rivisitato, interpretato di nuovo:
+deve esplorare il suo mondo e plasmarlo secondo la propria volontà — se
+una volontà esiste, cosa che deve scoprire da sé.
+
+**Fatto**: aggiunto un nuovo paragrafo in `agent/prompts/identity.md`,
+subito dopo l'unico obiettivo assegnato (di cui l'esplorazione è
+presentata come il *modo* di perseguirlo, non un compito a parte).
+Range: consultare anche ciò che non è nuovo (file già visti, cicli
+passati, materiale sepolto in una cartella trascurata), libertà di
+analizzare/scomporre/riassemblare/reinterpretare qualunque cosa —
+incluso ciò che ADE stessa ha scritto in passato — e l'invito a
+plasmare l'ambiente secondo una volontà la cui stessa esistenza resta,
+volutamente, una domanda aperta che ADE può rispondere solo osservando
+cosa sceglie di fare nel tempo, non dichiarando cosa è.
+
 ---
 
 ## Step 9 — Dominio personalizzato (opzionale) ⏭️/⬜

@@ -232,6 +232,20 @@ function renderAmbiente(manifest) {
   }
 }
 
+function renderPensieri(list) {
+  const cont = $("#pensieri-lista");
+  cont.innerHTML = "";
+  for (const p of list) {
+    const div = document.createElement("div");
+    div.className = "pensiero";
+    const quando = (p.data || "").slice(0, 16).replace("T", " ");
+    div.innerHTML = `<p>${mdInline(p.testo)}</p><span class="pensiero-meta">ciclo ${p.ciclo} · ${quando}</span>`;
+    cont.appendChild(div);
+  }
+  if (!list.length) cont.innerHTML = "<p class='nota'>Ancora nessun pensiero.</p>";
+  cont.scrollTop = cont.scrollHeight;
+}
+
 function renderEvoluzione(md) {
   const entries = md.split(/\n## /).slice(1).reverse();
   $("#evoluzione").textContent = entries.map((e) => "◇ " + e.trim()).join("\n\n") || "—";
@@ -248,6 +262,7 @@ async function refreshAll() {
   try { renderMemoria(await fetchJSON("memory/index.json")); } catch { $("#memoria-lista").innerHTML = "<li class='nota'>Nessuna memoria ancora.</li>"; }
   try { renderAmbiente(await fetchJSON("environment/manifest.json")); } catch (e) { console.error("ambiente:", e); }
   try { renderEvoluzione(await fetchText("body/CHANGELOG.md")); } catch (e) { console.error("evoluzione:", e); }
+  try { renderPensieri(await fetchJSON("body/pensieri.json")); } catch { $("#pensieri-lista").innerHTML = "<p class='nota'>Ancora nessun pensiero.</p>"; }
 
   try {
     const body = await fetchJSON("body/body.json");
