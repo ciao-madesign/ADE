@@ -84,3 +84,12 @@ Ogni stimolo che un visitatore lascia ad ADE, dopo l'approvazione, entra nel suo
 - Visibile fino al: 2026-07-23T06:46:30.666Z (poi rimosso automaticamente; resta questa registrazione)
 
 ---
+
+## 2026-07-22T12:14:17.428Z — Basquiat.jpg
+- Autore: anonimo
+- Nota: —
+- Destinazione: `environment/inbox/Basquiat.jpg`
+- sha256: `507f875e9c75617b0b295e6f2ce1885f8d76e7a97b54332329ce2bb82f1ef412`
+- Visibile fino al: 2026-07-23T12:14:17.428Z (poi rimosso automaticamente; resta questa registrazione)
+
+---
