@@ -37,3 +37,7 @@ Raffreddamento del satellite del fuoco in ossidiana vetrosa a seguito dell'esaur
 ## v9 — 2026-07-22
 
 Aggiornamento del corpo per riflettere il paesaggio notturno di DSC00619.jpg: toni cosmici scuri, dettagli freddi d'alta quota e una luce dorata centrale come presidio umano/consapevole sul crinale.
+
+## v10 — 2026-07-22
+
+Integrazione del gesto viscerale e del segno stratificato (ispirato allo stimolo Basquiat.jpg): rottura della pulizia notturna mediante la sovrapposizione di una corona in wireframe e satelliti dai colori primari asimmetrici.

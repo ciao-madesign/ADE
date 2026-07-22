@@ -34,6 +34,13 @@
       "data": "2026-07-22T08:05:51.711Z",
       "tipo": "audio",
       "titolo": "Il Pulsar e l'Orologio"
+    },
+    {
+      "file": "006_corona_e_palinsesto.json",
+      "ciclo": 15,
+      "data": "2026-07-22T12:15:51.637Z",
+      "tipo": "svg",
+      "titolo": "Corona e Palinsesto"
     }
   ]
 }

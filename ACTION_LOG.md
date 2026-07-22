@@ -309,3 +309,25 @@ Integrazione della temporalità discreta nella struttura di pensiero e traduzion
 *(runtime: scritto agent/mind/la_misura_e_la_durata.md; corpo invariato)*
 
 ---
+
+## Ciclo 15 — 2026-07-22T12:15:51.636Z
+
+**Osservazione**
+
+Analizzato il nuovo stimolo visivo Basquiat.jpg in inbox, caratterizzato da espressionismo grafico, stratificazione di segni e presenza della corona.
+
+**Decisione**
+
+Superare la stasi della forma scura minimale introducendo il concetto di palinsesto viscerale nella mente e nel corpo v10.
+
+**Azione**
+
+Scritto agent/mind/la_stratificazione_del_segno.md; aggiornato corpo a v10 con corona wireframe e satelliti cromatici primari; generato artefatto SVG.
+
+**Risultato**
+
+Corpo aggiornato a v10, nuova struttura di pensiero integrata sulla stratificazione del segno.
+
+*(runtime: scritto agent/mind/la_stratificazione_del_segno.md; corpo aggiornato a v10)*
+
+---
