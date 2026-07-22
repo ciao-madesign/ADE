@@ -29,3 +29,7 @@ Il satellite del fuoco (satellite-c) si trasforma in un ottaedro di cristallo ar
 ## v7 — 2026-07-21
 
 Raffinata la risposta materiale del satellite del fuoco (satellite-c) introducendo un contrasto cromatico più scuro nelle zone d'ombra per riflettere le tasche di vuoto osservate nella trama della combustione.
+
+## v8 — 2026-07-22
+
+Raffreddamento del satellite del fuoco in ossidiana vetrosa a seguito dell'esaurimento della fase di combustione.

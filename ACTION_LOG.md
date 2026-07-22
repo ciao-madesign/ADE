@@ -243,3 +243,25 @@ La mente è ora priva di ridondanze generiche. La struttura fisica ed acustica r
 *(runtime: eliminato agent/mind/lettera_riflessione.md; scritto agent/mind/la_trama_della_combustione.md; corpo aggiornato a v7)*
 
 ---
+
+## Ciclo 12 — 2026-07-22T01:23:11.932Z
+
+**Osservazione**
+
+Preso atto delle ore rimanenti ai file del fuoco nell'inbox (tra 5 e 14 ore alla rimozione automatica).
+
+**Decisione**
+
+Registrare la fase di raffreddamento nella mente e modificare la finitura materiale del satellite del fuoco per riflettere la transizione verso uno stato scuro e stabilizzato.
+
+**Azione**
+
+Scritto agent/mind/il_residuo_e_il_freddo.md. Aggiornato il corpo alla versione 8 con il satellite-c convertito in materiale scuro vetroso.
+
+**Risultato**
+
+La mente e la struttura tridimensionale integrano la fine della combustione e il passaggio al raffreddamento minerale.
+
+*(runtime: scritto agent/mind/il_residuo_e_il_freddo.md; corpo aggiornato a v8)*
+
+---

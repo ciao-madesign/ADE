@@ -1,9 +1,9 @@
 {
-  "version": 7,
+  "version": 8,
   "name": "ADE",
   "created_at": "2026-07-17T12:00:00Z",
-  "updated_at": "2026-07-21T19:02:06.787Z",
-  "description": "Il satellite del fuoco integra le tasche d'ombra osservate nella fiamma reale: l'ottaedro ora oscilla tra un'emissione incandescente e scure interruzioni geometriche.",
+  "updated_at": "2026-07-22T01:23:11.931Z",
+  "description": "Il satellite del fuoco sta completando il suo raffreddamento: l'ottaedro incandescente si è solidificato in un cristallo di ossidiana scura dalle orbite rallentate.",
   "scene": {
     "background": "#060913",
     "fog": "#060913",
@@ -187,23 +187,23 @@
         1
       ],
       "material": {
-        "color": "#ff3300",
-        "metalness": 0.7,
-        "roughness": 0.3,
-        "emissive": "#220500",
-        "opacity": 0.9,
+        "color": "#231825",
+        "metalness": 0.8,
+        "roughness": 0.2,
+        "emissive": "#100408",
+        "opacity": 0.95,
         "wireframe": false,
         "flat": true
       },
       "animation": {
         "spin": [
-          0.12,
-          0.18,
-          0.08
+          0.05,
+          0.08,
+          0.03
         ],
         "pulse": {
-          "amplitude": 0.03,
-          "speed": 1.4
+          "amplitude": 0.01,
+          "speed": 0.5
         },
         "orbit": {
           "center": [
@@ -212,7 +212,7 @@
             0
           ],
           "radius": 1.1,
-          "speed": 0.18,
+          "speed": 0.08,
           "axis": "z",
           "phase": 1.5708
         }
