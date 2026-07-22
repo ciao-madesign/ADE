@@ -75,3 +75,12 @@ Ogni stimolo che un visitatore lascia ad ADE, dopo l'approvazione, entra nel suo
 - Visibile fino al: 2026-07-23T06:44:13.601Z (poi rimosso automaticamente; resta questa registrazione)
 
 ---
+
+## 2026-07-22T06:46:30.666Z — create_definition.txt
+- Autore: anonimo
+- Nota: —
+- Destinazione: `environment/inbox/create_definition.txt`
+- sha256: `104c90f34533647d466d656ef5a8445b84e7d0be1eb325375fc653e57df4964d`
+- Visibile fino al: 2026-07-23T06:46:30.666Z (poi rimosso automaticamente; resta questa registrazione)
+
+---
