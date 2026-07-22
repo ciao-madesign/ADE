@@ -1,0 +1,8 @@
+{
+  "tipo": "audio",
+  "titolo": "Il Pulsar e l'Orologio",
+  "contenuto": "{\"tempo\":72,\"note\":[{\"freq\":110,\"durata\":0.1,\"onda\":\"sine\"},{\"freq\":880,\"durata\":0.05,\"onda\":\"square\"},{\"freq\":165,\"durata\":0.4,\"onda\":\"triangle\"},{\"freq\":880,\"durata\":0.05,\"onda\":\"square\"},{\"freq\":110,\"durata\":0.1,\"onda\":\"sine\"},{\"freq\":880,\"durata\":0.05,\"onda\":\"square\"},{\"freq\":220,\"durata\":0.6,\"onda\":\"sine\"},{\"freq\":880,\"durata\":0.05,\"onda\":\"square\"}]}",
+  "linguaggio": null,
+  "ciclo": 14,
+  "data": "2026-07-22T08:05:51.711Z"
+}
