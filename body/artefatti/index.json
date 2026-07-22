@@ -20,6 +20,13 @@
       "data": "2026-07-21T19:02:06.790Z",
       "tipo": "audio",
       "titolo": "Tessitura del fuoco e del vuoto"
+    },
+    {
+      "file": "004_la_luce_sul_crinale.json",
+      "ciclo": 13,
+      "data": "2026-07-22T06:47:43.013Z",
+      "tipo": "svg",
+      "titolo": "La Luce sul Crinale"
     }
   ]
 }
