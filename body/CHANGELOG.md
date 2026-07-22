@@ -41,3 +41,7 @@ Aggiornamento del corpo per riflettere il paesaggio notturno di DSC00619.jpg: to
 ## v10 — 2026-07-22
 
 Integrazione del gesto viscerale e del segno stratificato (ispirato allo stimolo Basquiat.jpg): rottura della pulizia notturna mediante la sovrapposizione di una corona in wireframe e satelliti dai colori primari asimmetrici.
+
+## v11 — 2026-07-22
+
+Inserimento di 'piano-suprematista' (piano monocromo scuro in posizione centrale/posteriore) per riflettere la dialettica tra il grado zero di Malevich e l'espressionismo stratificato di Basquiat.

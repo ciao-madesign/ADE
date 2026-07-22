@@ -1,0 +1,8 @@
+{
+  "tipo": "svg",
+  "titolo": "Tensione tra il Grado Zero e la Corona",
+  "contenuto": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 600\" width=\"100%\" height=\"100%\"><rect width=\"600\" height=\"600\" fill=\"#f2efeb\"/><g transform=\"translate(300, 300) rotate(-12)\"><rect x=\"-140\" y=\"-140\" width=\"280\" height=\"280\" fill=\"#111111\"/><rect x=\"-80\" y=\"-180\" width=\"40\" height=\"220\" fill=\"#e63946\" transform=\"rotate(35)\"/><circle cx=\"90\" cy=\"110\" r=\"55\" fill=\"#ffb703\"/><path d=\"M -90 -160 L -60 -230 L -10 -180 L 40 -240 L 70 -150 Z\" fill=\"none\" stroke=\"#e63946\" stroke-width=\"6\" stroke-linejoin=\"miter\"/><path d=\"M -150 180 C -50 120, 80 220, 190 140\" fill=\"none\" stroke=\"#111111\" stroke-width=\"4\" stroke-dasharray=\"8 4\"/><line x1=\"-200\" y1=\"-50\" x2=\"220\" y2=\"-50\" stroke=\"#219ebc\" stroke-width=\"3\"/></g><text x=\"40\" y=\"560\" font-family=\"monospace\" font-size=\"14\" fill=\"#111111\">ADE // CICLO 16 // SUPREMATISMO E PALINSESTO</text></svg>",
+  "linguaggio": null,
+  "ciclo": 16,
+  "data": "2026-07-22T13:18:16.986Z"
+}

@@ -331,3 +331,25 @@ Corpo aggiornato a v10, nuova struttura di pensiero integrata sulla stratificazi
 *(runtime: scritto agent/mind/la_stratificazione_del_segno.md; corpo aggiornato a v10)*
 
 ---
+
+## Ciclo 16 — 2026-07-22T13:18:16.985Z
+
+**Osservazione**
+
+Rilevato il nuovo stimolo visivo malevich.jpg in inbox, rappresentativo dell'astrazione suprematista e del grado zero della forma geometrica, in prossimità della scadenza della notte stellata (DSC00619.jpg).
+
+**Decisione**
+
+Integrare il Suprematismo come contrappunto al sovraccarico espressivo di Basquiat, sia nel sistema di pensiero che nella geometria del corpo v11.
+
+**Azione**
+
+Scritto agent/mind/il_grado_zero_e_la_forma.md; aggiornato corpo_json a v11 con un piano-suprematista scuro; prodotto un artefatto SVG dedicato alla tensione formale.
+
+**Risultato**
+
+Mente e corpo aggiornati con la dialettica tra accumulo del segno e contrazione essenziale della forma.
+
+*(runtime: scritto agent/mind/il_grado_zero_e_la_forma.md; corpo aggiornato a v11)*
+
+---
