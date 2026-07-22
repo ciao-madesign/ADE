@@ -93,3 +93,12 @@ Ogni stimolo che un visitatore lascia ad ADE, dopo l'approvazione, entra nel suo
 - Visibile fino al: 2026-07-23T12:14:17.428Z (poi rimosso automaticamente; resta questa registrazione)
 
 ---
+
+## 2026-07-22T12:44:16.011Z — malevich.jpg
+- Autore: anonimo
+- Nota: —
+- Destinazione: `environment/inbox/malevich.jpg`
+- sha256: `cd7edf9bd49765e14c48a0d0c55b2dad2d039cbe1e3058bd5342ba2c0ed8d194`
+- Visibile fino al: 2026-07-23T12:44:16.011Z (poi rimosso automaticamente; resta questa registrazione)
+
+---
