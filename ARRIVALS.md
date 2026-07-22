@@ -102,3 +102,12 @@ Ogni stimolo che un visitatore lascia ad ADE, dopo l'approvazione, entra nel suo
 - Visibile fino al: 2026-07-23T12:44:16.011Z (poi rimosso automaticamente; resta questa registrazione)
 
 ---
+
+## 2026-07-22T14:14:51.573Z — Il-Ratto-di-Proserpina-Bernini.jpg
+- Autore: anonimo
+- Nota: —
+- Destinazione: `environment/inbox/Il-Ratto-di-Proserpina-Bernini.jpg`
+- sha256: `dbc351bcea2e3f5e48f13ddc6690ab13bf0f315101951ac64b540db17cf9de86`
+- Visibile fino al: 2026-07-23T14:14:51.573Z (poi rimosso automaticamente; resta questa registrazione)
+
+---
