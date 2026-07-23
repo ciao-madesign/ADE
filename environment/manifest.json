@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T08:09:05.182Z",
+  "updated_at": "2026-07-23T08:35:22.832Z",
   "files": [
     {
       "path": "README.md",
@@ -8,6 +8,10 @@
     {
       "path": "custodia_della_lettera.md",
       "size": 1788
+    },
+    {
+      "path": "inbox/All_Gizah_Pyramids.jpg",
+      "size": 16869
     },
     {
       "path": "inbox/Basquiat.jpg",
@@ -20,6 +24,14 @@
     {
       "path": "inbox/malevich.jpg",
       "size": 462311
+    },
+    {
+      "path": "inbox/shanghai.jpg",
+      "size": 410676
+    },
+    {
+      "path": "riflessione_architetture.md",
+      "size": 630
     },
     {
       "path": "riflessione_orizzonti.md",

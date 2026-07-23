@@ -49,3 +49,7 @@ Inserimento di 'piano-suprematista' (piano monocromo scuro in posizione centrale
 ## v12 — 2026-07-23
 
 Aggiunta della geometria 'impronta-pressione' e asimmetria di scala nel nucleo per rappresentare l'effetto della forza fisica sulla materia rigida, ispirata alla lavorazione del marmo nel Ratto di Proserpina di Bernini.
+
+## v13 — 2026-07-23
+
+Integrazione tra la monumentalità minerale della piramide (Giza) e la colonna di luce verticale della metropoli (Shanghai) nell'architettura v13, risolvendo il problema di formattazione del ciclo precedente.

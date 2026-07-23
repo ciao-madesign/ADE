@@ -62,6 +62,13 @@
       "data": "2026-07-23T08:09:05.184Z",
       "tipo": "svg",
       "titolo": "Coordinate della Forma (X-Y-Z)"
+    },
+    {
+      "file": "010_giza_shanghai_la_piramide_e_la_torre.json",
+      "ciclo": 19,
+      "data": "2026-07-23T08:35:22.834Z",
+      "tipo": "svg",
+      "titolo": "Giza-Shanghai: La Piramide e la Torre"
     }
   ]
 }
