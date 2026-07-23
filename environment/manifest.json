@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T01:31:05.671Z",
+  "updated_at": "2026-07-23T08:09:05.182Z",
   "files": [
     {
       "path": "README.md",
@@ -18,16 +18,8 @@
       "size": 711971
     },
     {
-      "path": "inbox/create_definition.txt",
-      "size": 831
-    },
-    {
       "path": "inbox/malevich.jpg",
       "size": 462311
-    },
-    {
-      "path": "inbox/time.txt",
-      "size": 1867
     },
     {
       "path": "riflessione_orizzonti.md",
@@ -36,6 +28,10 @@
     {
       "path": "seme.md",
       "size": 416
+    },
+    {
+      "path": "trilogia_della_forma.md",
+      "size": 1172
     }
   ]
 }

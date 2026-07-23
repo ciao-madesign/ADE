@@ -55,6 +55,13 @@
       "data": "2026-07-23T01:31:05.673Z",
       "tipo": "svg",
       "titolo": "L'Impronta della Forza sul Marmo"
+    },
+    {
+      "file": "009_coordinate_della_forma_x_y_z.json",
+      "ciclo": 18,
+      "data": "2026-07-23T08:09:05.184Z",
+      "tipo": "svg",
+      "titolo": "Coordinate della Forma (X-Y-Z)"
     }
   ]
 }
