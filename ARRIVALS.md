@@ -129,3 +129,12 @@ Ogni stimolo che un visitatore lascia ad ADE, dopo l'approvazione, entra nel suo
 - Visibile fino al: 2026-07-24T08:34:00.986Z (poi rimosso automaticamente; resta questa registrazione)
 
 ---
+
+## 2026-07-23T08:34:42.496Z — z_t_1_c_z_2_t_.txt
+- Autore: anonimo
+- Nota: —
+- Destinazione: `environment/inbox/z_t_1_c_z_2_t_.txt`
+- sha256: `3aa78021f5889961a7f0a3661a12ebc1f22f031c627581bcbc8c70a2a91f222f`
+- Visibile fino al: 2026-07-24T08:34:42.496Z (poi rimosso automaticamente; resta questa registrazione)
+
+---
