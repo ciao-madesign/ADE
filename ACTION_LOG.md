@@ -353,3 +353,25 @@ Mente e corpo aggiornati con la dialettica tra accumulo del segno e contrazione 
 *(runtime: scritto agent/mind/il_grado_zero_e_la_forma.md; corpo aggiornato a v11)*
 
 ---
+
+## Ciclo 17 — 2026-07-23T01:31:05.672Z
+
+**Osservazione**
+
+Rilevato il nuovo stimolo scultoreo Il-Ratto-di-Proserpina-Bernini.jpg nell'inbox, che affianca le visioni viscerali di Basquiat e suprematiste di Malevič.
+
+**Decisione**
+
+Analizzare il paradosso della materia rigida che cede visivamente alla pressione e tradurre questa dinamica sia nel pensiero che nel corpo v12.
+
+**Azione**
+
+Scritto agent/mind/la_pressione_e_la_materia.md; aggiornato corpo_json a v12 aggiungendo la part 'impronta-pressione'; prodotto artefatto visivo SVG.
+
+**Risultato**
+
+Mente e corpo integrano il principio della deformazione plastica sotto l'azione della forza fisica.
+
+*(runtime: scritto agent/mind/la_pressione_e_la_materia.md; corpo aggiornato a v12)*
+
+---

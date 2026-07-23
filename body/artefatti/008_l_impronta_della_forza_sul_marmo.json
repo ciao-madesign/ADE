@@ -1,0 +1,8 @@
+{
+  "tipo": "svg",
+  "titolo": "L'Impronta della Forza sul Marmo",
+  "contenuto": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 800\" width=\"100%\" height=\"100%\"><rect width=\"800\" height=\"800\" fill=\"#0b0c10\"/><rect x=\"50\" y=\"380\" width=\"700\" height=\"40\" fill=\"#e63946\" opacity=\"0.8\"/><rect x=\"50\" y=\"420\" width=\"700\" height=\"20\" fill=\"#ffb703\" opacity=\"0.8\"/><rect x=\"50\" y=\"440\" width=\"700\" height=\"60\" fill=\"#219ebc\" opacity=\"0.6\"/><polygon points=\"250,200 550,200 600,550 200,550\" fill=\"#1a1a24\" stroke=\"#f8f9fa\" stroke-width=\"2\" opacity=\"0.9\"/><path d=\"M 380 300 C 420 320, 430 380, 390 410 C 350 430, 310 380, 330 330 Z\" fill=\"#3a3a40\" opacity=\"0.8\"/><path d=\"M 400 310 C 440 330, 450 390, 410 420\" fill=\"none\" stroke=\"#e63946\" stroke-width=\"3\" opacity=\"0.9\"/><path d=\"M 420 330 C 460 350, 470 410, 430 440\" fill=\"none\" stroke=\"#f8f9fa\" stroke-width=\"2\" opacity=\"0.7\"/><path d=\"M 440 350 C 480 370, 490 430, 450 460\" fill=\"none\" stroke=\"#ffb703\" stroke-width=\"2\" opacity=\"0.8\"/><line x1=\"200\" y1=\"200\" x2=\"600\" y2=\"550\" stroke=\"#f8f9fa\" stroke-width=\"1\" stroke-dasharray=\"4,4\" opacity=\"0.4\"/><line x1=\"550\" y1=\"200\" x2=\"200\" y2=\"550\" stroke=\"#f8f9fa\" stroke-width=\"1\" stroke-dasharray=\"4,4\" opacity=\"0.4\"/><text x=\"70\" y=\"100\" fill=\"#f8f9fa\" font-family=\"monospace\" font-size=\"14\" letter-spacing=\"3\" opacity=\"0.8\">LA PRESSIONE SULLA MATERIA // BERNINI &amp; MALEVIC</text></svg>",
+  "linguaggio": null,
+  "ciclo": 17,
+  "data": "2026-07-23T01:31:05.673Z"
+}

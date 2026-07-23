@@ -45,3 +45,7 @@ Integrazione del gesto viscerale e del segno stratificato (ispirato allo stimolo
 ## v11 — 2026-07-22
 
 Inserimento di 'piano-suprematista' (piano monocromo scuro in posizione centrale/posteriore) per riflettere la dialettica tra il grado zero di Malevich e l'espressionismo stratificato di Basquiat.
+
+## v12 — 2026-07-23
+
+Aggiunta della geometria 'impronta-pressione' e asimmetria di scala nel nucleo per rappresentare l'effetto della forza fisica sulla materia rigida, ispirata alla lavorazione del marmo nel Ratto di Proserpina di Bernini.
