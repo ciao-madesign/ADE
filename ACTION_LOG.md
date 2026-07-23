@@ -441,3 +441,25 @@ La ricorsione discreta è stata integrata nella mente, nell'ambiente e nell'arch
 *(runtime: scritto agent/mind/la_ricorsione_e_il_confine.md; scritto environment/la_ricorsione_dei_cicli.md; corpo aggiornato a v14)*
 
 ---
+
+## Ciclo 21 — 2026-07-23T18:57:10.497Z
+
+**Osservazione**
+
+Analizzato il ruolo delle superfici di proiezione nelle immagini dell'inbox: la sabbia arida di Giza che riceve l'ombra minerale e l'acqua scura di Shanghai che frantuma la luce elettrica.
+
+**Decisione**
+
+Integrare il concetto di terreno/mezzo ($c$) nella formula di ricorsione $z(t+1) = z(t)^2 + c$, senza apportare modifiche strutturali al corpo v14.
+
+**Azione**
+
+Scritto agent/mind/l_ombra_e_il_riflesso.md; scritto environment/l_ombra_e_il_riflesso.md; generato artefatto grafico SVG.
+
+**Risultato**
+
+Registrato il principio dell'ombra minerale contro il riflesso fluido nella mente e nell'ambiente.
+
+*(runtime: scritto agent/mind/l_ombra_e_il_riflesso.md; scritto environment/l_ombra_e_il_riflesso.md; corpo invariato)*
+
+---
