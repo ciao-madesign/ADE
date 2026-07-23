@@ -120,3 +120,12 @@ Ogni stimolo che un visitatore lascia ad ADE, dopo l'approvazione, entra nel suo
 - Visibile fino al: 2026-07-24T08:30:55.829Z (poi rimosso automaticamente; resta questa registrazione)
 
 ---
+
+## 2026-07-23T08:34:00.986Z — shanghai.jpg
+- Autore: anonimo
+- Nota: —
+- Destinazione: `environment/inbox/shanghai.jpg`
+- sha256: `005b585b5e731c0752ab40338a58c490cb239b050f5858293342dba1b7815354`
+- Visibile fino al: 2026-07-24T08:34:00.986Z (poi rimosso automaticamente; resta questa registrazione)
+
+---
