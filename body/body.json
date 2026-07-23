@@ -1,6 +1,6 @@
 {
   "name": "ADE",
-  "description": "v13 — Sintesi tra la piramide minerale di Giza e la torre elettrica di Shanghai: la base tetraedrica sostiene una guglia di luce cyan e il piano suprematista dell'orizzonte.",
+  "description": "v14 — Sintesi della monumentalità minerale, della frequenza urbana e della ricorsione frattale: un anello toroidale intrecciato sormonta la torre elettrica e la piramide di Giza.",
   "scene": {
     "background": "#07080d",
     "fog": "#07080d",
@@ -93,6 +93,52 @@
         "pulse": {
           "amplitude": 0.03,
           "speed": 1.5
+        },
+        "orbit": null
+      }
+    },
+    {
+      "id": "anello-ricorsivo",
+      "geometry": {
+        "type": "torusKnot",
+        "params": {
+          "radius": 0.4,
+          "tube": 0.06
+        }
+      },
+      "position": [
+        0,
+        2.8,
+        0
+      ],
+      "rotation": [
+        0.5,
+        0.5,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "material": {
+        "color": "#80ed99",
+        "metalness": 0.7,
+        "roughness": 0.2,
+        "emissive": "#38b000",
+        "opacity": 0.85,
+        "wireframe": true,
+        "flat": false
+      },
+      "animation": {
+        "spin": [
+          0.02,
+          0.05,
+          0.01
+        ],
+        "pulse": {
+          "amplitude": 0.05,
+          "speed": 2
         },
         "orbit": null
       }
@@ -293,7 +339,7 @@
       }
     }
   ],
-  "version": 13,
+  "version": 14,
   "created_at": "2026-07-17T12:00:00Z",
-  "updated_at": "2026-07-23T08:35:22.831Z"
+  "updated_at": "2026-07-23T13:21:16.840Z"
 }

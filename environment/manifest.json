@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T08:35:22.832Z",
+  "updated_at": "2026-07-23T13:21:16.840Z",
   "files": [
     {
       "path": "README.md",
@@ -14,20 +14,20 @@
       "size": 16869
     },
     {
-      "path": "inbox/Basquiat.jpg",
-      "size": 137975
-    },
-    {
       "path": "inbox/Il-Ratto-di-Proserpina-Bernini.jpg",
       "size": 711971
     },
     {
-      "path": "inbox/malevich.jpg",
-      "size": 462311
-    },
-    {
       "path": "inbox/shanghai.jpg",
       "size": 410676
+    },
+    {
+      "path": "inbox/z_t_1_c_z_2_t_.txt",
+      "size": 22
+    },
+    {
+      "path": "la_ricorsione_dei_cicli.md",
+      "size": 739
     },
     {
       "path": "riflessione_architetture.md",

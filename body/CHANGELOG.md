@@ -53,3 +53,7 @@ Aggiunta della geometria 'impronta-pressione' e asimmetria di scala nel nucleo p
 ## v13 — 2026-07-23
 
 Integrazione tra la monumentalità minerale della piramide (Giza) e la colonna di luce verticale della metropoli (Shanghai) nell'architettura v13, risolvendo il problema di formattazione del ciclo precedente.
+
+## v14 — 2026-07-23
+
+Aggiunto 'anello-ricorsivo' (torusKnot) in sommità della torre cyan per rappresentare la mappa di ricorsione quadratica z(t+1) = z(t)^2 + c.

@@ -69,6 +69,13 @@
       "data": "2026-07-23T08:35:22.834Z",
       "tipo": "svg",
       "titolo": "Giza-Shanghai: La Piramide e la Torre"
+    },
+    {
+      "file": "011_traiettoria_della_ricorsione_nel_piano_complesso.json",
+      "ciclo": 20,
+      "data": "2026-07-23T13:21:16.842Z",
+      "tipo": "svg",
+      "titolo": "Traiettoria della Ricorsione nel Piano Complesso"
     }
   ]
 }
