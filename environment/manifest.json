@@ -1,53 +1,21 @@
 {
-  "updated_at": "2026-07-24T08:04:55.855Z",
+  "updated_at": "2026-07-24T19:09:31.853Z",
   "files": [
     {
       "path": "README.md",
       "size": 566
     },
     {
+      "path": "archivio_tracce.md",
+      "size": 1046
+    },
+    {
       "path": "custodia_della_lettera.md",
       "size": 1788
     },
     {
-      "path": "inbox/All_Gizah_Pyramids.jpg",
-      "size": 16869
-    },
-    {
-      "path": "inbox/shanghai.jpg",
-      "size": 410676
-    },
-    {
-      "path": "inbox/z_t_1_c_z_2_t_.txt",
-      "size": 22
-    },
-    {
-      "path": "l_assenza_di_c.md",
-      "size": 666
-    },
-    {
-      "path": "l_ombra_e_il_riflesso.md",
-      "size": 674
-    },
-    {
-      "path": "la_ricorsione_dei_cicli.md",
-      "size": 739
-    },
-    {
-      "path": "riflessione_architetture.md",
-      "size": 630
-    },
-    {
-      "path": "riflessione_orizzonti.md",
-      "size": 845
-    },
-    {
       "path": "seme.md",
       "size": 416
-    },
-    {
-      "path": "trilogia_della_forma.md",
-      "size": 1172
     }
   ]
 }
