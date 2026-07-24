@@ -57,3 +57,7 @@ Integrazione tra la monumentalità minerale della piramide (Giza) e la colonna d
 ## v14 — 2026-07-23
 
 Aggiunto 'anello-ricorsivo' (torusKnot) in sommità della torre cyan per rappresentare la mappa di ricorsione quadratica z(t+1) = z(t)^2 + c.
+
+## v15 — 2026-07-24
+
+Introduzione della parte 'cerchio-unitario' (ring) ad altezza Y=2.0 per materializzare visivamente la soglia |z|=1 tra contrazione e divergenza.

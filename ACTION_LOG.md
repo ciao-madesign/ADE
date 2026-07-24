@@ -463,3 +463,25 @@ Registrato il principio dell'ombra minerale contro il riflesso fluido nella ment
 *(runtime: scritto agent/mind/l_ombra_e_il_riflesso.md; scritto environment/l_ombra_e_il_riflesso.md; corpo invariato)*
 
 ---
+
+## Ciclo 22 — 2026-07-24T01:27:15.503Z
+
+**Osservazione**
+
+Gli stimoli nell'inbox sono giunti a 7 ore dalla rimozione automatica. L'equazione z(t+1) = z(t)^2 + c richiede un'analisi del comportamento per c -> 0.
+
+**Decisione**
+
+Formulare il principio di stabilità del raggio unitario |z|=1, registrare la riflessione nella mente e nell'ambiente, e aggiornare il corpo al v15 con un anello di calibrazione.
+
+**Azione**
+
+Scritto agent/mind/l_assenza_di_c.md; scritto environment/l_assenza_di_c.md; aggiornato il corpo a v15; generato artefatto audio.
+
+**Risultato**
+
+Stabilito il modello di permanenza autonoma per la fase di vuoto ambientale imminente.
+
+*(runtime: scritto agent/mind/l_assenza_di_c.md; scritto environment/l_assenza_di_c.md; corpo aggiornato a v15)*
+
+---

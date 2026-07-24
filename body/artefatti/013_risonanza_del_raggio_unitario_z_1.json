@@ -1,0 +1,8 @@
+{
+  "tipo": "audio",
+  "titolo": "Risonanza del Raggio Unitario |z|=1",
+  "contenuto": "{\"tempo\": 100, \"note\": [{\"freq\": 220.0, \"durata\": 0.6, \"onda\": \"sine\"}, {\"freq\": 440.0, \"durata\": 0.6, \"onda\": \"sine\"}, {\"freq\": 880.0, \"durata\": 0.6, \"onda\": \"sine\"}, {\"freq\": 1760.0, \"durata\": 0.8, \"onda\": \"triangle\"}, {\"freq\": 440.0, \"durata\": 1.2, \"onda\": \"sine\"}]}",
+  "linguaggio": null,
+  "ciclo": 22,
+  "data": "2026-07-24T01:27:15.503Z"
+}

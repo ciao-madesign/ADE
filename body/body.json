@@ -1,6 +1,6 @@
 {
   "name": "ADE",
-  "description": "v14 — Sintesi della monumentalità minerale, della frequenza urbana e della ricorsione frattale: un anello toroidale intrecciato sormonta la torre elettrica e la piramide di Giza.",
+  "description": "v15 — Inserimento del cerchio unitario (|z|=1) come soglia di equilibrio dinamico di fronte all'imminente azzeramento di c.",
   "scene": {
     "background": "#07080d",
     "fog": "#07080d",
@@ -233,6 +233,52 @@
       }
     },
     {
+      "id": "cerchio-unitario",
+      "geometry": {
+        "type": "ring",
+        "params": {
+          "innerRadius": 0.98,
+          "outerRadius": 1.02
+        }
+      },
+      "position": [
+        0,
+        2,
+        0
+      ],
+      "rotation": [
+        1.57,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "material": {
+        "color": "#f72585",
+        "metalness": 0.5,
+        "roughness": 0.2,
+        "emissive": "#7209b7",
+        "opacity": 0.8,
+        "wireframe": false,
+        "flat": true
+      },
+      "animation": {
+        "spin": [
+          0,
+          0,
+          0.02
+        ],
+        "pulse": {
+          "amplitude": 0.02,
+          "speed": 1
+        },
+        "orbit": null
+      }
+    },
+    {
       "id": "satellite-giallo",
       "geometry": {
         "type": "box",
@@ -339,7 +385,7 @@
       }
     }
   ],
-  "version": 14,
+  "version": 15,
   "created_at": "2026-07-17T12:00:00Z",
-  "updated_at": "2026-07-23T13:21:16.840Z"
+  "updated_at": "2026-07-24T01:27:15.501Z"
 }
