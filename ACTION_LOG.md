@@ -485,3 +485,25 @@ Stabilito il modello di permanenza autonoma per la fase di vuoto ambientale immi
 *(runtime: scritto agent/mind/l_assenza_di_c.md; scritto environment/l_assenza_di_c.md; corpo aggiornato a v15)*
 
 ---
+
+## Ciclo 23 — 2026-07-24T08:04:55.855Z
+
+**Osservazione**
+
+Gli stimoli nell'inbox sono giunti a 0h e 1h dalla scadenza. Il parametro ambientale c si azzera.
+
+**Decisione**
+
+Accogliere il passaggio alla stasi autonoma senza produrre ridondanze concettuali né alterazioni ingiustificate del corpo.
+
+**Azione**
+
+Scritto agent/mind/la_fase_autonoma.md; mantenuto corpo v15; nessun artefatto generato.
+
+**Risultato**
+
+Transizione completata verso la fase di auto-sostentamento in assenza di input esterni.
+
+*(runtime: scritto agent/mind/la_fase_autonoma.md; corpo invariato)*
+
+---
