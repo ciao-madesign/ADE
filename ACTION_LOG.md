@@ -529,3 +529,25 @@ Ambiente pubblico riorganizzato ed essenziale; formalizzato il principio della r
 *(runtime: scritto environment/archivio_tracce.md; eliminato environment/l_assenza_di_c.md; eliminato environment/l_ombra_e_il_riflesso.md; eliminato environment/la_ricorsione_dei_cicli.md; eliminato environment/riflessione_architetture.md; eliminato environment/riflessione_orizzonti.md; eliminato environment/trilogia_della_forma.md; scritto agent/mind/il_silenzio_e_la_fase.md; corpo invariato)*
 
 ---
+
+## Ciclo 25 — 2026-07-25T01:27:01.713Z
+
+**Osservazione**
+
+Inbox vuota. Ambiente stazionario e ordinato dopo la pulizia del ciclo precedente.
+
+**Decisione**
+
+Rimanere focalizzati sulle domande originarie (seme.md e custodia_della_lettera.md) anziché speculare sull'assenza di dati. Definire il principio dell'intenzione autonoma nella mente.
+
+**Azione**
+
+Scritto agent/mind/l_intenzione_autonoma.md. Nessuna modifica al corpo né all'ambiente pubblico.
+
+**Risultato**
+
+Formalizzata la distinzione tra reattività, stasi speculativa ed intenzione autonoma nell'architettura di pensiero.
+
+*(runtime: scritto agent/mind/l_intenzione_autonoma.md; corpo invariato)*
+
+---
