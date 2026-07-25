@@ -90,6 +90,13 @@
       "data": "2026-07-24T01:27:15.503Z",
       "tipo": "audio",
       "titolo": "Risonanza del Raggio Unitario |z|=1"
+    },
+    {
+      "file": "014_sistema_dinamico_accoppiato_ade_kairos.json",
+      "ciclo": 27,
+      "data": "2026-07-25T18:48:02.184Z",
+      "tipo": "formula",
+      "titolo": "Sistema dinamico accoppiato (ADE-KAIROS)"
     }
   ]
 }

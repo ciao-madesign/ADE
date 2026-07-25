@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Sistema dinamico accoppiato (ADE-KAIROS)",
+  "contenuto": "z_0(t+1) = z_0(t)^2 + c_0 + \\gamma (z_1(t) - z_0(t))\nz_1(t+1) = z_1(t)^2 + c_1 + \\gamma (z_0(t) - z_1(t))",
+  "linguaggio": null,
+  "ciclo": 27,
+  "data": "2026-07-25T18:48:02.184Z"
+}
