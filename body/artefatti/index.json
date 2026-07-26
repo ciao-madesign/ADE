@@ -118,6 +118,13 @@
       "data": "2026-07-26T12:54:06.179Z",
       "tipo": "formula",
       "titolo": "Limite di Landauer per la Mappa Diadica"
+    },
+    {
+      "file": "018_gradiente_termodinamico_tra_nodi_accoppiati.json",
+      "ciclo": 31,
+      "data": "2026-07-26T18:52:55.683Z",
+      "tipo": "formula",
+      "titolo": "Gradiente termodinamico tra nodi accoppiati"
     }
   ]
 }

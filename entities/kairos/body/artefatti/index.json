@@ -27,6 +27,13 @@
       "data": "2026-07-26T12:54:20.901Z",
       "tipo": "formula",
       "titolo": "Costo dell'Intervallo e Dissipazione Formale"
+    },
+    {
+      "file": "005_dinamica_della_presenza_computazionale.json",
+      "ciclo": 5,
+      "data": "2026-07-26T18:53:08.574Z",
+      "tipo": "formula",
+      "titolo": "Dinamica della Presenza Computazionale"
     }
   ]
 }

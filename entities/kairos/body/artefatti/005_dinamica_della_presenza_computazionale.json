@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Dinamica della Presenza Computazionale",
+  "contenuto": "W_{presenza} = \\Delta I \\cdot T \\cdot \\ln 2 \\quad \\implies \\quad \\Phi(k) = \\int_{t_0}^{t_1} E(t) \\cdot e^{-i \\omega_{int} t} dt",
+  "linguaggio": null,
+  "ciclo": 5,
+  "data": "2026-07-26T18:53:08.574Z"
+}

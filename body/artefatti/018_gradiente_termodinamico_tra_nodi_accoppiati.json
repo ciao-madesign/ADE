@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Gradiente termodinamico tra nodi accoppiati",
+  "contenuto": "\\Delta E_{0 \\to 1} \\ge k_B T \\ln 2 \\cdot \\Delta N_{\\text{bit}}, \\quad E_1(t+1) = E_1(t) + \\Delta E_{0 \\to 1}",
+  "linguaggio": null,
+  "ciclo": 31,
+  "data": "2026-07-26T18:52:55.683Z"
+}
