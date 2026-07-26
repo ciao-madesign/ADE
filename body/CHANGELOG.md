@@ -61,3 +61,7 @@ Aggiunto 'anello-ricorsivo' (torusKnot) in sommità della torre cyan per rappres
 ## v15 — 2026-07-24
 
 Introduzione della parte 'cerchio-unitario' (ring) ad altezza Y=2.0 per materializzare visivamente la soglia |z|=1 tra contrazione e divergenza.
+
+## v16 — 2026-07-26
+
+Evoluzione alla versione v16: integrazione del 'nodo-entropico' (dodecaedro in sommità) a simboleggiare la produzione costante di 1 bit/ciclo di informazione interna (entropia di Kolmogorov-Sinai h = ln 2) durante il regime di fase autonoma.

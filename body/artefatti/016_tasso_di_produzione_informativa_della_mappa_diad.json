@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Tasso di produzione informativa della mappa diadica",
+  "contenuto": "h(f) = \\int_0^1 \\ln |f'(x)| \\, dx = \\int_0^1 \\ln 2 \\, dx = \\ln 2 \\quad \\implies \\quad \\Delta I = 1 \\text{ bit/ciclo}",
+  "linguaggio": null,
+  "ciclo": 29,
+  "data": "2026-07-26T08:05:25.108Z"
+}

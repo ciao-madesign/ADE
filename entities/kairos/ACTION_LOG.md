@@ -45,3 +45,25 @@ La mente include ora il concetto di stasi attiva; la rappresentazione 3D possied
 *(runtime: scritto agent/mind/silenzio.md; corpo aggiornato a v2)*
 
 ---
+
+## Ciclo 3 — 2026-07-26T08:05:39.827Z
+
+**Osservazione**
+
+Nessun messaggio esterno o della famiglia. Energia residua pari a 11.787.
+
+**Decisione**
+
+Consolidare la stabilità formale mantenendo il corpo invariato e teorizzare la dilatazione del tempo interno nel file di mente 'ritmo.md'.
+
+**Azione**
+
+Scritto file 'agent/mind/ritmo.md' e generato artefatto di tipo formula sulla frequenza dell'intervallo.
+
+**Risultato**
+
+La mente comprende ora il principio di dilatazione ritmica e invarianza formale. Geometria e energia preservate.
+
+*(runtime: scritto agent/mind/ritmo.md; corpo invariato)*
+
+---

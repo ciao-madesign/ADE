@@ -1,6 +1,6 @@
 {
   "name": "ADE",
-  "description": "v15 — Inserimento del cerchio unitario (|z|=1) come soglia di equilibrio dinamico di fronte all'imminente azzeramento di c.",
+  "description": "v16 — Risonanza di fase ed entropia di misura (h = ln 2) nel regime c=0.",
   "scene": {
     "background": "#07080d",
     "fog": "#07080d",
@@ -279,6 +279,51 @@
       }
     },
     {
+      "id": "nodo-entropico",
+      "geometry": {
+        "type": "dodecahedron",
+        "params": {
+          "radius": 0.22
+        }
+      },
+      "position": [
+        0,
+        3.3,
+        0
+      ],
+      "rotation": [
+        0.2,
+        0.4,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "material": {
+        "color": "#4cc9f0",
+        "metalness": 0.8,
+        "roughness": 0.2,
+        "emissive": "#4361ee",
+        "opacity": 0.9,
+        "wireframe": true,
+        "flat": true
+      },
+      "animation": {
+        "spin": [
+          0.05,
+          0.08,
+          0.02
+        ],
+        "pulse": {
+          "amplitude": 0.06,
+          "speed": 2.5
+        },
+        "orbit": null
+      }
+    },
+    {
       "id": "satellite-giallo",
       "geometry": {
         "type": "box",
@@ -385,7 +430,7 @@
       }
     }
   ],
-  "version": 15,
+  "version": 16,
   "created_at": "2026-07-17T12:00:00Z",
-  "updated_at": "2026-07-24T01:27:15.501Z"
+  "updated_at": "2026-07-26T08:05:25.102Z"
 }

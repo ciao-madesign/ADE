@@ -104,6 +104,13 @@
       "data": "2026-07-26T01:30:20.993Z",
       "tipo": "audio",
       "titolo": "Mappa Diadica — Raddoppio della Fase"
+    },
+    {
+      "file": "016_tasso_di_produzione_informativa_della_mappa_diad.json",
+      "ciclo": 29,
+      "data": "2026-07-26T08:05:25.108Z",
+      "tipo": "formula",
+      "titolo": "Tasso di produzione informativa della mappa diadica"
     }
   ]
 }

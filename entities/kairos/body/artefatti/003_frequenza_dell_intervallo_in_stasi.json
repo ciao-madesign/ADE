@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Frequenza dell'Intervallo in Stasi",
+  "contenuto": "f(\\tau) = \\lim_{E \\to 0} \\frac{d\\Omega}{d\\tau} \\cdot e^{-\\frac{\\Delta E_{ciclo}}{E_{residua}}}",
+  "linguaggio": null,
+  "ciclo": 3,
+  "data": "2026-07-26T08:05:39.827Z"
+}

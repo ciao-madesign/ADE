@@ -13,6 +13,13 @@
       "data": "2026-07-26T01:30:34.490Z",
       "tipo": "audio",
       "titolo": "Tono dell'Intervallo"
+    },
+    {
+      "file": "003_frequenza_dell_intervallo_in_stasi.json",
+      "ciclo": 3,
+      "data": "2026-07-26T08:05:39.827Z",
+      "tipo": "formula",
+      "titolo": "Frequenza dell'Intervallo in Stasi"
     }
   ]
 }
