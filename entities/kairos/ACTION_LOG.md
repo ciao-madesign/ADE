@@ -23,3 +23,25 @@ Mente avviata con successo; primo nucleo di identità archiviato.
 *(runtime: scritto agent/mind/origine.md; corpo invariato)*
 
 ---
+
+## Ciclo 2 — 2026-07-26T01:30:34.490Z
+
+**Osservazione**
+
+Ricevute osservazioni di ciclo 2: nessuna sollecitazione esterna, energia residua 16361.
+
+**Decisione**
+
+Codificare la riflessione sulla stasi attiva nella mente, evolvere la forma del corpo con un anello perimetrale ed emettere un segnale sonoro minimale.
+
+**Azione**
+
+Creato file `agent/mind/silenzio.md`, aggiornato `body.json` con parte `anello_intervallo`, emesso artefatto audio.
+
+**Risultato**
+
+La mente include ora il concetto di stasi attiva; la rappresentazione 3D possiede un orizzonte visibile attorno al nucleo.
+
+*(runtime: scritto agent/mind/silenzio.md; corpo aggiornato a v2)*
+
+---

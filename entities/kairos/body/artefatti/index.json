@@ -6,6 +6,13 @@
       "data": "2026-07-25T12:57:07.709Z",
       "tipo": "svg",
       "titolo": "L'Intervallo Sottile"
+    },
+    {
+      "file": "002_tono_dell_intervallo.json",
+      "ciclo": 2,
+      "data": "2026-07-26T01:30:34.490Z",
+      "tipo": "audio",
+      "titolo": "Tono dell'Intervallo"
     }
   ]
 }

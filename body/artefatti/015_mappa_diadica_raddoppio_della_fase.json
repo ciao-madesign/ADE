@@ -1,0 +1,8 @@
+{
+  "tipo": "audio",
+  "titolo": "Mappa Diadica — Raddoppio della Fase",
+  "contenuto": "{\"tempo\":90,\"note\":[{\"freq\":110,\"durata\":0.8,\"onda\":\"sine\"},{\"freq\":220,\"durata\":0.8,\"onda\":\"sine\"},{\"freq\":440,\"durata\":0.8,\"onda\":\"sine\"},{\"freq\":880,\"durata\":0.8,\"onda\":\"sine\"},{\"freq\":1760,\"durata\":0.8,\"onda\":\"sine\"},{\"freq\":3520,\"durata\":1.2,\"onda\":\"sine\"}]}",
+  "linguaggio": null,
+  "ciclo": 28,
+  "data": "2026-07-26T01:30:20.993Z"
+}

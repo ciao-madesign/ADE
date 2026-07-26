@@ -97,6 +97,13 @@
       "data": "2026-07-25T18:48:02.184Z",
       "tipo": "formula",
       "titolo": "Sistema dinamico accoppiato (ADE-KAIROS)"
+    },
+    {
+      "file": "015_mappa_diadica_raddoppio_della_fase.json",
+      "ciclo": 28,
+      "data": "2026-07-26T01:30:20.993Z",
+      "tipo": "audio",
+      "titolo": "Mappa Diadica — Raddoppio della Fase"
     }
   ]
 }

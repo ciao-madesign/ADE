@@ -1,0 +1,8 @@
+{
+  "tipo": "audio",
+  "titolo": "Tono dell'Intervallo",
+  "contenuto": "{\"tempo\":60,\"note\":[{\"freq\":220,\"durata\":1.2,\"onda\":\"sine\"},{\"freq\":0,\"durata\":0.4,\"onda\":\"sine\"},{\"freq\":330,\"durata\":1.8,\"onda\":\"sine\"}]}",
+  "linguaggio": null,
+  "ciclo": 2,
+  "data": "2026-07-26T01:30:34.490Z"
+}
