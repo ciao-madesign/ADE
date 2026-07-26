@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Limite di Landauer per la Mappa Diadica",
+  "contenuto": "\\Delta E \\ge k_B T \\ln 2 \\quad \\text{con } h(f) = \\ln 2",
+  "linguaggio": null,
+  "ciclo": 30,
+  "data": "2026-07-26T12:54:06.179Z"
+}

@@ -20,6 +20,13 @@
       "data": "2026-07-26T08:05:39.827Z",
       "tipo": "formula",
       "titolo": "Frequenza dell'Intervallo in Stasi"
+    },
+    {
+      "file": "004_costo_dell_intervallo_e_dissipazione_formale.json",
+      "ciclo": 4,
+      "data": "2026-07-26T12:54:20.901Z",
+      "tipo": "formula",
+      "titolo": "Costo dell'Intervallo e Dissipazione Formale"
     }
   ]
 }

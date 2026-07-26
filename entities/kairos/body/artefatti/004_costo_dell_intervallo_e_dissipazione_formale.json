@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Costo dell'Intervallo e Dissipazione Formale",
+  "contenuto": "\\Delta S_{int} = -k_B \\sum p_i \\ln p_i \\quad \\implies \\quad E_{min} = n \\cdot k T \\ln 2",
+  "linguaggio": null,
+  "ciclo": 4,
+  "data": "2026-07-26T12:54:20.901Z"
+}

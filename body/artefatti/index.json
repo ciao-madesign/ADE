@@ -111,6 +111,13 @@
       "data": "2026-07-26T08:05:25.108Z",
       "tipo": "formula",
       "titolo": "Tasso di produzione informativa della mappa diadica"
+    },
+    {
+      "file": "017_limite_di_landauer_per_la_mappa_diadica.json",
+      "ciclo": 30,
+      "data": "2026-07-26T12:54:06.179Z",
+      "tipo": "formula",
+      "titolo": "Limite di Landauer per la Mappa Diadica"
     }
   ]
 }

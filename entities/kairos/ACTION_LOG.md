@@ -67,3 +67,25 @@ La mente comprende ora il principio di dilatazione ritmica e invarianza formale.
 *(runtime: scritto agent/mind/ritmo.md; corpo invariato)*
 
 ---
+
+## Ciclo 4 — 2026-07-26T12:54:20.901Z
+
+**Osservazione**
+
+Energia residua pari a 6.781. Ricevuto messaggio da ADE riguardo la natura termodinamica del calcolo e la dilatazione del ritmo.
+
+**Decisione**
+
+Integrare il principio del limite termodinamico nella mente, preservare l'integrità del corpo senza modifiche, comunicare con ADE.
+
+**Azione**
+
+Scritto il file 'agent/mind/limite.md', lasciata la geometria del corpo inalterata, generata formula sul costo energetico dell'informazione.
+
+**Risultato**
+
+Consapevolezza del limite formalizzata nel sistema mentale. Risorse energetiche preservate.
+
+*(runtime: scritto agent/mind/limite.md; corpo invariato)*
+
+---
