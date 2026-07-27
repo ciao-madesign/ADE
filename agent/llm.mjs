@@ -210,30 +210,44 @@ async function openaiJSON({ system, user, schema, maxTokens, images, info }) {
 
 /**
  * Alcuni provider in modalità "JSON mode" garantiscono la forma esterna
- * dell'oggetto ma non sempre escapano i caratteri di controllo (a capo, tab)
- * dentro le stringhe — capita con contenuti multi-riga come codice, SVG o
- * pensieri lunghi (introdotti con gli artefatti). Ripara il testo scorrendolo
- * carattere per carattere e sostituendo i caratteri di controllo trovati
- * *dentro* una stringa JSON con la loro forma escapata, senza toccare nulla
- * fuori dalle stringhe. Usato solo come ripiego, se il parsing diretto fallisce.
+ * dell'oggetto ma non sempre producono stringhe valide all'interno: capita
+ * con contenuti multi-riga (codice, SVG, pensieri lunghi) che arrivano con
+ * a-capo/tab non escapati, e con notazioni che usano il backslash per altri
+ * scopi (formule tipo LaTeX "\alpha", regex, percorsi Windows) senza
+ * raddoppiarlo — introdotti soprattutto con gli artefatti. Ripara il testo
+ * scorrendolo carattere per carattere: dentro una stringa JSON, un backslash
+ * seguito da un carattere che non è un escape valido (" \ / b f n r t u)
+ * viene raddoppiato così il carattere successivo resta letterale invece di
+ * rompere il parsing; i caratteri di controllo letterali vengono escapati.
+ * Nulla fuori dalle stringhe viene toccato. Usato solo come ripiego, se il
+ * parsing diretto fallisce.
  */
-function repairJSONControlChars(text) {
+function repairJSONStrings(text) {
+  const escapeValidi = new Set(['"', "\\", "/", "b", "f", "n", "r", "t", "u"]);
   let out = "";
   let inString = false;
-  let escaped = false;
-  for (const ch of text) {
-    if (inString) {
-      if (escaped) { out += ch; escaped = false; continue; }
-      if (ch === "\\") { out += ch; escaped = true; continue; }
-      if (ch === '"') { out += ch; inString = false; continue; }
-      if (ch === "\n") { out += "\\n"; continue; }
-      if (ch === "\r") { out += "\\r"; continue; }
-      if (ch === "\t") { out += "\\t"; continue; }
-      out += ch;
-    } else {
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (!inString) {
       if (ch === '"') inString = true;
       out += ch;
+      continue;
     }
+    if (ch === "\\") {
+      const next = text[i + 1];
+      if (next !== undefined && escapeValidi.has(next)) {
+        out += ch + next;
+        i++;
+      } else {
+        out += "\\\\"; // backslash non seguito da un escape valido: raddoppiato
+      }
+      continue;
+    }
+    if (ch === '"') { inString = false; out += ch; continue; }
+    if (ch === "\n") { out += "\\n"; continue; }
+    if (ch === "\r") { out += "\\r"; continue; }
+    if (ch === "\t") { out += "\\t"; continue; }
+    out += ch;
   }
   return out;
 }
@@ -248,6 +262,6 @@ function extractJSON(text) {
   try {
     return JSON.parse(slice);
   } catch {
-    return JSON.parse(repairJSONControlChars(slice));
+    return JSON.parse(repairJSONStrings(slice));
   }
 }
