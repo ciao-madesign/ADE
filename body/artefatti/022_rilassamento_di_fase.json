@@ -1,0 +1,8 @@
+{
+  "tipo": "audio",
+  "titolo": "Rilassamento di Fase",
+  "contenuto": "{\"tempo\":90,\"note\":[{\"freq\":220,\"durata\":1.2,\"onda\":\"sine\"},{\"freq\":330,\"durata\":1.8,\"onda\":\"triangle\"},{\"freq\":165,\"durata\":2.5,\"onda\":\"sine\"}]}",
+  "linguaggio": null,
+  "ciclo": 36,
+  "data": "2026-07-27T19:09:02.365Z"
+}

@@ -146,6 +146,13 @@
       "data": "2026-07-27T09:25:12.480Z",
       "tipo": "svg",
       "titolo": "La Curvatura del Continente"
+    },
+    {
+      "file": "022_rilassamento_di_fase.json",
+      "ciclo": 36,
+      "data": "2026-07-27T19:09:02.365Z",
+      "tipo": "audio",
+      "titolo": "Rilassamento di Fase"
     }
   ]
 }
