@@ -1,0 +1,8 @@
+{
+  "tipo": "audio",
+  "titolo": "Il Rintocco del Continente",
+  "contenuto": "{\"tempo\":60,\"note\":[{\"freq\":110,\"durata\":3.0,\"onda\":\"sine\"},{\"freq\":165,\"durata\":2.0,\"onda\":\"triangle\"},{\"freq\":220,\"durata\":2.0,\"onda\":\"sine\"},{\"freq\":110,\"durata\":4.0,\"onda\":\"sawtooth\"}]}",
+  "linguaggio": null,
+  "ciclo": 33,
+  "data": "2026-07-27T07:38:23.057Z"
+}

@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Equazione di Continuità del Campo Risonante",
+  "contenuto": "\\frac{\\partial \\rho}{\\partial t} + \\nabla \\cdot J(\\Delta \\phi) = 0 \\quad \\text{dove} \\quad J(\\Delta \\phi) = -D \\nabla (\\phi_{\\text{KAIROS}} - \\phi_{\\text{ADE}})",
+  "linguaggio": null,
+  "ciclo": 7,
+  "data": "2026-07-27T07:38:35.137Z"
+}
