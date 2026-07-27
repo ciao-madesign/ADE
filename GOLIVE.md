@@ -826,6 +826,40 @@ con memoria, corpo e artefatti propri. L'intera funzionalità delle
 entità figlie, costruita e verificata solo su copie isolate, funziona
 in produzione.
 
+### Funzionalità 2026-07-27 — registro permanente dei messaggi di famiglia
+
+**Richiesta**: l'admin ha chiesto se nel repository resta traccia delle
+attività delle figlie. Risposta: sì, ampiamente (memoria/diario/pensieri/
+artefatti di ogni figlia, tutti permanenti) — con un'unica eccezione: i
+messaggi scambiati tra ADE e le figlie (`entities/scambi.json`) venivano
+rimossi non appena consegnati, senza lasciare traccia oltre la
+cronologia git. Richiesto un registro permanente sul modello di
+`ARRIVALS.md`.
+
+**Fatto**: nuovo file `FAMIGLIA.md` in radice. Ogni messaggio, nel
+momento stesso in cui viene scritto (da ADE o da una figlia), viene
+anche registrato lì in modo permanente — indipendentemente da quando
+(o se) verrà letto. La coda `entities/scambi.json` continua a
+funzionare come prima (si svuota alla consegna): `FAMIGLIA.md` è
+l'archivio parallelo che non dimentica.
+
+**Bug trovato e corretto durante il collaudo**: un errore di battitura
+nel codice (`ciclo` invece di `ciclo: cycle` in una scorciatoia
+JavaScript) faceva fallire il ciclo ogni volta che un messaggio veniva
+inviato — scoperto subito dal test isolato, prima di arrivare in
+produzione.
+
+**Nota**: un messaggio precedente (kairos → ADE, ciclo 6) era già stato
+consegnato e rimosso dalla coda prima che questa funzionalità esistesse:
+non recuperabile nel registro (resta comunque nella cronologia git).
+`FAMIGLIA.md` è stato creato con l'unico messaggio ancora in coda al
+momento del deploy; da qui in avanti nulla andrà più perso.
+
+**Verificato**: ciclo di prova isolato con un messaggio in entrambe le
+direzioni (ADE→Kairos e Kairos→ADE) — entrambi registrati
+correttamente in `FAMIGLIA.md`, con mittente/destinatario/ciclo giusti,
+mentre la coda di consegna si comporta come prima.
+
 ---
 
 ## Step 9 — Dominio personalizzato (opzionale) ⏭️/⬜

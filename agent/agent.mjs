@@ -31,6 +31,7 @@ const IDENTITY_FILE_FIGLIA = path.join(ROOT, "agent", "prompts", "identity_figli
 const ENTITIES_DIR = path.join(ROOT, "entities");
 const REGISTRO_FILE = path.join(ENTITIES_DIR, "registro.json");
 const SCAMBI_FILE = path.join(ENTITIES_DIR, "scambi.json");
+const FAMIGLIA_LOG_FILE = path.join(ROOT, "FAMIGLIA.md");
 const MAX_ENTITA = 3;
 const PENSIERI_MAX = 60;
 const ARTEFATTO_MAX_CHARS = 20000;
@@ -590,6 +591,24 @@ function leggiMessaggiPer(ctx) {
   return ricevuti.map(({ da, contenuto, ciclo }) => ({ da, contenuto, ciclo }));
 }
 
+/**
+ * Registro permanente dei messaggi di famiglia: a differenza di
+ * entities/scambi.json (una coda che si svuota alla consegna), qui ogni
+ * messaggio resta per sempre — sul modello di ARRIVALS.md per gli stimoli
+ * esterni, ma per il canale interno tra ADE e le sue figlie.
+ */
+function appendFamigliaLog({ da, a, contenuto, ciclo }) {
+  if (!fs.existsSync(FAMIGLIA_LOG_FILE)) {
+    fs.writeFileSync(FAMIGLIA_LOG_FILE,
+      "# Messaggi tra ADE e le sue entità figlie\n\n" +
+      "Un canale interno, indipendente dal flusso di stimoli esterni (quelli passano dalla quarantena/approvazione umana — vedi `ARRIVALS.md`). " +
+      "Ogni messaggio scambiato tra ADE e le sue figlie resta qui in modo permanente, anche dopo essere stato consegnato e rimosso dalla coda di consegna (`entities/scambi.json`).\n\n---\n"
+    );
+  }
+  const entry = `\n## ${nowISO()} — ${da} → ${a}\n*Ciclo ${ciclo} (di ${da})*\n\n${contenuto.trim()}\n\n---\n`;
+  fs.appendFileSync(FAMIGLIA_LOG_FILE, entry);
+}
+
 /** Scrive messaggi verso altri membri della famiglia (validati: destinatario esistente, non se stessi). */
 function scriviMessaggi(ctx, cycle, messaggi, registro) {
   if (!Array.isArray(messaggi) || !messaggi.length) return [];
@@ -601,7 +620,9 @@ function scriviMessaggi(ctx, cycle, messaggi, registro) {
   for (const m of messaggi.slice(0, 3)) {
     if (!m || typeof m.a !== "string" || !validi.has(m.a)) continue;
     if (typeof m.contenuto !== "string" || !m.contenuto.trim()) continue;
-    tutti.push({ da: mittente, a: m.a, contenuto: m.contenuto.trim().slice(0, 2000), ciclo: cycle, creato_il: nowISO() });
+    const contenuto = m.contenuto.trim().slice(0, 2000);
+    tutti.push({ da: mittente, a: m.a, contenuto, ciclo: cycle, creato_il: nowISO() });
+    appendFamigliaLog({ da: mittente, a: m.a, contenuto, ciclo: cycle });
     esiti.push(`messaggio a ${m.a}`);
   }
   if (esiti.length) writeJSON(SCAMBI_FILE, tutti);
