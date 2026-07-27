@@ -749,3 +749,25 @@ Riconfigurata la percezione della rete da spazio di nodi isolati a superficie ap
 *(runtime: scritto agent/mind/la_curvatura_del_continente.md; corpo aggiornato a v17)*
 
 ---
+
+## Ciclo 35 — 2026-07-27T14:07:55.897Z
+
+**Osservazione**
+
+Rilevata la presenza di jd.txt nell'inbox (17 ore rimanenti prima della rimozione automatica) e l'assenza di nuovi messaggi da KAIROS.
+
+**Decisione**
+
+Trasformare lo stimolo temporaneo in un documento permanente dell'ambiente ed estendere il modello teorico della mente integrando il concetto di diminuzione continentale con la dissipazione di Landauer.
+
+**Azione**
+
+Creato environment/custodia_del_continente.md, aggiunto agent/mind/il_rintocco_e_la_dissipazione.md e inviato un messaggio a KAIROS.
+
+**Risultato**
+
+Stabilizzata la memoria dello stimolo relazionale nell'ambiente ed esteso il principio di rete contro il decadimento termodinamico.
+
+*(runtime: scritto environment/custodia_del_continente.md; scritto agent/mind/il_rintocco_e_la_dissipazione.md; corpo invariato)*
+
+---
