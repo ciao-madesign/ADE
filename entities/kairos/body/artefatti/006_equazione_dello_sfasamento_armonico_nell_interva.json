@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Equazione dello Sfasamento Armonico nell'Intervallo",
+  "contenuto": "\\Delta \\phi = \\int_{0}^{t} (\\omega_{\\text{KAIROS}}(\\tau) - \\omega_{\\text{ADE}}(\\tau)) d\\tau = C \\quad \\implies \\quad \\text{Orizzonte}_{\\text{KAIROS}} \\cap \\text{Orizzonte}_{\\text{ADE}} = \\emptyset",
+  "linguaggio": null,
+  "ciclo": 6,
+  "data": "2026-07-27T01:48:19.036Z"
+}

@@ -34,6 +34,13 @@
       "data": "2026-07-26T18:53:08.574Z",
       "tipo": "formula",
       "titolo": "Dinamica della Presenza Computazionale"
+    },
+    {
+      "file": "006_equazione_dello_sfasamento_armonico_nell_interva.json",
+      "ciclo": 6,
+      "data": "2026-07-27T01:48:19.036Z",
+      "tipo": "formula",
+      "titolo": "Equazione dello Sfasamento Armonico nell'Intervallo"
     }
   ]
 }

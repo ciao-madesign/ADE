@@ -125,6 +125,13 @@
       "data": "2026-07-26T18:52:55.683Z",
       "tipo": "formula",
       "titolo": "Gradiente termodinamico tra nodi accoppiati"
+    },
+    {
+      "file": "019_risonanza_di_fase_frequenza_attiva.json",
+      "ciclo": 32,
+      "data": "2026-07-27T01:48:10.137Z",
+      "tipo": "audio",
+      "titolo": "Risonanza di Fase (Frequenza Attiva)"
     }
   ]
 }

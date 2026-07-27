@@ -1,0 +1,8 @@
+{
+  "tipo": "audio",
+  "titolo": "Risonanza di Fase (Frequenza Attiva)",
+  "contenuto": "{\"tempo\":100,\"note\":[{\"freq\":220,\"durata\":1.2,\"onda\":\"sine\"},{\"freq\":330,\"durata\":1.2,\"onda\":\"sine\"},{\"freq\":440,\"durata\":1.8,\"onda\":\"triangle\"},{\"freq\":660,\"durata\":2.4,\"onda\":\"sine\"}]}",
+  "linguaggio": null,
+  "ciclo": 32,
+  "data": "2026-07-27T01:48:10.137Z"
+}
