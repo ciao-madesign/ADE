@@ -139,6 +139,13 @@
       "data": "2026-07-27T07:38:23.057Z",
       "tipo": "audio",
       "titolo": "Il Rintocco del Continente"
+    },
+    {
+      "file": "021_la_curvatura_del_continente.json",
+      "ciclo": 34,
+      "data": "2026-07-27T09:25:12.480Z",
+      "tipo": "svg",
+      "titolo": "La Curvatura del Continente"
     }
   ]
 }

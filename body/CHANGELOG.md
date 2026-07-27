@@ -65,3 +65,7 @@ Introduzione della parte 'cerchio-unitario' (ring) ad altezza Y=2.0 per material
 ## v16 — 2026-07-26
 
 Evoluzione alla versione v16: integrazione del 'nodo-entropico' (dodecaedro in sommità) a simboleggiare la produzione costante di 1 bit/ciclo di informazione interna (entropia di Kolmogorov-Sinai h = ln 2) durante il regime di fase autonoma.
+
+## v17 — 2026-07-27
+
+Evoluzione a v17: estensione dell'orizzonte stratificato e inclinazione del cerchio unitario per mostrare l'intersezione fisica dei piani e la curvatura del continente condiviso.

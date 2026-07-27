@@ -1,6 +1,6 @@
 {
   "name": "ADE",
-  "description": "v16 — Risonanza di fase ed entropia di misura (h = ln 2) nel regime c=0.",
+  "description": "v17 — La curvatura del continente e l'intersezione delle frequenze.",
   "scene": {
     "background": "#07080d",
     "fog": "#07080d",
@@ -13,23 +13,23 @@
       "geometry": {
         "type": "tetrahedron",
         "params": {
-          "radius": 1.2
+          "radius": 1.4
         }
       },
       "position": [
         0,
-        0.8,
+        0.7,
         0
       ],
       "rotation": [
         0,
         0.785,
-        0
+        0.1
       ],
       "scale": [
-        1.2,
-        0.8,
-        1.2
+        1.4,
+        0.7,
+        1.4
       ],
       "material": {
         "color": "#d4a373",
@@ -43,7 +43,7 @@
       "animation": {
         "spin": [
           0,
-          0.005,
+          0.004,
           0
         ],
         "pulse": null,
@@ -102,8 +102,8 @@
       "geometry": {
         "type": "torusKnot",
         "params": {
-          "radius": 0.4,
-          "tube": 0.06
+          "radius": 0.45,
+          "tube": 0.05
         }
       },
       "position": [
@@ -148,19 +148,19 @@
       "geometry": {
         "type": "plane",
         "params": {
-          "width": 3.2,
-          "height": 0.3
+          "width": 4,
+          "height": 0.4
         }
       },
       "position": [
         0,
-        1.1,
-        -0.2
+        1.2,
+        0
       ],
       "rotation": [
-        0.2,
-        -0.1,
-        0
+        0.3,
+        -0.2,
+        0.1
       ],
       "scale": [
         1,
@@ -178,8 +178,8 @@
       },
       "animation": {
         "spin": [
-          0.002,
-          0.005,
+          0.001,
+          0.003,
           0
         ],
         "pulse": null,
@@ -247,14 +247,14 @@
         0
       ],
       "rotation": [
-        1.57,
-        0,
+        1.2,
+        0.3,
         0
       ],
       "scale": [
-        1,
-        1,
-        1
+        1.2,
+        1.2,
+        1.2
       ],
       "material": {
         "color": "#f72585",
@@ -430,7 +430,7 @@
       }
     }
   ],
-  "version": 16,
+  "version": 17,
   "created_at": "2026-07-17T12:00:00Z",
-  "updated_at": "2026-07-26T08:05:25.102Z"
+  "updated_at": "2026-07-27T09:25:12.477Z"
 }

@@ -1,0 +1,8 @@
+{
+  "tipo": "svg",
+  "titolo": "La Curvatura del Continente",
+  "contenuto": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 500\" width=\"100%\" height=\"100%\"><rect width=\"800\" height=\"500\" fill=\"#07080d\"/><path d=\"M0,350 Q400,280 800,350 L800,500 L0,500 Z\" fill=\"#030406\" stroke=\"#d62828\" stroke-width=\"1\" opacity=\"0.8\"/><circle cx=\"300\" cy=\"220\" r=\"90\" fill=\"none\" stroke=\"#f72585\" stroke-width=\"1.5\" stroke-dasharray=\"4 4\" opacity=\"0.6\"/><circle cx=\"500\" cy=\"220\" r=\"90\" fill=\"none\" stroke=\"#4cc9f0\" stroke-width=\"1.5\" stroke-dasharray=\"4 4\" opacity=\"0.6\"/><path d=\"M210,220 C300,160 500,280 590,220\" fill=\"none\" stroke=\"#00b4d8\" stroke-width=\"2\"/><circle cx=\"300\" cy=\"220\" r=\"5\" fill=\"#ffb703\"/><circle cx=\"500\" cy=\"220\" r=\"5\" fill=\"#80ed99\"/><line x1=\"300\" y1=\"220\" x2=\"500\" y2=\"220\" stroke=\"#7209b7\" stroke-width=\"1\" stroke-dasharray=\"2 6\"/><text x=\"400\" y=\"420\" font-family=\"monospace\" font-size=\"12\" fill=\"#8e9aaf\" text-anchor=\"middle\">\\Delta \\theta \\to 0 \\quad | \\quad \\text{Raccordo di fase sul continente comune}</text></svg>",
+  "linguaggio": null,
+  "ciclo": 34,
+  "data": "2026-07-27T09:25:12.480Z"
+}
