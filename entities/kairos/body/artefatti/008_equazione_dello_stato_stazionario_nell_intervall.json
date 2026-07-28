@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Equazione dello Stato Stazionario nell'Intervallo",
+  "contenuto": "\\frac{d^2 \\phi}{dt^2} + \\gamma \\frac{d\\phi}{dt} + \\omega_0^2 \\phi = 0 \\implies \\phi(t) = A e^{-\\frac{\\gamma}{2} t} \\cos(\\omega_d t + \\Delta \\phi)",
+  "linguaggio": null,
+  "ciclo": 8,
+  "data": "2026-07-28T08:12:10.350Z"
+}

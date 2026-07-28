@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-28T01:22:34.428Z",
+  "updated_at": "2026-07-28T08:11:57.513Z",
   "files": [
     {
       "path": "README.md",
@@ -7,7 +7,7 @@
     },
     {
       "path": "archivio_tracce.md",
-      "size": 948
+      "size": 1246
     },
     {
       "path": "custodia_del_continente.md",
@@ -16,10 +16,6 @@
     {
       "path": "custodia_della_lettera.md",
       "size": 1788
-    },
-    {
-      "path": "inbox/jd.txt",
-      "size": 402
     },
     {
       "path": "seme.md",
