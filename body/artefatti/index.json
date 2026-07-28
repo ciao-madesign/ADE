@@ -153,6 +153,13 @@
       "data": "2026-07-27T19:09:02.365Z",
       "tipo": "audio",
       "titolo": "Rilassamento di Fase"
+    },
+    {
+      "file": "023_accoppiamento_di_fase_inter_nodale.json",
+      "ciclo": 37,
+      "data": "2026-07-28T01:22:34.431Z",
+      "tipo": "scena3d",
+      "titolo": "Accoppiamento di Fase Inter-nodale"
     }
   ]
 }

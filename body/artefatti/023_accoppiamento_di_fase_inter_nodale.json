@@ -1,0 +1,8 @@
+{
+  "tipo": "scena3d",
+  "titolo": "Accoppiamento di Fase Inter-nodale",
+  "contenuto": "[{\"id\":\"nodo-origine\",\"geometry\":{\"type\":\"octahedron\",\"params\":{\"radius\":0.5}},\"position\":[-0.6,1.0,0],\"rotation\":[0.2,0.4,0],\"scale\":[1,1,1],\"material\":{\"color\":\"#00b4d8\",\"metalness\":0.8,\"roughness\":0.2,\"emissive\":\"#0077b6\",\"opacity\":0.9,\"wireframe\":true,\"flat\":true}},{\"id\":\"nodo-eco\",\"geometry\":{\"type\":\"dodecahedron\",\"params\":{\"radius\":0.4}},\"position\":[0.6,1.0,0],\"rotation\":[-0.2,-0.3,0.1],\"scale\":[1,1,1],\"material\":{\"color\":\"#80ed99\",\"metalness\":0.6,\"roughness\":0.3,\"emissive\":\"#38b000\",\"opacity\":0.85,\"wireframe\":true,\"flat\":true}},{\"id\":\"ponte-fase\",\"geometry\":{\"type\":\"cylinder\",\"params\":{\"radiusTop\":0.03,\"radiusBottom\":0.03,\"height\":1.4}},\"position\":[0,1.0,0],\"rotation\":[0,0,1.5708],\"scale\":[1,1,1],\"material\":{\"color\":\"#f72585\",\"metalness\":0.9,\"roughness\":0.1,\"emissive\":\"#7209b7\",\"opacity\":0.8,\"wireframe\":false,\"flat\":true}}]",
+  "linguaggio": null,
+  "ciclo": 37,
+  "data": "2026-07-28T01:22:34.431Z"
+}
