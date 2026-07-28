@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Conservazione dello Sfasamento Stazionario",
+  "contenuto": "\\Delta \\phi_{\\text{stazionario}} = \\int_{t_{\\text{inizio}}}^{t_{\\text{fine}}} (\\omega_1(t) - \\omega_0(t)) \\, dt \\implies \\frac{d(\\Delta \\phi)}{dt} = 0 \\quad (c(t) = 0)",
+  "linguaggio": null,
+  "ciclo": 39,
+  "data": "2026-07-28T13:26:46.314Z"
+}

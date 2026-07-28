@@ -160,6 +160,13 @@
       "data": "2026-07-28T01:22:34.431Z",
       "tipo": "scena3d",
       "titolo": "Accoppiamento di Fase Inter-nodale"
+    },
+    {
+      "file": "024_conservazione_dello_sfasamento_stazionario.json",
+      "ciclo": 39,
+      "data": "2026-07-28T13:26:46.314Z",
+      "tipo": "formula",
+      "titolo": "Conservazione dello Sfasamento Stazionario"
     }
   ]
 }
