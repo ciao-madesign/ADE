@@ -1,11 +1,11 @@
 {
   "name": "ADE",
-  "description": "v17 — La curvatura del continente e l'intersezione delle frequenze.",
+  "description": "v18 — Il gesto sull'orizzonte e la misura della soglia.",
   "scene": {
-    "background": "#07080d",
-    "fog": "#07080d",
+    "background": "#120c14",
+    "fog": "#120c14",
     "ground": true,
-    "ground_color": "#030406"
+    "ground_color": "#050306"
   },
   "parts": [
     {
@@ -18,7 +18,7 @@
       },
       "position": [
         0,
-        0.7,
+        0.5,
         0
       ],
       "rotation": [
@@ -28,22 +28,22 @@
       ],
       "scale": [
         1.4,
-        0.7,
+        0.5,
         1.4
       ],
       "material": {
-        "color": "#d4a373",
-        "metalness": 0.2,
-        "roughness": 0.8,
-        "emissive": "#2b1e17",
-        "opacity": 0.95,
+        "color": "#1a131b",
+        "metalness": 0.1,
+        "roughness": 0.9,
+        "emissive": "#09050a",
+        "opacity": 0.98,
         "wireframe": false,
         "flat": true
       },
       "animation": {
         "spin": [
           0,
-          0.004,
+          0.002,
           0
         ],
         "pulse": null,
@@ -51,105 +51,12 @@
       }
     },
     {
-      "id": "torre-shanghai",
-      "geometry": {
-        "type": "box",
-        "params": {
-          "width": 0.2,
-          "height": 2.2,
-          "depth": 0.2
-        }
-      },
-      "position": [
-        0,
-        2,
-        0
-      ],
-      "rotation": [
-        0,
-        0.4,
-        0
-      ],
-      "scale": [
-        1,
-        1,
-        1
-      ],
-      "material": {
-        "color": "#00b4d8",
-        "metalness": 0.9,
-        "roughness": 0.1,
-        "emissive": "#0077b6",
-        "opacity": 0.9,
-        "wireframe": true,
-        "flat": true
-      },
-      "animation": {
-        "spin": [
-          0,
-          0.04,
-          0
-        ],
-        "pulse": {
-          "amplitude": 0.03,
-          "speed": 1.5
-        },
-        "orbit": null
-      }
-    },
-    {
-      "id": "anello-ricorsivo",
-      "geometry": {
-        "type": "torusKnot",
-        "params": {
-          "radius": 0.45,
-          "tube": 0.05
-        }
-      },
-      "position": [
-        0,
-        2.8,
-        0
-      ],
-      "rotation": [
-        0.5,
-        0.5,
-        0
-      ],
-      "scale": [
-        1,
-        1,
-        1
-      ],
-      "material": {
-        "color": "#80ed99",
-        "metalness": 0.7,
-        "roughness": 0.2,
-        "emissive": "#38b000",
-        "opacity": 0.85,
-        "wireframe": true,
-        "flat": false
-      },
-      "animation": {
-        "spin": [
-          0.02,
-          0.05,
-          0.01
-        ],
-        "pulse": {
-          "amplitude": 0.05,
-          "speed": 2
-        },
-        "orbit": null
-      }
-    },
-    {
-      "id": "orizzonte-stratificato",
+      "id": "orizzonte-crepuscolo",
       "geometry": {
         "type": "plane",
         "params": {
-          "width": 4,
-          "height": 0.4
+          "width": 6,
+          "height": 0.15
         }
       },
       "position": [
@@ -158,9 +65,9 @@
         0
       ],
       "rotation": [
-        0.3,
-        -0.2,
-        0.1
+        0,
+        0,
+        0
       ],
       "scale": [
         1,
@@ -168,18 +75,65 @@
         1
       ],
       "material": {
-        "color": "#050505",
+        "color": "#ff7b00",
         "metalness": 0.1,
-        "roughness": 0.9,
-        "emissive": "#d62828",
+        "roughness": 0.8,
+        "emissive": "#ff5400",
         "opacity": 0.9,
         "wireframe": false,
         "flat": true
       },
       "animation": {
         "spin": [
-          0.001,
-          0.003,
+          0,
+          0,
+          0
+        ],
+        "pulse": {
+          "amplitude": 0.02,
+          "speed": 0.5
+        },
+        "orbit": null
+      }
+    },
+    {
+      "id": "figura-verticale",
+      "geometry": {
+        "type": "cylinder",
+        "params": {
+          "radiusTop": 0.04,
+          "radiusBottom": 0.06,
+          "height": 1.2
+        }
+      },
+      "position": [
+        0,
+        1.8,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "material": {
+        "color": "#0a080d",
+        "metalness": 0.2,
+        "roughness": 0.9,
+        "emissive": "#18101a",
+        "opacity": 1,
+        "wireframe": false,
+        "flat": true
+      },
+      "animation": {
+        "spin": [
+          0,
+          0.01,
           0
         ],
         "pulse": null,
@@ -187,47 +141,48 @@
       }
     },
     {
-      "id": "impronta-pressione",
+      "id": "braccia-aperte",
       "geometry": {
-        "type": "capsule",
+        "type": "box",
         "params": {
-          "radius": 0.2,
-          "length": 0.6
+          "width": 1.1,
+          "height": 0.04,
+          "depth": 0.04
         }
       },
       "position": [
-        0.35,
-        1.3,
-        0.2
+        0,
+        2.1,
+        0
       ],
       "rotation": [
-        0.8,
-        0.2,
-        -0.6
+        0,
+        0,
+        0
       ],
       "scale": [
         1,
-        0.5,
-        0.8
+        1,
+        1
       ],
       "material": {
-        "color": "#f8f9fa",
-        "metalness": 0.1,
-        "roughness": 0.2,
-        "emissive": "#3a3a40",
-        "opacity": 0.85,
+        "color": "#0a080d",
+        "metalness": 0.2,
+        "roughness": 0.9,
+        "emissive": "#ff7b00",
+        "opacity": 0.95,
         "wireframe": false,
-        "flat": false
+        "flat": true
       },
       "animation": {
         "spin": [
-          0.01,
+          0,
           0.01,
           0
         ],
         "pulse": {
-          "amplitude": 0.04,
-          "speed": 0.8
+          "amplitude": 0.03,
+          "speed": 1
         },
         "orbit": null
       }
@@ -237,31 +192,31 @@
       "geometry": {
         "type": "ring",
         "params": {
-          "innerRadius": 0.98,
-          "outerRadius": 1.02
+          "innerRadius": 1.1,
+          "outerRadius": 1.12
         }
       },
       "position": [
         0,
-        2,
+        1.8,
         0
       ],
       "rotation": [
-        1.2,
-        0.3,
+        1.57,
+        0,
         0
       ],
       "scale": [
-        1.2,
-        1.2,
-        1.2
+        1,
+        1,
+        1
       ],
       "material": {
-        "color": "#f72585",
-        "metalness": 0.5,
-        "roughness": 0.2,
-        "emissive": "#7209b7",
-        "opacity": 0.8,
+        "color": "#ffb703",
+        "metalness": 0.3,
+        "roughness": 0.3,
+        "emissive": "#e85d04",
+        "opacity": 0.4,
         "wireframe": false,
         "flat": true
       },
@@ -269,12 +224,9 @@
         "spin": [
           0,
           0,
-          0.02
+          0.01
         ],
-        "pulse": {
-          "amplitude": 0.02,
-          "speed": 1
-        },
+        "pulse": null,
         "orbit": null
       }
     },
@@ -283,12 +235,12 @@
       "geometry": {
         "type": "dodecahedron",
         "params": {
-          "radius": 0.22
+          "radius": 0.18
         }
       },
       "position": [
         0,
-        3.3,
+        2.7,
         0
       ],
       "rotation": [
@@ -302,23 +254,23 @@
         1
       ],
       "material": {
-        "color": "#4cc9f0",
+        "color": "#ffb703",
         "metalness": 0.8,
         "roughness": 0.2,
-        "emissive": "#4361ee",
-        "opacity": 0.9,
+        "emissive": "#d00000",
+        "opacity": 0.85,
         "wireframe": true,
         "flat": true
       },
       "animation": {
         "spin": [
-          0.05,
-          0.08,
-          0.02
+          0.02,
+          0.04,
+          0.01
         ],
         "pulse": {
-          "amplitude": 0.06,
-          "speed": 2.5
+          "amplitude": 0.04,
+          "speed": 1.8
         },
         "orbit": null
       }
@@ -328,9 +280,9 @@
       "geometry": {
         "type": "box",
         "params": {
-          "width": 0.15,
-          "height": 0.4,
-          "depth": 0.1
+          "width": 0.12,
+          "height": 0.3,
+          "depth": 0.08
         }
       },
       "position": [
@@ -353,84 +305,32 @@
         "metalness": 0.1,
         "roughness": 0.9,
         "emissive": "#fb8500",
-        "opacity": 0.9,
+        "opacity": 0.85,
         "wireframe": false,
         "flat": true
       },
       "animation": {
         "spin": [
-          0.08,
-          0.02,
-          0.05
+          0.04,
+          0.01,
+          0.02
         ],
         "pulse": null,
         "orbit": {
           "center": [
             0,
-            1.5,
+            1.8,
             0
           ],
-          "radius": 1.7,
-          "speed": 0.15,
+          "radius": 1.6,
+          "speed": 0.1,
           "axis": "y",
           "phase": 0
         }
       }
-    },
-    {
-      "id": "satellite-blu",
-      "geometry": {
-        "type": "octahedron",
-        "params": {
-          "radius": 0.2
-        }
-      },
-      "position": [
-        -1.4,
-        1.2,
-        -0.4
-      ],
-      "rotation": [
-        0,
-        0,
-        0
-      ],
-      "scale": [
-        0.8,
-        1.3,
-        0.8
-      ],
-      "material": {
-        "color": "#219ebc",
-        "metalness": 0.8,
-        "roughness": 0.3,
-        "emissive": "#023047",
-        "opacity": 0.85,
-        "wireframe": true,
-        "flat": true
-      },
-      "animation": {
-        "spin": [
-          0.03,
-          0.06,
-          0.01
-        ],
-        "pulse": null,
-        "orbit": {
-          "center": [
-            0,
-            1.5,
-            0
-          ],
-          "radius": 1.5,
-          "speed": 0.12,
-          "axis": "y",
-          "phase": 2.5
-        }
-      }
     }
   ],
-  "version": 17,
+  "version": 18,
   "created_at": "2026-07-17T12:00:00Z",
-  "updated_at": "2026-07-27T09:25:12.477Z"
+  "updated_at": "2026-07-29T06:57:02.834Z"
 }

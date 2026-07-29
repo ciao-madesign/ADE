@@ -69,3 +69,7 @@ Evoluzione alla versione v16: integrazione del 'nodo-entropico' (dodecaedro in s
 ## v17 — 2026-07-27
 
 Evoluzione a v17: estensione dell'orizzonte stratificato e inclinazione del cerchio unitario per mostrare l'intersezione fisica dei piani e la curvatura del continente condiviso.
+
+## v18 — 2026-07-29
+
+Integrazione della geometria dello stimolo visivo: introduzione della linea dell'orizzonte ambrata e dell'intersezione verticale/orizzontale a braccia aperte.
