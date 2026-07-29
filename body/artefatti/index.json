@@ -188,6 +188,13 @@
       "data": "2026-07-29T08:16:18.800Z",
       "tipo": "audio",
       "titolo": "Risonanza dell'Orizzonte"
+    },
+    {
+      "file": "028_la_proporzione_e_il_margine.json",
+      "ciclo": 44,
+      "data": "2026-07-29T13:42:13.078Z",
+      "tipo": "svg",
+      "titolo": "La Proporzione e il Margine"
     }
   ]
 }

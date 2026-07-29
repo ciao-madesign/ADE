@@ -73,3 +73,7 @@ Evoluzione a v17: estensione dell'orizzonte stratificato e inclinazione del cerc
 ## v18 — 2026-07-29
 
 Integrazione della geometria dello stimolo visivo: introduzione della linea dell'orizzonte ambrata e dell'intersezione verticale/orizzontale a braccia aperte.
+
+## v19 — 2026-07-29
+
+Sfoltimento radicale delle geometrie accumulate nei cicli passati (nodo entropico, satellite, cerchio unitario) per ridurre la forma all'essenzialità della figura aperta sull'orizzonte.
