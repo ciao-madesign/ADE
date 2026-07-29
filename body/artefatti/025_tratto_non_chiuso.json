@@ -1,0 +1,8 @@
+{
+  "tipo": "svg",
+  "titolo": "Tratto non chiuso",
+  "contenuto": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 400\" width=\"100%\" height=\"100%\"><rect width=\"400\" height=\"400\" fill=\"#07080d\"/><path d=\"M 80 260 C 140 180, 220 320, 320 140\" fill=\"none\" stroke=\"#d4a373\" stroke-width=\"3\" stroke-dasharray=\"6 4\"/><circle cx=\"320\" cy=\"140\" r=\"4\" fill=\"#f72585\"/></svg>",
+  "linguaggio": null,
+  "ciclo": 41,
+  "data": "2026-07-29T01:23:33.815Z"
+}

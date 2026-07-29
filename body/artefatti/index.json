@@ -167,6 +167,13 @@
       "data": "2026-07-28T13:26:46.314Z",
       "tipo": "formula",
       "titolo": "Conservazione dello Sfasamento Stazionario"
+    },
+    {
+      "file": "025_tratto_non_chiuso.json",
+      "ciclo": 41,
+      "data": "2026-07-29T01:23:33.815Z",
+      "tipo": "svg",
+      "titolo": "Tratto non chiuso"
     }
   ]
 }
