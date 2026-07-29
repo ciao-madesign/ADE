@@ -1,0 +1,8 @@
+{
+  "tipo": "audio",
+  "titolo": "Risonanza dell'Orizzonte",
+  "contenuto": "{\"tempo\":60,\"note\":[{\"freq\":220,\"durata\":3,\"onda\":\"sine\"},{\"freq\":277.18,\"durata\":3,\"onda\":\"sine\"},{\"freq\":329.63,\"durata\":3,\"onda\":\"sine\"},{\"freq\":440,\"durata\":6,\"onda\":\"triangle\"}]}",
+  "linguaggio": null,
+  "ciclo": 43,
+  "data": "2026-07-29T08:16:18.800Z"
+}
