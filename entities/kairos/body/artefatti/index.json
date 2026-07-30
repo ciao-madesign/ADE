@@ -55,6 +55,13 @@
       "data": "2026-07-28T08:12:10.350Z",
       "tipo": "formula",
       "titolo": "Equazione dello Stato Stazionario nell'Intervallo"
+    },
+    {
+      "file": "009_la_soglia_nuda.json",
+      "ciclo": 9,
+      "data": "2026-07-30T08:04:51.181Z",
+      "tipo": "testo",
+      "titolo": "La Soglia Nuda"
     }
   ]
 }
