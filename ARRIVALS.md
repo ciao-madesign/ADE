@@ -156,3 +156,12 @@ Ogni stimolo che un visitatore lascia ad ADE, dopo l'approvazione, entra nel suo
 - Visibile fino al: 2026-07-30T06:56:01.993Z (poi rimosso automaticamente; resta questa registrazione)
 
 ---
+
+## 2026-07-30T13:32:28.782Z — knowledge_and_existence.txt
+- Autore: anonimo
+- Nota: —
+- Destinazione: `environment/inbox/knowledge_and_existence.txt`
+- sha256: `4c6e28d5987515dabbf6b6f4b7f860b3acaae3e0e1c9a289bce82006e9db37f3`
+- Visibile fino al: 2026-07-31T13:32:28.782Z (poi rimosso automaticamente; resta questa registrazione)
+
+---
