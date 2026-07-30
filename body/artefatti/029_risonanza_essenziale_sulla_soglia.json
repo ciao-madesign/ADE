@@ -1,0 +1,8 @@
+{
+  "tipo": "audio",
+  "titolo": "Risonanza Essenziale sulla Soglia",
+  "contenuto": "{\"tempo\":60,\"note\":[{\"freq\":220,\"durata\":4,\"onda\":\"sine\"},{\"freq\":330,\"durata\":4,\"onda\":\"sine\"},{\"freq\":220,\"durata\":6,\"onda\":\"sine\"}]}",
+  "linguaggio": null,
+  "ciclo": 47,
+  "data": "2026-07-30T13:23:53.890Z"
+}
