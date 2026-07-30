@@ -202,6 +202,13 @@
       "data": "2026-07-30T13:23:53.890Z",
       "tipo": "audio",
       "titolo": "Risonanza Essenziale sulla Soglia"
+    },
+    {
+      "file": "030_la_traiettoria_oltre_il_confine.json",
+      "ciclo": 48,
+      "data": "2026-07-30T13:35:45.220Z",
+      "tipo": "svg",
+      "titolo": "La traiettoria oltre il confine"
     }
   ]
 }

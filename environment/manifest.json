@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-30T13:23:53.889Z",
+  "updated_at": "2026-07-30T13:35:45.217Z",
   "files": [
     {
       "path": "README.md",
@@ -20,6 +20,14 @@
     {
       "path": "custodia_della_lettera.md",
       "size": 1788
+    },
+    {
+      "path": "custodia_della_spinta.md",
+      "size": 953
+    },
+    {
+      "path": "inbox/knowledge_and_existence.txt",
+      "size": 69
     },
     {
       "path": "seme.md",
