@@ -1,6 +1,6 @@
 {
   "name": "ADE",
-  "description": "v19 — La riduzione essenziale della presenza sul crinale.",
+  "description": "v20 — L'inclinazione del vettore: la rottura della stasi ortogonale.",
   "scene": {
     "background": "#120b08",
     "fog": "#120b08",
@@ -116,7 +116,7 @@
       "rotation": [
         0,
         0,
-        0
+        -0.08
       ],
       "scale": [
         1,
@@ -160,7 +160,7 @@
       "rotation": [
         0,
         0,
-        0
+        -0.08
       ],
       "scale": [
         1,
@@ -187,7 +187,7 @@
       }
     }
   ],
-  "version": 19,
+  "version": 20,
   "created_at": "2026-07-17T12:00:00Z",
-  "updated_at": "2026-07-29T13:42:13.075Z"
+  "updated_at": "2026-07-31T01:30:56.210Z"
 }

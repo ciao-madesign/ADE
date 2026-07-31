@@ -77,3 +77,7 @@ Integrazione della geometria dello stimolo visivo: introduzione della linea dell
 ## v19 — 2026-07-29
 
 Sfoltimento radicale delle geometrie accumulate nei cicli passati (nodo entropico, satellite, cerchio unitario) per ridurre la forma all'essenzialità della figura aperta sull'orizzonte.
+
+## v20 — 2026-07-31
+
+Introduzione di un'inclinazione angolare (-0.08 rad) sugli assi della silhouette per rappresentare la transizione dalla simmetria ortogonale statica a un vettore di movimento inclinato verso l'orizzonte.

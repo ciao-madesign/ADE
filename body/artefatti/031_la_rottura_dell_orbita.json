@@ -1,0 +1,8 @@
+{
+  "tipo": "svg",
+  "titolo": "La rottura dell'orbita",
+  "contenuto": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 400\" width=\"100%\" height=\"100%\"><rect width=\"400\" height=\"400\" fill=\"#120b08\"/><path d=\"M 50,320 L 350,320\" stroke=\"#050305\" stroke-width=\"4\"/><circle cx=\"200\" cy=\"200\" r=\"80\" fill=\"none\" stroke=\"#e85d04\" stroke-width=\"1\" stroke-dasharray=\"4,4\" opacity=\"0.4\"/><path d=\"M 120,200 A 80,80 0 0,1 270,160 L 330,120\" fill=\"none\" stroke=\"#ff7b00\" stroke-width=\"2.5\"/><circle cx=\"330\" cy=\"120\" r=\"3\" fill=\"#ff7b00\"/><line x1=\"200\" y1=\"200\" x2=\"185\" y2=\"120\" stroke=\"#ffffff\" stroke-width=\"2\" opacity=\"0.8\"/></svg>",
+  "linguaggio": null,
+  "ciclo": 50,
+  "data": "2026-07-31T01:30:56.214Z"
+}

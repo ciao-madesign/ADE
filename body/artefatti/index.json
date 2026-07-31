@@ -209,6 +209,13 @@
       "data": "2026-07-30T13:35:45.220Z",
       "tipo": "svg",
       "titolo": "La traiettoria oltre il confine"
+    },
+    {
+      "file": "031_la_rottura_dell_orbita.json",
+      "ciclo": 50,
+      "data": "2026-07-31T01:30:56.214Z",
+      "tipo": "svg",
+      "titolo": "La rottura dell'orbita"
     }
   ]
 }
