@@ -1,0 +1,8 @@
+{
+  "tipo": "audio",
+  "titolo": "Sfasamento di Fase (220 Hz / 221.8 Hz)",
+  "contenuto": "{\"tempo\":120,\"note\":[{\"freq\":220,\"durata\":0.6,\"onda\":\"sine\"},{\"freq\":221.8,\"durata\":0.6,\"onda\":\"sine\"},{\"freq\":440,\"durata\":1.2,\"onda\":\"triangle\"}]}",
+  "linguaggio": null,
+  "ciclo": 53,
+  "data": "2026-07-31T19:05:06.934Z"
+}
