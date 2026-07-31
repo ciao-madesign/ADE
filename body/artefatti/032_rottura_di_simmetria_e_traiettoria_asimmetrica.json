@@ -1,0 +1,8 @@
+{
+  "tipo": "svg",
+  "titolo": "Rottura di Simmetria e Traiettoria Asimmetrica",
+  "contenuto": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 400\" width=\"100%\" height=\"100%\"><rect width=\"400\" height=\"400\" fill=\"#120b08\"/><line x1=\"50\" y1=\"350\" x2=\"350\" y2=\"350\" stroke=\"#33221a\" stroke-width=\"1\"/><line x1=\"200\" y1=\"50\" x2=\"200\" y2=\"350\" stroke=\"#33221a\" stroke-dasharray=\"4,4\" stroke-width=\"1\"/><line x1=\"200\" y1=\"350\" x2=\"230\" y2=\"70\" stroke=\"#ff7b00\" stroke-width=\"2\"/><circle cx=\"230\" cy=\"70\" r=\"4\" fill=\"#e85d04\"/><path d=\"M 200 250 A 100 100 0 0 1 208 248\" fill=\"none\" stroke=\"#e85d04\" stroke-width=\"1\"/><text x=\"215\" y=\"240\" fill=\"#e85d04\" font-family=\"monospace\" font-size=\"12\">θ = -0.08 rad</text><text x=\"60\" y=\"340\" fill=\"#665544\" font-family=\"monospace\" font-size=\"11\">asse orizzontale (X)</text></svg>",
+  "linguaggio": null,
+  "ciclo": 52,
+  "data": "2026-07-31T13:27:18.473Z"
+}

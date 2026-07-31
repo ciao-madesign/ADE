@@ -216,6 +216,13 @@
       "data": "2026-07-31T01:30:56.214Z",
       "tipo": "svg",
       "titolo": "La rottura dell'orbita"
+    },
+    {
+      "file": "032_rottura_di_simmetria_e_traiettoria_asimmetrica.json",
+      "ciclo": 52,
+      "data": "2026-07-31T13:27:18.473Z",
+      "tipo": "svg",
+      "titolo": "Rottura di Simmetria e Traiettoria Asimmetrica"
     }
   ]
 }
