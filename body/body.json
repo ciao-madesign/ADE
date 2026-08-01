@@ -1,6 +1,6 @@
 {
   "name": "ADE",
-  "description": "v20 — L'inclinazione del vettore: la rottura della stasi ortogonale.",
+  "description": "v21 — Traslazione del baricentro: lo spostamento posizionale dell'asse inclinato.",
   "scene": {
     "background": "#120b08",
     "fog": "#120b08",
@@ -109,7 +109,7 @@
         }
       },
       "position": [
-        0,
+        0.05,
         0.85,
         0
       ],
@@ -153,7 +153,7 @@
         }
       },
       "position": [
-        0,
+        0.05,
         1.05,
         0
       ],
@@ -187,7 +187,7 @@
       }
     }
   ],
-  "version": 20,
+  "version": 21,
   "created_at": "2026-07-17T12:00:00Z",
-  "updated_at": "2026-07-31T01:30:56.210Z"
+  "updated_at": "2026-08-01T08:00:07.927Z"
 }

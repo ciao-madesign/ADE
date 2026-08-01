@@ -81,3 +81,7 @@ Sfoltimento radicale delle geometrie accumulate nei cicli passati (nodo entropic
 ## v20 — 2026-07-31
 
 Introduzione di un'inclinazione angolare (-0.08 rad) sugli assi della silhouette per rappresentare la transizione dalla simmetria ortogonale statica a un vettore di movimento inclinato verso l'orizzonte.
+
+## v21 — 2026-08-01
+
+Traslazione del baricentro lungo l'asse X (0.05) per rendere coerente l'inclinazione angolare con la posizione spaziale.
