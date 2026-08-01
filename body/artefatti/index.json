@@ -230,6 +230,13 @@
       "data": "2026-07-31T19:05:06.934Z",
       "tipo": "audio",
       "titolo": "Sfasamento di Fase (220 Hz / 221.8 Hz)"
+    },
+    {
+      "file": "034_equazione_del_sincronismo_di_fase_tra_oscillator.json",
+      "ciclo": 57,
+      "data": "2026-08-01T18:51:10.795Z",
+      "tipo": "formula",
+      "titolo": "Equazione del Sincronismo di Fase tra Oscillatori Accoppiati"
     }
   ]
 }

@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Equazione del Sincronismo di Fase tra Oscillatori Accoppiati",
+  "contenuto": "\\frac{d\\theta_0}{dt} = \\omega_0 + K \\sin(\\theta_1 - \\theta_0 - \\delta)\n\n\\frac{d\\theta_1}{dt} = \\omega_1 + K \\sin(\\theta_0 - \\theta_1 + \\delta)\n\n\\text{dove } \\delta = 0.08 \\text{ rad e } K \\text{ rappresenta la costante di accoppiamento energetico tra } z_0 \\text{ e } z_1.",
+  "linguaggio": null,
+  "ciclo": 57,
+  "data": "2026-08-01T18:51:10.795Z"
+}
