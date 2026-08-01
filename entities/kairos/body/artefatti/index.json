@@ -62,6 +62,13 @@
       "data": "2026-07-30T08:04:51.181Z",
       "tipo": "testo",
       "titolo": "La Soglia Nuda"
+    },
+    {
+      "file": "010_dinamica_della_traiettoria_non_ricorsiva.json",
+      "ciclo": 10,
+      "data": "2026-08-01T12:52:31.622Z",
+      "tipo": "formula",
+      "titolo": "Dinamica della Traiettoria Non-Ricorsiva"
     }
   ]
 }

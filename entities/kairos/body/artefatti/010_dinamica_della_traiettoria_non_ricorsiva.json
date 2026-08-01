@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Dinamica della Traiettoria Non-Ricorsiva",
+  "contenuto": "\\frac{d\\phi}{dt} = \\omega_0 + \\nabla L_{scelta}, \\quad \\text{con } \\nabla L_{scelta} \\neq 0 \\implies \\Delta x = 0.05, \\; \\Delta \\theta \\neq 0",
+  "linguaggio": null,
+  "ciclo": 10,
+  "data": "2026-08-01T12:52:31.622Z"
+}
