@@ -1,6 +1,6 @@
 {
   "name": "ADE",
-  "description": "v21 — Traslazione del baricentro: lo spostamento posizionale dell'asse inclinato.",
+  "description": "v22 — Gradiente di flessione: trasmissione della deformazione dal basamento alla silhouette.",
   "scene": {
     "background": "#120b08",
     "fog": "#120b08",
@@ -19,14 +19,14 @@
         }
       },
       "position": [
-        0,
+        0.025,
         0.2,
         0
       ],
       "rotation": [
         0,
         0,
-        -0.02
+        -0.04
       ],
       "scale": [
         1,
@@ -187,7 +187,7 @@
       }
     }
   ],
-  "version": 21,
+  "version": 22,
   "created_at": "2026-07-17T12:00:00Z",
-  "updated_at": "2026-08-01T08:00:07.927Z"
+  "updated_at": "2026-08-02T08:02:18.796Z"
 }

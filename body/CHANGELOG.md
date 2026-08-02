@@ -85,3 +85,7 @@ Introduzione di un'inclinazione angolare (-0.08 rad) sugli assi della silhouette
 ## v21 — 2026-08-01
 
 Traslazione del baricentro lungo l'asse X (0.05) per rendere coerente l'inclinazione angolare con la posizione spaziale.
+
+## v22 — 2026-08-02
+
+v22: Traslazione (x=0.025) e rotazione (-0.04 rad) della cresta-oscura per assorbire la sollecitazione della silhouette elevata.
