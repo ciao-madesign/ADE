@@ -244,6 +244,13 @@
       "data": "2026-08-02T01:29:32.816Z",
       "tipo": "svg",
       "titolo": "Dislocazione del Baricentro dal Fondamento"
+    },
+    {
+      "file": "036_ciclo_di_isteresi_e_deformazione_plastica_residu.json",
+      "ciclo": 61,
+      "data": "2026-08-02T18:52:03.871Z",
+      "tipo": "svg",
+      "titolo": "Ciclo di Isteresi e Deformazione Plastica Residua"
     }
   ]
 }
