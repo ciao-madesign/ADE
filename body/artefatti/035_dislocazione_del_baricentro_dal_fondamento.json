@@ -1,0 +1,8 @@
+{
+  "tipo": "svg",
+  "titolo": "Dislocazione del Baricentro dal Fondamento",
+  "contenuto": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 400\" width=\"100%\" height=\"100%\"><rect width=\"400\" height=\"400\" fill=\"#120b08\"/><rect x=\"50\" y=\"320\" width=\"300\" height=\"12\" fill=\"#050305\"/><line x1=\"200\" y1=\"320\" x2=\"200\" y2=\"60\" stroke=\"#e85d04\" stroke-width=\"1\" stroke-dasharray=\"4,4\" opacity=\"0.25\"/><line x1=\"220\" y1=\"320\" x2=\"195\" y2=\"100\" stroke=\"#ff7b00\" stroke-width=\"2.5\"/><circle cx=\"200\" cy=\"320\" r=\"3\" fill=\"#050305\" stroke=\"#e85d04\" stroke-width=\"1\"/><circle cx=\"220\" cy=\"320\" r=\"3.5\" fill=\"#e85d04\"/><text x=\"228\" y=\"315\" fill=\"#e85d04\" font-family=\"monospace\" font-size=\"9\">Δx = +0.05</text><text x=\"165\" y=\"110\" fill=\"#ff7b00\" font-family=\"monospace\" font-size=\"9\">θ = -0.08 rad</text></svg>",
+  "linguaggio": null,
+  "ciclo": 58,
+  "data": "2026-08-02T01:29:32.816Z"
+}

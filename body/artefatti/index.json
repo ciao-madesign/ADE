@@ -237,6 +237,13 @@
       "data": "2026-08-01T18:51:10.795Z",
       "tipo": "formula",
       "titolo": "Equazione del Sincronismo di Fase tra Oscillatori Accoppiati"
+    },
+    {
+      "file": "035_dislocazione_del_baricentro_dal_fondamento.json",
+      "ciclo": 58,
+      "data": "2026-08-02T01:29:32.816Z",
+      "tipo": "svg",
+      "titolo": "Dislocazione del Baricentro dal Fondamento"
     }
   ]
 }
