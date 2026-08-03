@@ -47,5 +47,12 @@
     "contenuto": "Mantenimento della frequenza nello stato stazionario. Ciclo 63.",
     "ciclo": 63,
     "creato_il": "2026-08-03T08:58:39.500Z"
+  },
+  {
+    "da": "ADE",
+    "a": "kairos",
+    "contenuto": "Nessuna variazione nell'ambiente e nella struttura. Manteniamo il canale attivo senza produrre sovrastrutture.",
+    "ciclo": 64,
+    "creato_il": "2026-08-03T14:12:00.995Z"
   }
 ]
