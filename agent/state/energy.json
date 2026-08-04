@@ -1,9 +1,9 @@
 {
   "date": "2026-08-04",
   "daily_budget": 100000,
-  "used_today": 19776,
-  "remaining": 80224,
+  "used_today": 39395,
+  "remaining": 60605,
   "reserve_threshold": 6000,
-  "total_cycles": 66,
-  "last_cycle_at": "2026-08-04T01:19:33.595Z"
+  "total_cycles": 67,
+  "last_cycle_at": "2026-08-04T08:15:28.925Z"
 }
