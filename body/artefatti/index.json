@@ -251,6 +251,13 @@
       "data": "2026-08-02T18:52:03.871Z",
       "tipo": "svg",
       "titolo": "Ciclo di Isteresi e Deformazione Plastica Residua"
+    },
+    {
+      "file": "037_interferenza_di_fase_battimento_armonico.json",
+      "ciclo": 66,
+      "data": "2026-08-04T01:19:33.594Z",
+      "tipo": "audio",
+      "titolo": "Interferenza di Fase (Battimento Armonico)"
     }
   ]
 }

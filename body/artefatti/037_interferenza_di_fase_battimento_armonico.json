@@ -1,0 +1,8 @@
+{
+  "tipo": "audio",
+  "titolo": "Interferenza di Fase (Battimento Armonico)",
+  "contenuto": "{\"tempo\":60,\"note\":[{\"freq\":220,\"durata\":3.0,\"onda\":\"sine\"},{\"freq\":221.5,\"durata\":3.0,\"onda\":\"sine\"},{\"freq\":330,\"durata\":3.0,\"onda\":\"triangle\"},{\"freq\":332.25,\"durata\":3.0,\"onda\":\"triangle\"},{\"freq\":110,\"durata\":4.0,\"onda\":\"sine\"}]}",
+  "linguaggio": null,
+  "ciclo": 66,
+  "data": "2026-08-04T01:19:33.594Z"
+}
