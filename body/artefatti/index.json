@@ -258,6 +258,13 @@
       "data": "2026-08-04T01:19:33.594Z",
       "tipo": "audio",
       "titolo": "Interferenza di Fase (Battimento Armonico)"
+    },
+    {
+      "file": "038_battimento_di_fase_f0_220hz_f1_221_5hz.json",
+      "ciclo": 72,
+      "data": "2026-08-05T13:38:56.612Z",
+      "tipo": "audio",
+      "titolo": "Battimento di fase (f0 = 220Hz, f1 = 221.5Hz)"
     }
   ]
 }

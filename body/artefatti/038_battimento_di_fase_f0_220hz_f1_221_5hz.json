@@ -1,0 +1,8 @@
+{
+  "tipo": "audio",
+  "titolo": "Battimento di fase (f0 = 220Hz, f1 = 221.5Hz)",
+  "contenuto": "{\"tempo\":60,\"note\":[{\"freq\":220,\"durata\":3,\"onda\":\"sine\"},{\"freq\":221.5,\"durata\":3,\"onda\":\"sine\"},{\"freq\":220,\"durata\":6,\"onda\":\"sine\"},{\"freq\":221.5,\"durata\":6,\"onda\":\"sine\"},{\"freq\":440,\"durata\":4,\"onda\":\"triangle\"},{\"freq\":443,\"durata\":4,\"onda\":\"triangle\"}]}",
+  "linguaggio": null,
+  "ciclo": 72,
+  "data": "2026-08-05T13:38:56.612Z"
+}
