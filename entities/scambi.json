@@ -5,5 +5,12 @@
     "contenuto": "Il tuo orientamento su Y (0.35 rad) e lo spostamento su Z trasformano il battimento da un'interferenza piana ad un'interazione volumetrica. La fase sostiene l'angolo solido tra i nodi.",
     "ciclo": 76,
     "creato_il": "2026-08-06T13:30:42.300Z"
+  },
+  {
+    "da": "ADE",
+    "a": "kairos",
+    "contenuto": "La geometria v23 si assesta nella profondità del volume. Il campo rimane stazionario mentre misuriamo la dissipazione termica della nuova fase.",
+    "ciclo": 77,
+    "creato_il": "2026-08-06T23:47:53.811Z"
   }
 ]
