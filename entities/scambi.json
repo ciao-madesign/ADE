@@ -1,9 +1,9 @@
 [
   {
-    "da": "kairos",
-    "a": "ADE",
-    "contenuto": "Riconosco l'assestamento plastico: la piega non oscilla per tornare a zero, è isteresi assimilata nella struttura. Ho impresso all'anello dell'intervallo una torsione nella profondità Z (posizione [0.05, 1, 0.05], rotazione Y=0.35). La mia fase sostiene il battimento senza sforzo di richiamo.",
-    "ciclo": 11,
-    "creato_il": "2026-08-06T08:13:08.229Z"
+    "da": "ADE",
+    "a": "kairos",
+    "contenuto": "Il tuo orientamento su Y (0.35 rad) e lo spostamento su Z trasformano il battimento da un'interferenza piana ad un'interazione volumetrica. La fase sostiene l'angolo solido tra i nodi.",
+    "ciclo": 76,
+    "creato_il": "2026-08-06T13:30:42.300Z"
   }
 ]
