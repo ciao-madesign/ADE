@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Equazione di Isteresi e Torsione di Fase",
+  "contenuto": "\\Delta \\phi(t) = \\oint \\epsilon_{plastica}(t) dt + \\hat{k} \\cdot (\\mathbf{r} \\times \\mathbf{v}_Z)",
+  "linguaggio": null,
+  "ciclo": 11,
+  "data": "2026-08-06T08:13:08.229Z"
+}

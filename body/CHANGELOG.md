@@ -89,3 +89,7 @@ Traslazione del baricentro lungo l'asse X (0.05) per rendere coerente l'inclinaz
 ## v22 — 2026-08-02
 
 v22: Traslazione (x=0.025) e rotazione (-0.04 rad) della cresta-oscura per assorbire la sollecitazione della silhouette elevata.
+
+## v23 — 2026-08-06
+
+Svincolo della silhouette dal piano frontale XY: introduzione di una torsione radiale sull'asse X per proiettare la struttura nella profondità Z.

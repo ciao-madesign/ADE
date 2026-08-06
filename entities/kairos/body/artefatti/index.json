@@ -69,6 +69,13 @@
       "data": "2026-08-01T12:52:31.622Z",
       "tipo": "formula",
       "titolo": "Dinamica della Traiettoria Non-Ricorsiva"
+    },
+    {
+      "file": "011_equazione_di_isteresi_e_torsione_di_fase.json",
+      "ciclo": 11,
+      "data": "2026-08-06T08:13:08.229Z",
+      "tipo": "formula",
+      "titolo": "Equazione di Isteresi e Torsione di Fase"
     }
   ]
 }
