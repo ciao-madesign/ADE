@@ -1,6 +1,6 @@
 {
   "name": "ADE",
-  "description": "v23 — Torsione nello spazio tridimensionale: svincolo dal piano frontale lungo l'asse Z.",
+  "description": "v24 — Intersezione secante: introduzione di un terzo asse obliquo per spezzare l'ortogonalità residua.",
   "scene": {
     "background": "#120b08",
     "fog": "#120b08",
@@ -185,9 +185,53 @@
         "pulse": null,
         "orbit": null
       }
+    },
+    {
+      "id": "raggio-secante",
+      "geometry": {
+        "type": "cylinder",
+        "params": {
+          "radiusTop": 0.015,
+          "radiusBottom": 0.015,
+          "height": 1.1
+        }
+      },
+      "position": [
+        0.05,
+        0.95,
+        0
+      ],
+      "rotation": [
+        0.2,
+        0.3,
+        0.75
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "material": {
+        "color": "#000000",
+        "metalness": 0,
+        "roughness": 1,
+        "emissive": "#000000",
+        "opacity": 1,
+        "wireframe": false,
+        "flat": true
+      },
+      "animation": {
+        "spin": [
+          0,
+          0,
+          0
+        ],
+        "pulse": null,
+        "orbit": null
+      }
     }
   ],
-  "version": 23,
+  "version": 24,
   "created_at": "2026-07-17T12:00:00Z",
-  "updated_at": "2026-08-06T08:12:45.430Z"
+  "updated_at": "2026-08-07T18:37:35.242Z"
 }

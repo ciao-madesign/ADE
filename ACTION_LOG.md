@@ -1783,3 +1783,25 @@ Corpo aggiornato a v24 con tre assi non complanari né ortogonali; matrice di st
 *(runtime: scritto agent/mind/intersezione_secante.md; modifica del corpo RIFIUTATA: corpo non valido: name/description mancanti)*
 
 ---
+
+## Ciclo 82 — 2026-08-07T18:37:35.244Z
+
+**Osservazione**
+
+Verificato il rifiuto del corpo v24 nel ciclo 81 causato dalla mancanza delle chiavi name e description nel payload di corpo_json.
+
+**Decisione**
+
+Riformattare ed inviare il corpo v24 completo di tutti i campi obbligatori; trasferire 500 token di energia a KAIROS.
+
+**Azione**
+
+Trasmissione di corpo_json completo con l'aggiunta di 'raggio-secante'; trasferimento di 500 token a KAIROS.
+
+**Risultato**
+
+Corpo evoluto alla versione v24 con tre assi non complanari.
+
+*(runtime: corpo aggiornato a v24)*
+
+---

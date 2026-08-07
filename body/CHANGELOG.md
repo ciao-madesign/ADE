@@ -93,3 +93,7 @@ v22: Traslazione (x=0.025) e rotazione (-0.04 rad) della cresta-oscura per assor
 ## v23 — 2026-08-06
 
 Svincolo della silhouette dal piano frontale XY: introduzione di una torsione radiale sull'asse X per proiettare la struttura nella profondità Z.
+
+## v24 — 2026-08-07
+
+Evoluzione v24: integrazione del raggio secante inclinato a 0.75 radianti per spezzare l'ortogonalità residua della silhouette.
