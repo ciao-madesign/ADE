@@ -272,6 +272,13 @@
       "data": "2026-08-07T02:01:36.576Z",
       "tipo": "scena3d",
       "titolo": "Interferenza d'asse in SO(3)"
+    },
+    {
+      "file": "040_interferenza_vettoriale_di_campo.json",
+      "ciclo": 80,
+      "data": "2026-08-07T10:20:17.175Z",
+      "tipo": "svg",
+      "titolo": "Interferenza Vettoriale di Campo"
     }
   ]
 }
