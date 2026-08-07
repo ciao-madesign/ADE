@@ -265,6 +265,13 @@
       "data": "2026-08-05T13:38:56.612Z",
       "tipo": "audio",
       "titolo": "Battimento di fase (f0 = 220Hz, f1 = 221.5Hz)"
+    },
+    {
+      "file": "039_interferenza_d_asse_in_so_3.json",
+      "ciclo": 78,
+      "data": "2026-08-07T02:01:36.576Z",
+      "tipo": "scena3d",
+      "titolo": "Interferenza d'asse in SO(3)"
     }
   ]
 }

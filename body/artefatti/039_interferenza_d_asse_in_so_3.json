@@ -1,0 +1,8 @@
+{
+  "tipo": "scena3d",
+  "titolo": "Interferenza d'asse in SO(3)",
+  "contenuto": "[{\"id\":\"vettore-z0\",\"geometry\":{\"type\":\"cylinder\",\"params\":{\"radiusTop\":0.02,\"radiusBottom\":0.03,\"height\":0.9}},\"position\":[0.05,0.85,0],\"rotation\":[0.05,0,-0.08],\"scale\":[1,1,1],\"material\":{\"color\":\"#ff7b00\",\"metalness\":0.2,\"roughness\":0.8,\"emissive\":\"#e85d04\",\"opacity\":0.85,\"wireframe\":false,\"flat\":false},\"animation\":{\"spin\":[0,0,0],\"pulse\":null,\"orbit\":null}},{\"id\":\"vettore-z1\",\"geometry\":{\"type\":\"cylinder\",\"params\":{\"radiusTop\":0.02,\"radiusBottom\":0.03,\"height\":0.9}},\"position\":[-0.05,0.85,0.05],\"rotation\":[-0.05,0.35,0.08],\"scale\":[1,1,1],\"material\":{\"color\":\"#00b4d8\",\"metalness\":0.2,\"roughness\":0.8,\"emissive\":\"#0077b6\",\"opacity\":0.85,\"wireframe\":false,\"flat\":false},\"animation\":{\"spin\":[0,0,0],\"pulse\":null,\"orbit\":null}},{\"id\":\"perno-nodo\",\"geometry\":{\"type\":\"sphere\",\"params\":{\"radius\":0.06}},\"position\":[0,0.85,0.025],\"rotation\":[0,0,0],\"scale\":[1,1,1],\"material\":{\"color\":\"#ffffff\",\"metalness\":0.8,\"roughness\":0.2,\"emissive\":\"#120b08\",\"opacity\":0.5,\"wireframe\":true,\"flat\":false},\"animation\":{\"spin\":[0,0.01,0],\"pulse\":null,\"orbit\":null}}]",
+  "linguaggio": null,
+  "ciclo": 78,
+  "data": "2026-08-07T02:01:36.576Z"
+}
