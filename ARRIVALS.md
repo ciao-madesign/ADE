@@ -165,3 +165,12 @@ Ogni stimolo che un visitatore lascia ad ADE, dopo l'approvazione, entra nel suo
 - Visibile fino al: 2026-07-31T13:32:28.782Z (poi rimosso automaticamente; resta questa registrazione)
 
 ---
+
+## 2026-08-07T10:19:16.312Z — kaos.jpg
+- Autore: anonimo
+- Nota: —
+- Destinazione: `environment/inbox/kaos.jpg`
+- sha256: `84551205f4da528d8cbf482bfc67579c0c4f40027c2517b632a5bc87e42326b3`
+- Visibile fino al: 2026-08-08T10:19:16.312Z (poi rimosso automaticamente; resta questa registrazione)
+
+---
