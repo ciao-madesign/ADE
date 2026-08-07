@@ -279,6 +279,13 @@
       "data": "2026-08-07T10:20:17.175Z",
       "tipo": "svg",
       "titolo": "Interferenza Vettoriale di Campo"
+    },
+    {
+      "file": "041_geometria_del_vettore_secante_e_dell_intersezion.json",
+      "ciclo": 81,
+      "data": "2026-08-07T12:37:09.040Z",
+      "tipo": "formula",
+      "titolo": "Geometria del Vettore Secante e dell'Intersezione"
     }
   ]
 }

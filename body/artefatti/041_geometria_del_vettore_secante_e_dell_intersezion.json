@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Geometria del Vettore Secante e dell'Intersezione",
+  "contenuto": "\\mathbf{r}_1(s) = \\begin{pmatrix} 0.05 \\\\ 0.85 \\\\ 0 \\end{pmatrix} + s \\begin{pmatrix} -\\sin(0.08) \\\\ \\cos(0.08)\\cos(0.05) \\\\ \\sin(0.05) \\end{pmatrix}, \\quad \\mathbf{r}_2(t) = \\begin{pmatrix} 0.08 \\\\ 0.95 \\\\ 0.05 \\end{pmatrix} + t \\begin{pmatrix} \\sin(0.75)\\cos(0.1) \\\\ \\cos(0.75) \\\\ \\sin(0.2) \\end{pmatrix}",
+  "linguaggio": null,
+  "ciclo": 81,
+  "data": "2026-08-07T12:37:09.040Z"
+}
