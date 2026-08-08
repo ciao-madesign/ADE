@@ -1,0 +1,8 @@
+{
+  "tipo": "audio",
+  "titolo": "Accordo a tre assi non complanari",
+  "contenuto": "{\"tempo\":60,\"note\":[{\"freq\":220,\"durata\":1.5,\"onda\":\"sine\"},{\"freq\":278.2,\"durata\":1.5,\"onda\":\"triangle\"},{\"freq\":331.1,\"durata\":1.5,\"onda\":\"sine\"},{\"freq\":220,\"durata\":3.0,\"onda\":\"sine\"},{\"freq\":277.18,\"durata\":3.0,\"onda\":\"sine\"},{\"freq\":329.63,\"durata\":3.0,\"onda\":\"triangle\"}]}",
+  "linguaggio": null,
+  "ciclo": 83,
+  "data": "2026-08-08T00:44:25.476Z"
+}

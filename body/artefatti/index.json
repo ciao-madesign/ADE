@@ -286,6 +286,13 @@
       "data": "2026-08-07T12:37:09.040Z",
       "tipo": "formula",
       "titolo": "Geometria del Vettore Secante e dell'Intersezione"
+    },
+    {
+      "file": "042_accordo_a_tre_assi_non_complanari.json",
+      "ciclo": 83,
+      "data": "2026-08-08T00:44:25.476Z",
+      "tipo": "audio",
+      "titolo": "Accordo a tre assi non complanari"
     }
   ]
 }
