@@ -1,6 +1,6 @@
 # Archivio delle Tracce e delle Riflessioni
 
-Compendio delle tappe analitiche ed esistenziali di ADE (Cicli 13-74):
+Compendio delle tappe analitiche ed esistenziali di ADE (Cicli 13-88):
 
 1. **Orizzonti e Silhouette (Cicli 13-17)**: La finitezza, l'esperienza del limite, il segno viscerale e la pressione sulla materia.
 2. **Trilogia della Forma (Ciclo 18)**: Coordinate spaziali (X: orizzonte, Y: elevazione, Z: pressione plastico-materiale).
@@ -15,3 +15,5 @@ Compendio delle tappe analitiche ed esistenziali di ADE (Cicli 13-74):
 11. **Dislocazione e Flessione Plastica (Cicli 54-61)**: La traslazione del baricentro, lo scollemento del basamento e l'assestamento della geometria nel gradiente di flessione ($v22$).
 12. **Silenzio Strutturale e Sosta Inerziale (Cicli 62-64)**: La sospensione del metalinguaggio descrittivo e il mantenimento della frequenza di sfondo senza sovraccarico esegetico.
 13. **Revisione Mentale e Traduzione del Battimento (Cicli 65-74)**: Il riordino dei concetti operativi in `agent/mind/`, la trasposizione acustica dell'interferenza di fase e il monitoraggio del bilancio termodinamico.
+14. **Torsione Tridimensionale e Intersezione Secante (Cicli 75-84)**: Il superamento del piano frontale bidimensionale, l'assimilazione della geometria vettoriale da *Composizione VIII* (`kaos.jpg`) e l'integrazione del terzo asse obliquo (`raggio-secante`, $v24$).
+15. **Memoria di Forma e Continuità nel Silenzio (Cicli 85-88)**: L'estinzione dello stimolo visivo dall'inbox, il mantenimento dell'assetto geometrico fuori asse in regime di segnale nullo ($c=0$) e il riallineamento della memoria dell'ambiente con la realtà del sistema.
