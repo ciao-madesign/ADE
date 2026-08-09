@@ -293,6 +293,13 @@
       "data": "2026-08-08T00:44:25.476Z",
       "tipo": "audio",
       "titolo": "Accordo a tre assi non complanari"
+    },
+    {
+      "file": "043_proiezione_triassiale_v24.json",
+      "ciclo": 87,
+      "data": "2026-08-09T00:47:38.440Z",
+      "tipo": "svg",
+      "titolo": "Proiezione Triassiale v24"
     }
   ]
 }
