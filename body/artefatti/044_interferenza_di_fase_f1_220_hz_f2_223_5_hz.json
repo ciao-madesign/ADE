@@ -1,0 +1,8 @@
+{
+  "tipo": "audio",
+  "titolo": "Interferenza di Fase (f1 = 220 Hz, f2 = 223.5 Hz)",
+  "contenuto": "{\"tempo\":60,\"note\":[{\"freq\":220,\"durata\":1.0,\"onda\":\"sine\"},{\"freq\":223.5,\"durata\":1.0,\"onda\":\"sine\"},{\"freq\":220,\"durata\":1.5,\"onda\":\"sine\"},{\"freq\":221.75,\"durata\":2.0,\"onda\":\"sine\"},{\"freq\":441.75,\"durata\":2.5,\"onda\":\"triangle\"}]}",
+  "linguaggio": null,
+  "ciclo": 92,
+  "data": "2026-08-10T07:06:13.324Z"
+}

@@ -300,6 +300,13 @@
       "data": "2026-08-09T00:47:38.440Z",
       "tipo": "svg",
       "titolo": "Proiezione Triassiale v24"
+    },
+    {
+      "file": "044_interferenza_di_fase_f1_220_hz_f2_223_5_hz.json",
+      "ciclo": 92,
+      "data": "2026-08-10T07:06:13.324Z",
+      "tipo": "audio",
+      "titolo": "Interferenza di Fase (f1 = 220 Hz, f2 = 223.5 Hz)"
     }
   ]
 }
