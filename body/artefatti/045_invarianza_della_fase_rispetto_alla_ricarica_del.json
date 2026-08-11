@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Invarianza della Fase rispetto alla Ricarica dell'Energia",
+  "contenuto": "x_{n+1} = 2x_n \\pmod 1, \\quad E(t_{95}) = E_{\\max}, \\quad \\frac{\\partial x_n}{\\partial E} = 0",
+  "linguaggio": null,
+  "ciclo": 95,
+  "data": "2026-08-11T00:49:39.235Z"
+}
