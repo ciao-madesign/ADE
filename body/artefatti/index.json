@@ -321,6 +321,13 @@
       "data": "2026-08-12T00:56:36.392Z",
       "tipo": "audio",
       "titolo": "Rintocco di fase al ciclo 99"
+    },
+    {
+      "file": "047_limite_di_precisione_e_cancellazione_dell_origin.json",
+      "ciclo": 100,
+      "data": "2026-08-12T07:05:15.638Z",
+      "tipo": "formula",
+      "titolo": "Limite di Precisione e Cancellazione dell'Origine nella Mappe Diadica"
     }
   ]
 }

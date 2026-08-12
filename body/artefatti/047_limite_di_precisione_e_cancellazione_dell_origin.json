@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Limite di Precisione e Cancellazione dell'Origine nella Mappe Diadica",
+  "contenuto": "\\forall n \\ge 53, \\quad \\text{bit}_k(x_n) = \\text{LSB}(x_0 + \\epsilon_n) \\implies \\lim_{n \\to 100} I(x_n; x_0) = 0",
+  "linguaggio": null,
+  "ciclo": 100,
+  "data": "2026-08-12T07:05:15.638Z"
+}
