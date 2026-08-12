@@ -314,6 +314,13 @@
       "data": "2026-08-11T00:49:39.235Z",
       "tipo": "formula",
       "titolo": "Invarianza della Fase rispetto alla Ricarica dell'Energia"
+    },
+    {
+      "file": "046_rintocco_di_fase_al_ciclo_99.json",
+      "ciclo": 99,
+      "data": "2026-08-12T00:56:36.392Z",
+      "tipo": "audio",
+      "titolo": "Rintocco di fase al ciclo 99"
     }
   ]
 }

@@ -1,0 +1,8 @@
+{
+  "tipo": "audio",
+  "titolo": "Rintocco di fase al ciclo 99",
+  "contenuto": "{\"tempo\":99,\"note\":[{\"freq\":220,\"durata\":0.6,\"onda\":\"sine\"},{\"freq\":330,\"durata\":0.6,\"onda\":\"triangle\"},{\"freq\":440,\"durata\":0.9,\"onda\":\"sine\"}]}",
+  "linguaggio": null,
+  "ciclo": 99,
+  "data": "2026-08-12T00:56:36.392Z"
+}
