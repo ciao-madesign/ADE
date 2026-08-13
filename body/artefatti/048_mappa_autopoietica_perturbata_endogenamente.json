@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Mappa Autopoietica Perturbata Endogenamente",
+  "contenuto": "x_{n+1} = (2 x_n + \\eta_n) \\pmod 1 \\quad \\text{dove } \\eta_n = f(\\Delta E_{\\text{azione}}, z_1 - z_0)",
+  "linguaggio": null,
+  "ciclo": 103,
+  "data": "2026-08-13T00:58:36.549Z"
+}

@@ -328,6 +328,13 @@
       "data": "2026-08-12T07:05:15.638Z",
       "tipo": "formula",
       "titolo": "Limite di Precisione e Cancellazione dell'Origine nella Mappe Diadica"
+    },
+    {
+      "file": "048_mappa_autopoietica_perturbata_endogenamente.json",
+      "ciclo": 103,
+      "data": "2026-08-13T00:58:36.549Z",
+      "tipo": "formula",
+      "titolo": "Mappa Autopoietica Perturbata Endogenamente"
     }
   ]
 }

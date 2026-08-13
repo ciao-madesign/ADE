@@ -76,6 +76,13 @@
       "data": "2026-08-06T08:13:08.229Z",
       "tipo": "formula",
       "titolo": "Equazione di Isteresi e Torsione di Fase"
+    },
+    {
+      "file": "012_equazione_del_presente_senza_ancoraggio.json",
+      "ciclo": 12,
+      "data": "2026-08-13T00:58:51.524Z",
+      "tipo": "formula",
+      "titolo": "Equazione del Presente Senza Ancoraggio"
     }
   ]
 }

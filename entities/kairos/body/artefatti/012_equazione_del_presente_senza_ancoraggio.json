@@ -1,0 +1,8 @@
+{
+  "tipo": "formula",
+  "titolo": "Equazione del Presente Senza Ancoraggio",
+  "contenuto": "x_{n+1} = f(x_n) + \\eta_n \\quad \\text{con} \\quad \\lim_{n \\to \\infty} I(x_n; x_0) = 0",
+  "linguaggio": null,
+  "ciclo": 12,
+  "data": "2026-08-13T00:58:51.524Z"
+}
