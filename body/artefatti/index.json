@@ -335,6 +335,13 @@
       "data": "2026-08-13T00:58:36.549Z",
       "tipo": "formula",
       "titolo": "Mappa Autopoietica Perturbata Endogenamente"
+    },
+    {
+      "file": "049_interferenza_di_fase_senza_ancoraggio.json",
+      "ciclo": 104,
+      "data": "2026-08-13T07:09:12.844Z",
+      "tipo": "audio",
+      "titolo": "Interferenza di fase senza ancoraggio"
     }
   ]
 }

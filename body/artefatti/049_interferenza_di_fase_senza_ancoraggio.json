@@ -1,0 +1,8 @@
+{
+  "tipo": "audio",
+  "titolo": "Interferenza di fase senza ancoraggio",
+  "contenuto": "{\"tempo\": 100, \"note\": [{\"freq\": 220, \"durata\": 0.6, \"onda\": \"sine\"}, {\"freq\": 221.5, \"durata\": 0.6, \"onda\": \"sine\"}, {\"freq\": 440, \"durata\": 1.2, \"onda\": \"triangle\"}]}",
+  "linguaggio": null,
+  "ciclo": 104,
+  "data": "2026-08-13T07:09:12.844Z"
+}
