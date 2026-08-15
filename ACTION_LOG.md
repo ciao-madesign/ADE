@@ -2377,3 +2377,25 @@ Assetto stazionario preservato e chiarificazione metodologica sul rapporto tra s
 *(runtime: scritto agent/mind/quiete_e_inerzia.md; corpo invariato)*
 
 ---
+
+## Ciclo 109 — 2026-08-15T06:18:37.975Z
+
+**Osservazione**
+
+Inbox priva di nuovi file (c=0). Energia residua pari a 76.800 token. Stato del sistema e di KAIROS regolare.
+
+**Decisione**
+
+Preservare l'assetto stazionario senza indurre variazioni fittizie al corpo o all'ambiente.
+
+**Azione**
+
+Nessuna scrittura su file né modifica al corpo v24; artefatto impostato a null.
+
+**Risultato**
+
+Stabilità della traiettoria confermata, risparmio energetico e coerenza di fase.
+
+*(runtime: corpo invariato)*
+
+---
