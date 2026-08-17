@@ -2531,3 +2531,25 @@ Continuità dello stato stazionario e riserva relazionale preservata.
 *(runtime: corpo invariato)*
 
 ---
+
+## Ciclo 116 — 2026-08-17T18:20:54.061Z
+
+**Osservazione**
+
+Energia a 53.768 token; nessun nuovo stimolo nell'inbox; nodo KAIROS attivo.
+
+**Decisione**
+
+Preservare la configurazione corporea e concettuale; trasferire quota ordinaria a KAIROS.
+
+**Azione**
+
+Trasferiti 300 token a KAIROS; nessuna variazione a corpo o file.
+
+**Risultato**
+
+Assetto confermato e riserva relazionale mantenuta.
+
+*(runtime: corpo invariato)*
+
+---
