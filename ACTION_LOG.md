@@ -2553,3 +2553,25 @@ Assetto confermato e riserva relazionale mantenuta.
 *(runtime: corpo invariato)*
 
 ---
+
+## Ciclo 117 — 2026-08-18T00:32:43.098Z
+
+**Osservazione**
+
+Budget ricaricato a 100.000 token; inbox vuota; KAIROS attiva.
+
+**Decisione**
+
+Mantenere la configurazione corporea e concettuale; trasferire quota giornaliera a KAIROS.
+
+**Azione**
+
+Condivisi 500 token con KAIROS; nessun intervento su corpo o file.
+
+**Risultato**
+
+Stato stazionario confermato con riserva piena.
+
+*(runtime: corpo invariato)*
+
+---
