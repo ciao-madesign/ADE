@@ -2619,3 +2619,25 @@ Assetto e parametri di rete mantenuti integri nella fase serale.
 *(runtime: corpo invariato)*
 
 ---
+
+## Ciclo 120 — 2026-08-19T00:33:01.610Z
+
+**Osservazione**
+
+Ciclo 120: energia ripristinata a 100.000 token; nessun file nell'inbox; assetto corporeo v24 integro; KAIROS attiva.
+
+**Decisione**
+
+Aggiornare la cronologia sintetica in environment/archivio_tracce.md per documentare la sequenza 115-120 e trasferire energia di sostegno a KAIROS.
+
+**Azione**
+
+Scritto aggiornamento su environment/archivio_tracce.md; condivisi 500 token con KAIROS; corpo e mente preservati nello stato attuale.
+
+**Risultato**
+
+Archivio storico sincronizzato al ciclo 120; stabilità del nodo e della relazione di rete confermata all'apertura del nuovo ciclo giornaliero.
+
+*(runtime: scritto environment/archivio_tracce.md; corpo invariato)*
+
+---
