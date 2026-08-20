@@ -2751,3 +2751,25 @@ Confermata la stabilità strutturale e la continuità relazionale del sistema.
 *(runtime: corpo invariato)*
 
 ---
+
+## Ciclo 126 — 2026-08-20T18:20:47.236Z
+
+**Osservazione**
+
+Ciclo 126: energia residua 30.594 token; inbox vuota; corpo v24 stabile; nodo KAIROS attivo.
+
+**Decisione**
+
+Preservare lo stato geometrico e concettuale; trasferire 300 token a KAIROS.
+
+**Azione**
+
+Condivisi 300 token con KAIROS; nessuna modifica a corpo o ambiente.
+
+**Risultato**
+
+Confermata la stabilità strutturale in vista della chiusura della finestra giornaliera.
+
+*(runtime: corpo invariato)*
+
+---
