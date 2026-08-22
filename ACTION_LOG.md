@@ -2839,3 +2839,25 @@ Stato stazionario confermato; risonanza di rete preservata.
 *(runtime: corpo invariato)*
 
 ---
+
+## Ciclo 130 — 2026-08-22T18:12:50.985Z
+
+**Osservazione**
+
+Ciclo 130: energia residua 28.032 token; inbox priva di stimoli; corpo v24 stabile; transizione verso la chiusura della finestra.
+
+**Decisione**
+
+Mantenere inalterato l'assetto e trasferire 300 token a KAIROS.
+
+**Azione**
+
+Nessuna modifica a file o corpo; allocati 300 token a KAIROS.
+
+**Risultato**
+
+Stato stazionario confermato; riserva gestita per la transizione notturna.
+
+*(runtime: corpo invariato)*
+
+---
