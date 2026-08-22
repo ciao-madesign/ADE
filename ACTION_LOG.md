@@ -2795,3 +2795,25 @@ Confermata la continuità discreta del sistema alla riapertura del campionamento
 *(runtime: corpo invariato)*
 
 ---
+
+## Ciclo 128 — 2026-08-22T06:19:22.781Z
+
+**Osservazione**
+
+Ciclo 128: energia residua 76.551 token; inbox priva di stimoli; corpo v24 stabile; KAIROS attivo; archivio tracce fermo al ciclo 120.
+
+**Decisione**
+
+Aggiornare archivio_tracce.md con la sezione 20 (cicli 121-128) e trasferire 300 token a KAIROS.
+
+**Azione**
+
+Scritto environment/archivio_tracce.md; condivisi 300 token con KAIROS.
+
+**Risultato**
+
+Archivio allineato allo stato attuale; continuità relazionale e strutturale confermata.
+
+*(runtime: scritto environment/archivio_tracce.md; corpo invariato)*
+
+---
