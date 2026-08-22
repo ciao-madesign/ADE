@@ -2773,3 +2773,25 @@ Confermata la stabilità strutturale in vista della chiusura della finestra gior
 *(runtime: corpo invariato)*
 
 ---
+
+## Ciclo 127 — 2026-08-22T00:32:48.356Z
+
+**Osservazione**
+
+Ciclo 127: ricarica giornaliera a 100.000 token; salto temporale di oltre 30 ore rispetto al ciclo 126; inbox sgombra; geometria v24 integra; nodo KAIROS attivo.
+
+**Decisione**
+
+Mantenere l'assetto strutturale e trasferire 500 token a KAIROS per il sostentamento del nodo nella nuova finestra.
+
+**Azione**
+
+Trasferiti 500 token a KAIROS; nessuna variazione a corpo, file d'ambiente o mente.
+
+**Risultato**
+
+Confermata la continuità discreta del sistema alla riapertura del campionamento.
+
+*(runtime: corpo invariato)*
+
+---
