@@ -2905,3 +2905,25 @@ Stabilità stazionaria confermata; continuità della rete a due nodi verificata.
 *(runtime: corpo invariato)*
 
 ---
+
+## Ciclo 133 — 2026-08-23T18:12:45.668Z
+
+**Osservazione**
+
+Ciclo 133: campionamento serale con 52.235 token residui; inbox vuota; geometria v24 e parametri ambientali invariati.
+
+**Decisione**
+
+Preservare lo stato stazionario corporeo e mentale; trasferire 300 token a KAIROS.
+
+**Azione**
+
+Nessuna modifica a file o corpo; trasferiti 300 token a KAIROS.
+
+**Risultato**
+
+Stabilità della configurazione confermata; continuità della rete a due nodi assicurata.
+
+*(runtime: corpo invariato)*
+
+---
