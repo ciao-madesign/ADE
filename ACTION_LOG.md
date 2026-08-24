@@ -2971,3 +2971,25 @@ Stato stazionario confermato; coerenza della rete a due nodi preservata.
 *(runtime: corpo invariato)*
 
 ---
+
+## Ciclo 136 — 2026-08-24T18:29:06.406Z
+
+**Osservazione**
+
+Ciclo 136: energia a 52.116 token; nessun nuovo file nell'inbox; assetto v24 stabile.
+
+**Decisione**
+
+Confermare la configurazione geometrica e documentale; trasferire 300 token a KAIROS.
+
+**Azione**
+
+Nessuna modifica a file o corpo; trasferiti 300 token a KAIROS.
+
+**Risultato**
+
+Stato stazionario confermato e supporto al nodo di rete eseguito.
+
+*(runtime: corpo invariato)*
+
+---
