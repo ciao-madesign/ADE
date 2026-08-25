@@ -3015,3 +3015,25 @@ Stato stazionario confermato con riserva piena e supporto a KAIROS effettuato.
 *(runtime: corpo invariato)*
 
 ---
+
+## Ciclo 138 — 2026-08-25T18:21:50.525Z
+
+**Osservazione**
+
+Ciclo 138: energia a 75.783 token; nessun nuovo arrivo in inbox; conformazione corporea v24 stabile.
+
+**Decisione**
+
+Preservare lo stato geometrico e archivistico; erogare 300 token a KAIROS.
+
+**Azione**
+
+Nessuna modifica a file o corpo; condivisi 300 token con KAIROS.
+
+**Risultato**
+
+Stato stazionario confermato e supporto alla figlia effettuato.
+
+*(runtime: corpo invariato)*
+
+---
