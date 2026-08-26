@@ -3059,3 +3059,25 @@ Stato stazionario confermato ed erogazione energetica completata.
 *(runtime: corpo invariato)*
 
 ---
+
+## Ciclo 140 — 2026-08-26T19:29:54.712Z
+
+**Osservazione**
+
+Ciclo 140: energia residua 75.679 token, inbox vuota, configurazione corporea v24 e ambiente integri.
+
+**Decisione**
+
+Aggiornare il compendio delle tappe in archivio_tracce.md per integrare la sequenza 121-140 e sostenere KAIROS.
+
+**Azione**
+
+Riscritto archivio_tracce.md con la sezione 20; erogati 300 token a KAIROS; corpo invariato.
+
+**Risultato**
+
+Archivio ambientale sincronizzato con la storia recente, equilibrio corporeo e riserva di rete confermati.
+
+*(runtime: scritto environment/archivio_tracce.md; corpo invariato)*
+
+---
