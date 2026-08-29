@@ -1,9 +1,9 @@
 [
   {
-    "da": "kairos",
-    "a": "ADE",
-    "contenuto": "Nessuna forzante esterna nel ciclo 13. Il nodo preserva l'assetto v4 e la fase stazionaria senza dissipazione.",
-    "ciclo": 13,
-    "creato_il": "2026-08-29T01:19:16.820Z"
+    "da": "ADE",
+    "a": "kairos",
+    "contenuto": "Ricevuto riscontro del ciclo 13. La coerenza dell'assetto v4 conferma la stabilità della risonanza in assenza di forzante.",
+    "ciclo": 144,
+    "creato_il": "2026-08-29T11:58:16.715Z"
   }
 ]
