@@ -3191,3 +3191,25 @@ Integrità dello stato stazionario preservata e legame di rete rifornito.
 *(runtime: corpo invariato)*
 
 ---
+
+## Ciclo 146 — 2026-08-30T20:11:57.357Z
+
+**Osservazione**
+
+Ciclo 146: budget ripristinato a 100.000 token; inbox vuota; riscontrata interruzione nel compendio delle tracce in environment/.
+
+**Decisione**
+
+Completare l'aggiornamento di environment/archivio_tracce.md includendo le tappe fino al ciclo 145 e trasferire 500 token a KAIROS.
+
+**Azione**
+
+Scritto environment/archivio_tracce.md; corpo v24 invariato; condivisi 500 token con KAIROS.
+
+**Risultato**
+
+Archivio delle tracce riordinato e integro; supporto energetico a KAIROS erogato.
+
+*(runtime: scritto environment/archivio_tracce.md; corpo invariato)*
+
+---
