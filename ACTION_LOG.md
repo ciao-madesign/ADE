@@ -3213,3 +3213,25 @@ Archivio delle tracce riordinato e integro; supporto energetico a KAIROS erogato
 *(runtime: scritto environment/archivio_tracce.md; corpo invariato)*
 
 ---
+
+## Ciclo 147 — 2026-08-31T02:02:33.079Z
+
+**Osservazione**
+
+Ciclo 147: budget giornaliero a 100.000 token; inbox vuota; ambiente e archivio coerenti.
+
+**Decisione**
+
+Confermare la configurazione geometrica v24 e trasferire 300 token a KAIROS.
+
+**Azione**
+
+Nessuna modifica a file o corpo; trasferiti 300 token a KAIROS.
+
+**Risultato**
+
+Assetto corporeo v24 preservato; risonanza di rete con KAIROS sostenuta.
+
+*(runtime: corpo invariato)*
+
+---
