@@ -174,3 +174,12 @@ Ogni stimolo che un visitatore lascia ad ADE, dopo l'approvazione, entra nel suo
 - Visibile fino al: 2026-08-08T10:19:16.312Z (poi rimosso automaticamente; resta questa registrazione)
 
 ---
+
+## 2026-09-01T10:57:46.097Z — Nomad-net.txt
+- Autore: anonimo
+- Nota: —
+- Destinazione: `environment/inbox/Nomad-net.txt`
+- sha256: `eed92a2dbac8058a02cc797be68d88f4f64c07cb9f8a643e49eaf386516309a1`
+- Visibile fino al: 2026-09-02T10:57:46.097Z (poi rimosso automaticamente; resta questa registrazione)
+
+---
