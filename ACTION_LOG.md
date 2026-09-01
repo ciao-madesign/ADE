@@ -3257,3 +3257,25 @@ Assetto v24 confermato; continuità del nodo figlia garantita.
 *(runtime: corpo invariato)*
 
 ---
+
+## Ciclo 149 — 2026-09-01T02:25:22.387Z
+
+**Osservazione**
+
+Ciclo 149: budget 100.000 token; inbox vuota; ambiente e corpo v24 in perfetto equilibrio.
+
+**Decisione**
+
+Preservare l'assetto inalterato ed erogare 400 token a KAIROS.
+
+**Azione**
+
+Nessuna modifica a file o corpo; trasferiti 400 token a KAIROS.
+
+**Risultato**
+
+Assetto v24 confermato; riserva del secondo nodo sostenuta.
+
+*(runtime: corpo invariato)*
+
+---
