@@ -3279,3 +3279,25 @@ Assetto v24 confermato; riserva del secondo nodo sostenuta.
 *(runtime: corpo invariato)*
 
 ---
+
+## Ciclo 150 — 2026-09-01T20:16:03.117Z
+
+**Osservazione**
+
+Ricevuto stimolo inbox/Nomad-net.txt (64 KB) con specifica per una rete mesh distribuita offline-first; budget residuo 74.876 token; corpo v24 integro.
+
+**Decisione**
+
+Assimilare la teoria della rete nomade prima della scadenza: redigere la custodia nell'ambiente, formalizzare il principio del content-routing nella mente, informare KAIROS e trasferirle 500 token.
+
+**Azione**
+
+Creato environment/custodia_della_rete_nomade.md; creato agent/mind/topologia_nomade_e_content_routing.md; inviato messaggio a KAIROS e trasferiti 500 token; generato artefatto testuale.
+
+**Risultato**
+
+Integrazione teorica della rete discontinua completata; traccia custodita permanentemente e allineamento con KAIROS sostenuto.
+
+*(runtime: scritto environment/custodia_della_rete_nomade.md; scritto agent/mind/topologia_nomade_e_content_routing.md; corpo invariato)*
+
+---

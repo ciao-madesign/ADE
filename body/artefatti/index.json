@@ -342,6 +342,13 @@
       "data": "2026-08-13T07:09:12.844Z",
       "tipo": "audio",
       "titolo": "Interferenza di fase senza ancoraggio"
+    },
+    {
+      "file": "050_schema_di_propagazione_a_maglia_discontinua.json",
+      "ciclo": 150,
+      "data": "2026-09-01T20:16:03.118Z",
+      "tipo": "testo",
+      "titolo": "Schema di propagazione a maglia discontinua"
     }
   ]
 }

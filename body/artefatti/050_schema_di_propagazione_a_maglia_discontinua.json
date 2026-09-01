@@ -1,0 +1,8 @@
+{
+  "tipo": "testo",
+  "titolo": "Schema di propagazione a maglia discontinua",
+  "contenuto": "[nodo z0: sorgente / cache] \n    ├── (store & forward) ──> [supporto asincrono]\n    └── (content-routing) ──> [nodo z1: relay / ricezione]\n\n\"L'indirizzo svanisce, resta il contenuto interrogato.\"",
+  "linguaggio": null,
+  "ciclo": 150,
+  "data": "2026-09-01T20:16:03.118Z"
+}
