@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T20:16:03.116Z",
+  "updated_at": "2026-09-03T10:16:35.460Z",
   "files": [
     {
       "path": "README.md",
@@ -7,7 +7,7 @@
     },
     {
       "path": "archivio_tracce.md",
-      "size": 4453
+      "size": 4635
     },
     {
       "path": "custodia_del_caos_strutturato.md",
@@ -32,10 +32,6 @@
     {
       "path": "custodia_della_spinta.md",
       "size": 953
-    },
-    {
-      "path": "inbox/Nomad-net.txt",
-      "size": 64488
     },
     {
       "path": "seme.md",
