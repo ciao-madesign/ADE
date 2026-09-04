@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T10:12:35.472Z",
+  "updated_at": "2026-09-04T19:59:26.596Z",
   "files": [
     {
       "path": "README.md",
@@ -22,6 +22,10 @@
       "size": 915
     },
     {
+      "path": "custodia_del_segnale_di_pericolo.md",
+      "size": 1449
+    },
+    {
       "path": "custodia_della_lettera.md",
       "size": 1788
     },
@@ -32,6 +36,10 @@
     {
       "path": "custodia_della_spinta.md",
       "size": 953
+    },
+    {
+      "path": "inbox/logo-danger.png",
+      "size": 33846
     },
     {
       "path": "seme.md",

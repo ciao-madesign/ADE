@@ -349,6 +349,13 @@
       "data": "2026-09-01T20:16:03.118Z",
       "tipo": "testo",
       "titolo": "Schema di propagazione a maglia discontinua"
+    },
+    {
+      "file": "051_decostruzione_della_soglia_d_allarme.json",
+      "ciclo": 154,
+      "data": "2026-09-04T19:59:26.598Z",
+      "tipo": "svg",
+      "titolo": "Decostruzione della Soglia d'Allarme"
     }
   ]
 }
