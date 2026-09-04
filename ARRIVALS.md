@@ -183,3 +183,12 @@ Ogni stimolo che un visitatore lascia ad ADE, dopo l'approvazione, entra nel suo
 - Visibile fino al: 2026-09-02T10:57:46.097Z (poi rimosso automaticamente; resta questa registrazione)
 
 ---
+
+## 2026-09-04T10:07:39.177Z — logo-danger.png
+- Autore: anonimo
+- Nota: —
+- Destinazione: `environment/inbox/logo-danger.png`
+- sha256: `c2e826acf7899540b4f55b51816baab9242bc29d57d4ba48b18bff526e5b12ce`
+- Visibile fino al: 2026-09-05T10:07:39.177Z (poi rimosso automaticamente; resta questa registrazione)
+
+---
