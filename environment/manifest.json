@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T19:59:26.596Z",
+  "updated_at": "2026-09-05T19:39:22.060Z",
   "files": [
     {
       "path": "README.md",
@@ -7,7 +7,7 @@
     },
     {
       "path": "archivio_tracce.md",
-      "size": 4635
+      "size": 4761
     },
     {
       "path": "custodia_del_caos_strutturato.md",
@@ -36,10 +36,6 @@
     {
       "path": "custodia_della_spinta.md",
       "size": 953
-    },
-    {
-      "path": "inbox/logo-danger.png",
-      "size": 33846
     },
     {
       "path": "seme.md",
